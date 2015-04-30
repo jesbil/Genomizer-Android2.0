@@ -1,0 +1,68 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="se.umu.cs.pvt151.SettingsActivity$PlaceholderFragment" >
+
+    <TextView
+        android:id="@+id/login_settings_tv_selectAServerURL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_alignParentTop="true"
+        android:text="@string/login_settings_selectAServerURL"
+        
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <Spinner
+        android:id="@+id/login_settings_spinner_servers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/login_settings_tv_selectAServerURL"
+        android:layout_margin="4dp"
+        android:entries="@array/login_settings_serverList" />
+    
+    <EditText 
+         android:id="@+id/login_settings_et_inputField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:singleLine="true"
+        android:visibility="invisible"
+        android:layout_below="@id/login_settings_tv_selectAServerURL"
+        android:inputType="textNoSuggestions"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        
+        />
+    
+       
+       <Button
+        android:id="@+id/login_settings_btn_saveURL"
+        android:layout_below="@id/login_settings_spinner_servers"        
+       	android:layout_alignParentRight="true"
+       	android:layout_marginRight="4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onClickaddNewURL"
+        android:text="@string/login_settings_btn_saveURL"
+        android:textSize="12sp"  
+        android:visibility="visible"      
+         />
+
+       <Button
+           android:id="@+id/settings_btn_editURL"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignBaseline="@+id/login_settings_btn_saveURL"
+           android:layout_marginRight="10dp"
+           android:layout_toLeftOf="@+id/login_settings_btn_saveURL"
+           android:text="@string/login_settings_btn_editURL"
+           android:onClick="onClickEditURL"
+           android:textSize="12sp"
+           android:visibility="visible" />
+
+</RelativeLayout>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string name="app_name">Genomizer</string>
+	<!-- Used in login_activity -->
+    <string name="login_action_settings">Settings</string>
+    <string name="login_signIn">Sign in</string>
+    <string name="login_username">Username</string>
+    <string name="login_enterUsername">Enter username</string>
+    <string name="login_password">Password</string>
+	<string name="login_enterPassword">••••••</string>
+	
+	<!-- Used in login_layout_settings -->
+	<string name="login_settings_label">Server settings</string>
+	<string name="login_settings_selectAServerURL">Select a server URL</string>
+	<string name="login_settings_btn_editURL">Edit URL</string>
+	<string name="login_settings_btn_saveURL">Save URL</string>
+	<string name="login_settings_removeURL">Remove URL</string>
+	<string name="login_settings_addURL">Add URL</string>
+	
+	<string-array name="login_settings_serverList">
+        <item>http://dumbledore.cs.umu.se:7000/</item>
+        <item>http://213.21.21.248:7000/</item>
+        <item>http://scratchy.cs.umu.se:60000/</item>
+    </string-array>
+    
+</resources>

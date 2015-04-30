@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/login_layout_main"
+    android:layout_width="match_parent"
+    android:background="#020712"
+    android:layout_height="match_parent" 
+    android:orientation="vertical" >
+
+
+    <Button
+        android:id="@+id/login_btn_signIn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"       
+        android:onClick="login"
+        android:background="#202020"
+        android:layout_alignParentBottom="true"        
+        android:textColor="#FFFFFF"        
+        android:text="@string/login_signIn" 
+         />    
+    
+     <LinearLayout
+        android:id="@+id/login_layout_inputField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"        
+        android:layout_above="@id/login_btn_signIn" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="13dp"
+            android:textColor="#ffffff"
+            android:text="@string/login_username" />
+
+        <EditText
+            android:id="@+id/login_et_enterUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:ems="10"
+            android:hint="@string/login_enterUsername"
+            android:maxLength="20"
+            android:textColor="#ffffff"            
+            android:inputType="textNoSuggestions"
+            android:textColorHint="#CFCFCF"
+            android:singleLine="true" >
+            
+        </EditText>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="13dp"
+            android:textColor="#ffffff"
+            android:text="@string/login_password" />
+
+        <EditText
+            android:id="@+id/login_et_enterPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/login_enterPassword"
+            android:inputType="textPassword"
+            android:textColor="#ffffff"
+            android:textColorHint="#CFCFCF"            
+            android:maxLength="20"
+            android:singleLine="true" />
+    </LinearLayout>
+    
+       <ScrollView
+           android:id="@+id/login_sv"
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:layout_above="@id/login_layout_inputField"
+           
+            >
+
+        <ImageView
+            android:id="@+id/login_iv_genomizer"
+            android:layout_marginTop="25dp"
+            android:scaleType="centerInside"
+                        
+            android:layout_gravity="center_vertical|start"
+            android:contentDescription="@string/app_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"   
+                                        
+            android:src="@drawable/genomizer_login" />
+    </ScrollView>  
+
+</RelativeLayout>
