@@ -23,8 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/login_settings_tv_selectAServerURL"
-        android:layout_margin="4dp"
-        android:entries="@array/login_settings_serverList" />
+        android:layout_margin="4dp" />
     
     <EditText 
          android:id="@+id/login_settings_et_inputField"
