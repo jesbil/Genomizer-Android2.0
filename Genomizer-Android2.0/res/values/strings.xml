@@ -36,8 +36,28 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     
+
+    <!-- Nav Drawer Menu Items -->
+    <string-array name="nav_drawer_items">
+        <item>Search</item>
+        <item>Selected files</item>
+        <item>Process</item>
+    </string-array>
+     
+    <!-- Nav Drawer List Item Icons -->
+    <!-- Keep them in order as the titles are in -->
+    <array name="nav_drawer_icons">
+        <item>@drawable/ic_search</item>
+        <item>@drawable/ic_selected_files</item>
+        <item>@drawable/ic_process</item>
+    </array>
+    
+    <!-- Content Description -->
+    <string name="desc_list_item_icon">Item icon</string>
+
     <!-- Used in search_layout_experimentList -->
     <string name="search_tv_searchResult">Search result</string>
+
 
     <!-- Used in search_layout_experimentfiles -->
     <string name="search_tv_experimentFiles">EXPERIMENT FILES</string>
