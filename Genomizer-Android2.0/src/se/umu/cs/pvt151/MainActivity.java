@@ -12,7 +12,7 @@ public class MainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_layout);
-		Fragment fragmenttab = new SearchMotherFragment();
+		Fragment fragmenttab = new SelectedfilesMotherFragment();
 		getSupportFragmentManager().beginTransaction()
 		.add(R.id.item_detail_container, fragmenttab).commit();
 	}

@@ -35,28 +35,39 @@ public final class R {
         public static final int tools=0x7f020004;
     }
     public static final class id {
+        public static final int convert_raw_button=0x7f0a001a;
         public static final int item_detail_container=0x7f0a000c;
-        public static final int login_action_settings=0x7f0a0014;
+        public static final int login_action_settings=0x7f0a001f;
         public static final int login_btn_signIn=0x7f0a0001;
         public static final int login_et_enterPassword=0x7f0a0004;
         public static final int login_et_enterUsername=0x7f0a0003;
         public static final int login_iv_genomizer=0x7f0a0006;
         public static final int login_layout_inputField=0x7f0a0002;
         public static final int login_layout_main=0x7f0a0000;
-        public static final int login_settings_addURL=0x7f0a0016;
+        public static final int login_settings_addURL=0x7f0a0021;
         public static final int login_settings_btn_saveURL=0x7f0a000a;
         public static final int login_settings_et_inputField=0x7f0a0009;
-        public static final int login_settings_removeURL=0x7f0a0015;
+        public static final int login_settings_removeURL=0x7f0a0020;
         public static final int login_settings_spinner_servers=0x7f0a0008;
         public static final int login_settings_tv_selectAServerURL=0x7f0a0007;
         public static final int login_sv=0x7f0a0005;
-        public static final int realtabcontent=0x7f0a000d;
+        public static final int remove_raw_button=0x7f0a001b;
+        public static final int remove_region_button=0x7f0a001e;
         public static final int searchListView=0x7f0a0013;
-        public static final int search_btn_search=0x7f0a0012;
         public static final int search_layout=0x7f0a0011;
         public static final int search_pubmed_button_search=0x7f0a0010;
         public static final int search_pubmed_input_field=0x7f0a000f;
+        public static final int search_realtabcontent=0x7f0a000d;
+        public static final int search_regular_btn_search=0x7f0a0012;
         public static final int search_tv_pubmedStyle=0x7f0a000e;
+        public static final int selectedfiles_btn_removeMarkedFiles=0x7f0a0017;
+        public static final int selectedfiles_layout_profile=0x7f0a0015;
+        public static final int selectedfiles_layout_raw=0x7f0a0018;
+        public static final int selectedfiles_layout_region=0x7f0a001c;
+        public static final int selectedfiles_lv_profile=0x7f0a0016;
+        public static final int selectedfiles_lv_raw=0x7f0a0019;
+        public static final int selectedfiles_lv_region=0x7f0a001d;
+        public static final int selectedfiles_realtabcontent=0x7f0a0014;
         public static final int settings_btn_editURL=0x7f0a000b;
     }
     public static final class layout {
@@ -66,6 +77,10 @@ public final class R {
         public static final int search_layout_mother=0x7f030003;
         public static final int search_layout_pubmed=0x7f030004;
         public static final int search_layout_regular=0x7f030005;
+        public static final int selectedfiles_layout_mother=0x7f030006;
+        public static final int selectedfiles_layout_profile=0x7f030007;
+        public static final int selectedfiles_layout_raw=0x7f030008;
+        public static final int selectedfiles_layout_region=0x7f030009;
     }
     public static final class menu {
         public static final int login_menu=0x7f090000;
@@ -73,9 +88,7 @@ public final class R {
         public static final int main_menu=0x7f090002;
     }
     public static final class string {
-        public static final int action_settings=0x7f060013;
         public static final int app_name=0x7f060000;
-        public static final int hello_world=0x7f060012;
         /**  Used in login_activity 
          */
         public static final int login_action_settings=0x7f060001;
@@ -92,15 +105,24 @@ public final class R {
         public static final int login_settings_selectAServerURL=0x7f060008;
         public static final int login_signIn=0x7f060002;
         public static final int login_username=0x7f060003;
-        public static final int searchPubmed_btn_cancel=0x7f06000f;
-        public static final int searchPubmed_btn_search=0x7f060010;
+        public static final int searchPubmed_btn_search=0x7f06000f;
         /**  Used in search_layout_pubmed 
          */
         public static final int searchPubmed_tv_pubmedStyle=0x7f06000e;
         /**  Used in search_layout_regular 
          */
         public static final int searchRegular_btn_search=0x7f06000d;
-        public static final int title_activity_main=0x7f060011;
+        /**  Used in selectedfiles_layout_mother 
+ Used in selectedfiles_layout_profile 
+         */
+        public static final int selectedfilesProfile_btn_removeMarkedFiles=0x7f060010;
+        /**  Used in selectedfiles_layout_raw 
+         */
+        public static final int selectedfilesRaw_btn_convertToProfile=0x7f060011;
+        public static final int selectedfilesRaw_btn_removeMarkedFiles=0x7f060012;
+        /**  Used in selectedfiles_layout_region 
+         */
+        public static final int selectedfilesRegion_btn_removeMarkedFiles=0x7f060013;
     }
     public static final class style {
         /** 

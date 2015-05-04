@@ -23,11 +23,11 @@ public class SearchMotherFragment extends Fragment {
 
 
 		mTabHost = (FragmentTabHost)rootView.findViewById(android.R.id.tabhost);
-		mTabHost.setup(getActivity(), getChildFragmentManager(), R.id.realtabcontent);
+		mTabHost.setup(getActivity(), getChildFragmentManager(), R.id.search_realtabcontent);
 
-		mTabHost.addTab(mTabHost.newTabSpec("regular").setIndicator("Regular"),
+		mTabHost.addTab(mTabHost.newTabSpec("regular").setIndicator("regular"),
 				SearchRegularFragment.class, null);
-		mTabHost.addTab(mTabHost.newTabSpec("pubmed").setIndicator("Pubmed"),
+		mTabHost.addTab(mTabHost.newTabSpec("pubmed").setIndicator("pubmed"),
 				SearchPubmedFragment.class, null);
 
 
