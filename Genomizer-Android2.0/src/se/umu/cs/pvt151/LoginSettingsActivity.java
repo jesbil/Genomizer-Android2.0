@@ -160,9 +160,10 @@ public class LoginSettingsActivity extends Activity {
 	}
 	
 	public void onClickEditURL(View v) {
-		mEditURLInput.setText(mServerSpinner.getSelectedItem().toString());
-
-		mEditURLDialog.show();
+		if (!savedServerURLs.isEmpty()) {
+			mEditURLInput.setText(mServerSpinner.getSelectedItem().toString());
+			mEditURLDialog.show();
+		}
 	}
 	
 	private void setEditedURL(String editedURL) {
@@ -172,10 +173,13 @@ public class LoginSettingsActivity extends Activity {
 	}
 	
 	public void onClickRemoveURL() {
-		mRemoveURLText.setText("Really remove URL " 
-							   + mServerSpinner.getSelectedItem()
-							   + "?");
-		mRemoveURLDialog.show();
+		if (!savedServerURLs.isEmpty()) {
+			mRemoveURLText.setText("Really remove URL " 
+					   + mServerSpinner.getSelectedItem()
+					   + "?");
+			mRemoveURLDialog.show();	
+		}
+
 	}
 	
 	private void removeSelectedURL() {
