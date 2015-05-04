@@ -13,9 +13,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="15dp"       
         android:onClick="login"
-        android:background="#202020"
+        android:background="@color/black_login"
         android:layout_alignParentBottom="true"        
-        android:textColor="#FFFFFF"        
+        android:textColor="@color/white"        
         android:text="@string/login_signIn" 
          />    
     
@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="13dp"
-            android:textColor="#ffffff"
+            android:textColor="@color/white"
             android:text="@string/login_username" />
 
         <EditText
@@ -41,9 +41,9 @@
             android:ems="10"
             android:hint="@string/login_enterUsername"
             android:maxLength="20"
-            android:textColor="#ffffff"            
+            android:textColor="@color/white"            
             android:inputType="textNoSuggestions"
-            android:textColorHint="#CFCFCF"
+            android:textColorHint="@color/gray_login"
             android:singleLine="true" >
             
         </EditText>
@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="13dp"
-            android:textColor="#ffffff"
+            android:textColor="@color/white"
             android:text="@string/login_password" />
 
         <EditText
@@ -62,8 +62,8 @@
             android:ems="10"
             android:hint="@string/login_enterPassword"
             android:inputType="textPassword"
-            android:textColor="#ffffff"
-            android:textColorHint="#CFCFCF"            
+            android:textColor="@color/white"
+            android:textColorHint="@color/gray_login"            
             android:maxLength="20"
             android:singleLine="true" />
     </LinearLayout>

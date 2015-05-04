@@ -35,5 +35,15 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    
+    <!-- Used in search_layout_experimentList -->
+    <string name="search_tv_searchResult">Search result</string>
 
+    <!-- Used in search_layout_experimentfiles -->
+    <string name="search_tv_experimentFiles">EXPERIMENT FILES</string>
+    <string name="search_tv_rawData">RAW DATA</string>
+    <string name="search_tv_profileData">PROFILE DATA</string>
+    <string name="search_tv_regionData">REGION DATA</string>
+    <string name="search_btn_addToSelection">Add to selection</string>
+    
 </resources>
