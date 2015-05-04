@@ -1,25 +1,26 @@
 package se.umu.cs.pvt151;
 
-
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
-public class LoginActivity extends Activity {
+public class MainActivity extends FragmentActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.login_layout);
+		setContentView(R.layout.main_layout);
+		Fragment fragmenttab = new SearchMotherFragment();
+		getSupportFragmentManager().beginTransaction()
+		.add(R.id.item_detail_container, fragmenttab).commit();
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.login_menu, menu);
+		getMenuInflater().inflate(R.menu.main_menu, menu);
 		return true;
 	}
 
@@ -29,16 +30,7 @@ public class LoginActivity extends Activity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.login_action_settings) {
-			Intent intent = new Intent(this, LoginSettingsActivity.class);
-			startActivity(intent);
-			return true;
-		}
+
 		return super.onOptionsItemSelected(item);
-	}
-	
-	public void login(View v) {
-		Intent intent = new Intent(this, MainActivity.class);
-		startActivity(intent);
 	}
 }

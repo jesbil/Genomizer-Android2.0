@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="se.umu.cs.pvt151.SearchPubmedActivity$PlaceholderFragment">
+  	>
 	
 		<RelativeLayout 
 	    	android:layout_width="match_parent"
@@ -20,7 +20,8 @@
 	        android:layout_marginLeft="4dp"
 	        android:layout_alignParentTop="true"
 	        android:text="@string/searchPubmed_tv_pubmedStyle"
-	        android:textAppearance="?android:attr/textAppearanceSmall" />
+	        android:textAppearance="?android:attr/textAppearanceSmall"
+	         />
 	    
 	    <EditText 
 	         android:id="@+id/search_pubmed_input_field"
@@ -31,18 +32,6 @@
 	        android:layout_below="@id/search_tv_pubmedStyle"
 	        />
 	    
-	       
-	       <Button
-	        android:id="@+id/search_pubmed_button_cancel"
-	        android:layout_below="@id/search_pubmed_input_field"        
-	       	android:layout_alignParentLeft="true"
-	       	android:layout_marginRight="4dp"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:onClick="onClickCancel"
-	        android:textSize="12sp"  	       
-	        android:text="@string/searchPubmed_btn_cancel" />
-	       
 	       <Button
 	        android:id="@+id/search_pubmed_button_search"
 	        android:layout_below="@id/search_pubmed_input_field"        
