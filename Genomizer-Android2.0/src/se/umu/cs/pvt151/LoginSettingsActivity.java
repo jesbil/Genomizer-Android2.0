@@ -2,42 +2,137 @@ package se.umu.cs.pvt151;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-import javax.security.auth.callback.CallbackHandler;
-
-import android.R.array;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.os.Bundle;
-import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.TextView;
 
 public class LoginSettingsActivity extends Activity {
 	
 	private Spinner mServerSpinner;
-	private ArrayList<String> savedServerURLs;
-	private ArrayAdapter<CharSequence> mSpinnerAdapter;
+	private List<String> savedServerURLs;
+	private ArrayAdapter<String> mSpinnerAdapter;
+	
+	private EditText mEditURLInput;
+	private AlertDialog mEditURLDialog;
+	
+	private TextView mRemoveURLText;
+	private AlertDialog mRemoveURLDialog;
+	
+	private EditText mAddURLInput;
+	private AlertDialog mAddURLDialog;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login_layout_settings);
-		
-		
-		mServerSpinner = (Spinner) 
-						 this.findViewById(R.id.login_settings_spinner_servers);
-		
+
+		buildServerSpinner();
+		buildEditURLDialog();
+		buildRemoveURLDialog();
+		buildAddURLDialog();
+	}
 	
+	private void buildServerSpinner() {
+		mServerSpinner = (Spinner) 
+				 findViewById(R.id.login_settings_spinner_servers);
+		
+		Resources res = getResources();
+		
+		savedServerURLs = new ArrayList<String>(Arrays.asList(
+				res.getStringArray(R.array.login_settings_serverList)));
+		
+		mSpinnerAdapter = new ArrayAdapter<String>(
+				this, android.R.layout.simple_spinner_item, savedServerURLs);
+		
+		mSpinnerAdapter.setDropDownViewResource(
+				android.R.layout.simple_list_item_single_choice);
+		
+		mServerSpinner.setAdapter(mSpinnerAdapter);
+	}
+	
+	private void buildEditURLDialog() {
+		mEditURLInput = new EditText(this);
+		
+		mEditURLDialog = new AlertDialog.Builder(this)
+				.setTitle("Edit server")
+				.setView(mEditURLInput)
+				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						setEditedURL(mEditURLInput.getText().toString());	
+					}
+				})
+				.setNegativeButton("Cancel", new DialogInterface
+						.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// Cancel
+					}
+				})
+				.create();
+	}
+	
+	private void buildRemoveURLDialog() {
+		mRemoveURLText = new TextView(this);
+		mRemoveURLText.setTypeface(null, Typeface.BOLD);
+		
+		mRemoveURLDialog = new AlertDialog.Builder(this)
+				.setTitle("Remove server")
+				.setView(mRemoveURLText)
+				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						removeSelectedURL();	
+					}
+				})
+				.setNegativeButton("Cancel", new DialogInterface
+						.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// Cancel
+					}
+				})
+				.create();
+	}
+	
+	private void buildAddURLDialog() {
+		mAddURLInput = new EditText(this);
+		
+		mAddURLDialog = new AlertDialog.Builder(this)
+				.setTitle("Add URL")
+				.setView(mAddURLInput)
+				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						addServerURL(mAddURLInput.getText().toString());	
+					}
+				})
+				.setNegativeButton("Cancel", new DialogInterface
+						.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// Cancel
+					}
+				})
+				.create();
 	}
 
 	@Override
@@ -55,69 +150,49 @@ public class LoginSettingsActivity extends Activity {
 		int id = item.getItemId();
 		switch(id){
 		case R.id.login_settings_addURL:
+			onClickAddURL();
 			return true;
 		case R.id.login_settings_removeURL:
+			onClickRemoveURL();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 	
 	public void onClickEditURL(View v) {
-		editURLDialog();
-	}
-	
-	
-	private void editURLDialog() {
-		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		mEditURLInput.setText(mServerSpinner.getSelectedItem().toString());
 
-		alert.setTitle("Edit URL");
-
-		// Set an EditText view to get user input 
-		final EditText input = new EditText(this);
-		input.setText(mServerSpinner.getSelectedItem().toString());
-		alert.setView(input);
-
-		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-		public void onClick(DialogInterface dialog, int whichButton) {
-		  setEditedURL(input.getText().toString());
-		  }
-		});
-
-		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-		  public void onClick(DialogInterface dialog, int whichButton) {
-		    // Canceled.
-		  }
-		});
-		alert.show();
+		mEditURLDialog.show();
 	}
 	
 	private void setEditedURL(String editedURL) {
-		createSpinnerAdapter();
 		String serverURL = (String) mServerSpinner.getSelectedItem();
-		Resources res = getResources();
-		CharSequence[] temp = res.getStringArray(R.array.login_settings_serverList);
-		ArrayList<CharSequence> servers = new ArrayList<CharSequence>(Arrays.asList(temp));
-		servers.remove(serverURL);
-		servers.add(editedURL);
-		mSpinnerAdapter.clear();
- 		mSpinnerAdapter.addAll(servers);
+		savedServerURLs.set(savedServerURLs.indexOf(serverURL), editedURL);
  		mSpinnerAdapter.notifyDataSetChanged();
- 		mServerSpinner.setSelection(servers.indexOf(editedURL));
-	}
-
-	/**
-	 * Create an adapter for the Spinner(drop-down) element. Fill the Spinner with all URLs
-	 * stored within the 'mSavedURLsList'-list. 
-	 */
-	private void createSpinnerAdapter() {
-		mSpinnerAdapter = ArrayAdapter.createFromResource(this,android.R.layout.simple_spinner_item ,R.array.login_settings_serverList);
-		//		spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, savedServerURLs);
-		mSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
-		mServerSpinner.setAdapter(mSpinnerAdapter);
-		mSpinnerAdapter.notifyDataSetChanged();
-
 	}
 	
+	public void onClickRemoveURL() {
+		mRemoveURLText.setText("Really remove URL " 
+							   + mServerSpinner.getSelectedItem()
+							   + "?");
+		mRemoveURLDialog.show();
+	}
+	
+	private void removeSelectedURL() {
+		String serverURL = (String) mServerSpinner.getSelectedItem();
+		savedServerURLs.remove(serverURL);
+		mSpinnerAdapter.notifyDataSetChanged();
+	}
+	
+	private void onClickAddURL() {
+		mAddURLDialog.show();
+	}
+	
+	private void addServerURL(String serverURL) {
+		savedServerURLs.add(serverURL);
+		mSpinnerAdapter.notifyDataSetChanged();
+		mServerSpinner.setSelection(mSpinnerAdapter.getCount() - 1);
+	}
 	
 //	/**
 //	 * Fetch the currently selected URL from the settings file and mark this URL within
