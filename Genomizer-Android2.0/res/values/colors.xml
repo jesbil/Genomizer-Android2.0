@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="blue" type="color">#0000FF</item>
+    <item name="white" type="color">#FFFFFF</item>
+    <item name="light_gray" type="color">#DADADA</item>
+    <item name="black" type="color">#000000</item>
+    <item name="smoke_white" type="color">#F5F5F5</item>
+    <item name="black_login" type="color">#202020</item>
+    <item name="gray_login" type="color">#CFCFCF</item>
+    <item name="light_gray_experimentFiles" type="color">#D3D3D3</item>
+    
 </resources>
