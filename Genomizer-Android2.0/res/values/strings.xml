@@ -30,11 +30,7 @@
 
     <!-- Used in search_layout_pubmed -->
     <string name="searchPubmed_tv_pubmedStyle">PubMed-style</string>
-    <string name="searchPubmed_btn_cancel">Cancel</string>
     <string name="searchPubmed_btn_search">Search</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
     
 
     <!-- Nav Drawer Menu Items -->
@@ -58,6 +54,18 @@
     <!-- Used in search_layout_experimentList -->
     <string name="search_tv_searchResult">Search result</string>
 
+    
+    <!-- Used in selectedfiles_layout_mother -->
+    
+    <!-- Used in selectedfiles_layout_profile -->
+    <string name="selectedfilesProfile_btn_removeMarkedFiles">Remove marked files</string>
+    
+    <!-- Used in selectedfiles_layout_raw -->
+    <string name="selectedfilesRaw_btn_convertToProfile">Convert to profile</string>
+    <string name="selectedfilesRaw_btn_removeMarkedFiles">Remove marked files</string>
+    
+     <!-- Used in selectedfiles_layout_region -->
+    <string name="selectedfilesRegion_btn_removeMarkedFiles">Remove marked files</string>
 
     <!-- Used in search_layout_experimentfiles -->
     <string name="search_tv_experimentFiles">EXPERIMENT FILES</string>

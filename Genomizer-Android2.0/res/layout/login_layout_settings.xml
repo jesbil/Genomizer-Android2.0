@@ -46,7 +46,6 @@
        	android:layout_marginRight="4dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onClickaddNewURL"
         android:text="@string/login_settings_btn_saveURL"
         android:textSize="12sp"  
         android:visibility="visible"      
