@@ -1,0 +1,73 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/search_rl_experimentsettings"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context="se.umu.cs.pvt151.SearchSettingsActivity$PlaceholderFragment" >
+
+    <LinearLayout
+        android:id="@+id/search_ll_header"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/search_tv_setVisibleAnnotations"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="6dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/white"
+            android:text="@string/search_btn_setVisibleAnnotations"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/search_tv_divider"
+            android:layout_width="fill_parent"
+            android:layout_height="7dp"
+            android:background="@color/light_gray" />
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/search_lv_resultAnnotationsSettings"
+        android:layout_width="match_parent"
+        android:layout_height="371dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/search_ll_header"
+        android:layout_above="@+id/search_ll_experimentListSettingsButtonBar"
+        android:background="@color/white" >
+    </ListView>
+
+    <LinearLayout
+        android:id="@+id/search_ll_experimentListSettingsButtonBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/search_btn_saveSettings"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="@string/search_btn_saveSettings" />
+
+        <Button
+            android:id="@+id/search_btn_useDefault"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:text="@string/search_btn_useDefault" />
+    </LinearLayout>
+
+
+
+</RelativeLayout>
