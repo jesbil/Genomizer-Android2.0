@@ -74,4 +74,9 @@
     <string name="search_tv_regionData">REGION DATA</string>
     <string name="search_btn_addToSelection">Add to selection</string>
     
+    <!-- Used in search_layout_experimentlistsettings -->
+    <string name="search_btn_setVisibleAnnotations">Set visible annotations</string>
+    <string name="search_btn_saveSettings">Save settings</string>
+    <string name="search_btn_useDefault">Use default</string>
+    
 </resources>
