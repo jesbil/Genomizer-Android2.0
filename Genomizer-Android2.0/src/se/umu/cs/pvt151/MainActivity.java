@@ -2,10 +2,12 @@ package se.umu.cs.pvt151;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
+import se.umu.cs.pvt151.search.SearchMotherFragment;
+import se.umu.cs.pvt151.selected_files.SelectedfilesMotherFragment;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.app.FragmentManager;
+import android.support.v4.app.FragmentManager;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -59,7 +61,7 @@ public class MainActivity extends FragmentActivity {
         // Home
         navDrawerItems.add(new NavigationDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
         // Find People
-        navDrawerItems.add(new NavigationDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
+        navDrawerItems.add(new NavigationDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1), true, "3"));
         // Photos
         navDrawerItems.add(new NavigationDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
          
@@ -150,9 +152,10 @@ public class MainActivity extends FragmentActivity {
  
     /**
      * Diplaying fragment view for selected nav drawer list item
-     * */
+     */
     private void displayView(int position) {
         // update the main content by replacing fragments
+    	getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         Fragment fragment = null;
         switch (position) {
         case 0:
@@ -167,7 +170,7 @@ public class MainActivity extends FragmentActivity {
  
         if (fragment != null) {
             getSupportFragmentManager().beginTransaction()
-            						   .add(R.id.frame_container, fragment)
+            						   .replace(R.id.frame_container, fragment)
             						   .commit();
  
             // update selected item and title, then close the drawer
@@ -191,7 +194,6 @@ public class MainActivity extends FragmentActivity {
      * When using the ActionBarDrawerToggle, you must call it during
      * onPostCreate() and onConfigurationChanged()...
      */
- 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -205,5 +207,6 @@ public class MainActivity extends FragmentActivity {
         // Pass any configuration change to the drawer toggls
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
+
  
 }

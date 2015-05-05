@@ -1,6 +1,11 @@
-package se.umu.cs.pvt151;
+package se.umu.cs.pvt151.login;
 
 
+import se.umu.cs.pvt151.MainActivity;
+import se.umu.cs.pvt151.R;
+import se.umu.cs.pvt151.R.id;
+import se.umu.cs.pvt151.R.layout;
+import se.umu.cs.pvt151.R.menu;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
