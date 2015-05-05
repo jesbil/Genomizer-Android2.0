@@ -18,10 +18,8 @@ public class SearchMotherFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
 			Bundle savedInstanceState) {
 
-
 		View rootView = inflater.inflate(R.layout.search_layout_mother,container, false);
-
-
+		
 		mTabHost = (FragmentTabHost)rootView.findViewById(android.R.id.tabhost);
 		mTabHost.setup(getActivity(), getChildFragmentManager(), R.id.search_realtabcontent);
 
@@ -29,8 +27,6 @@ public class SearchMotherFragment extends Fragment {
 				SearchRegularFragment.class, null);
 		mTabHost.addTab(mTabHost.newTabSpec("pubmed").setIndicator("pubmed"),
 				SearchPubmedFragment.class, null);
-
-
 
 		return rootView;
 	}
