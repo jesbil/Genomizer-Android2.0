@@ -1,8 +1,14 @@
-package se.umu.cs.pvt151;
+package se.umu.cs.pvt151.login;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import se.umu.cs.pvt151.R;
+import se.umu.cs.pvt151.R.array;
+import se.umu.cs.pvt151.R.id;
+import se.umu.cs.pvt151.R.layout;
+import se.umu.cs.pvt151.R.menu;
 
 import android.app.Activity;
 import android.app.AlertDialog;
