@@ -83,4 +83,12 @@
     <string name="search_btn_saveSettings">Save settings</string>
     <string name="search_btn_useDefault">Use default</string>
     
+    <!-- Used in process_layout_experiment -->
+    <string name="process_expname">Experiment: </string>
+    <string name="process_author">Author: </string>
+    <string name="process_status">Status: </string>
+    <string name="process_added">Process added: </string>
+    <string name="process_started">Process started: </string>
+    <string name="process_finished">Process finished: </string>
+    
 </resources>
