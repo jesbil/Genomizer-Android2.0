@@ -60,6 +60,7 @@ public class LoginSettingsActivity extends Activity {
 				android.R.layout.simple_list_item_single_choice);
 		
 		mServerSpinner.setAdapter(mSpinnerAdapter);
+		
 	}
 	
 	private void buildEditURLDialog() {

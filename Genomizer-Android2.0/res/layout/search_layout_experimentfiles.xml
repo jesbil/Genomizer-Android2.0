@@ -8,7 +8,7 @@
     tools:context="se.umu.cs.pvt151.FileListActivity$PlaceholderFragment" >
     
      <TextView
-        android:id="@+id/textFiles"
+        android:id="@+id/search_tv_experimentFiles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -26,22 +26,22 @@
 
      
      <TextView
-        android:id="@+id/textRaw"
+        android:id="@+id/search_tv_raw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textFiles"
+        android:layout_below="@+id/search_tv_experimentFiles"
         android:background="@color/light_gray_experimentFiles"
         android:text="@string/search_tv_rawData"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/black" />
 
     <ListView
-        android:id="@+id/listView1"
+        android:id="@+id/search_lv_rawList"
         android:layout_width="match_parent"
         android:layout_height="114dp"
-        android:layout_above="@+id/textProfile"
-        android:layout_below="@id/textRaw"
+        android:layout_above="@+id/search_tv_profile"
+        android:layout_below="@id/search_tv_raw"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:background="@color/smoke_white"
@@ -51,10 +51,10 @@
     </ListView>
 
     <TextView
-        android:id="@+id/textRegion"
+        android:id="@+id/search_tv_region"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/listView3"
+        android:layout_above="@+id/search_lv_regionList"
         android:layout_alignParentLeft="true"
         android:background="@color/light_gray_experimentFiles"
         android:text="@string/search_tv_regionData"
@@ -62,10 +62,10 @@
         android:textColor="#000000"  />
 
     <ListView
-        android:id="@+id/listView3"
+        android:id="@+id/search_lv_regionList"
         android:layout_width="match_parent"
         android:layout_height="114dp"
-        android:layout_above="@+id/sendBtn"
+        android:layout_above="@+id/search_btn_addToSelection"
         android:layout_alignParentLeft="true"
         android:background="@color/smoke_white"
         android:dividerHeight="1dp"
@@ -73,7 +73,7 @@
     </ListView>
 
     <Button
-        android:id="@+id/sendBtn"
+        android:id="@+id/search_btn_addToSelection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"                
         android:layout_alignParentBottom="true"
@@ -81,10 +81,10 @@
         android:text="@string/search_btn_addToSelection" />
 
     <ListView
-        android:id="@+id/listView2"
+        android:id="@+id/search_lv_profileList"
         android:layout_width="match_parent"
         android:layout_height="114dp"
-        android:layout_above="@+id/textRegion"
+        android:layout_above="@+id/search_tv_region"
         android:layout_alignParentLeft="true"
         android:background="@color/smoke_white"
         android:choiceMode="multipleChoice"
@@ -93,10 +93,10 @@
     </ListView>
 
     <TextView
-        android:id="@+id/textProfile"
+        android:id="@+id/search_tv_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/listView2"
+        android:layout_above="@+id/search_lv_profileList"
         android:layout_alignParentLeft="true"        
         android:background="@color/light_gray_experimentFiles"
         android:text="@string/search_tv_profileData"
