@@ -43,6 +43,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/search_ll_header"
         android:layout_above="@+id/search_ll_experimentListSettingsButtonBar"
+        android:dividerHeight="1dp"
         android:background="@color/white" >
     </ListView>
 
