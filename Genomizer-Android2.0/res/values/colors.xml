@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="blue" type="color">#0000FF</item>
+    <item name="android_blue" type="color">#33B5E5</item>
     <item name="white" type="color">#FFFFFF</item>
     <item name="light_gray" type="color">#DADADA</item>
     <item name="black" type="color">#000000</item>
