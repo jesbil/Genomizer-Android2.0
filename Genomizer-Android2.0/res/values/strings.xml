@@ -74,6 +74,10 @@
     <string name="search_tv_regionData">REGION DATA</string>
     <string name="search_btn_addToSelection">Add to selection</string>
     
+    <!-- Used in process_layout_experimentlist -->
+    <string name="process_btn_refresh">Refresh</string>
+    <string name="process_tv_processStatus">PROCESS STATUS</string>
+    
     <!-- Used in search_layout_experimentlistsettings -->
     <string name="search_btn_setVisibleAnnotations">Set visible annotations</string>
     <string name="search_btn_saveSettings">Save settings</string>

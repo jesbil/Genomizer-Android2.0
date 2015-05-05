@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/process_llayout_rawLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+     <LinearLayout 
+        android:id="@+id/process_llayout_head"
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:orientation="vertical"
+    	android:background="@color/white">
+    	
+	     <TextView
+	        android:id="@+id/process_tv_processStatus"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+			android:layout_gravity="center_horizontal"
+	        android:layout_marginTop="8dp"
+	        android:layout_marginBottom="6dp"
+	        android:background="@color/white"
+	        android:text="@string/process_tv_processStatus"        
+	        android:textSize="16sp"
+	        android:textAppearance="?android:attr/textAppearanceLarge"
+	        android:textColor="@color/black"        
+	        android:textStyle="bold" />
+	        
+		<TextView      
+	      android:id="@+id/process_tv_divider"    
+	      android:layout_width="fill_parent" 
+	      android:layout_height="7dp" 
+	      android:background="@color/light_gray" />
+    </LinearLayout>
+    
+    <ListView
+        android:id="@+id/process_listv_processList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/smoke_white"
+        android:choiceMode="multipleChoice"
+        android:listSelector="@android:color/transparent"               
+		android:cacheColorHint="@android:color/transparent"
+        android:dividerHeight="1dp" >
+    </ListView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/process_btn_refresh"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/process_btn_refresh" />
+    </LinearLayout>
+
+</LinearLayout>
