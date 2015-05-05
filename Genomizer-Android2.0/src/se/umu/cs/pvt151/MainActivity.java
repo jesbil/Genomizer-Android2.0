@@ -2,6 +2,9 @@ package se.umu.cs.pvt151;
 
 import java.util.ArrayList;
 
+import se.umu.cs.pvt151.search.SearchMotherFragment;
+import se.umu.cs.pvt151.selected_files.SelectedfilesMotherFragment;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
