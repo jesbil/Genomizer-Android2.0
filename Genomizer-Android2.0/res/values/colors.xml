@@ -8,5 +8,7 @@
     <item name="black_login" type="color">#202020</item>
     <item name="gray_login" type="color">#CFCFCF</item>
     <item name="light_gray_experimentFiles" type="color">#D3D3D3</item>
+    <item name="gray_divider" type="color">#9ca7b1</item>
+    
     
 </resources>
