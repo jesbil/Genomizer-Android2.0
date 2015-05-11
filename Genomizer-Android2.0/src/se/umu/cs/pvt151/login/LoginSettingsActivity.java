@@ -50,6 +50,9 @@ public class LoginSettingsActivity extends Activity {
 		buildAddURLDialog();
 	}
 	
+	/**
+	 * Testcomment
+	 */
 	private void buildServerSpinner() {
 		mServerSpinner = (Spinner) 
 				 findViewById(R.id.login_settings_spinner_servers);
