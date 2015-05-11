@@ -3,6 +3,7 @@ package se.umu.cs.pvt151.login;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import se.umu.cs.pvt151.R;
 import se.umu.cs.pvt151.R.array;
@@ -12,19 +13,35 @@ import se.umu.cs.pvt151.R.menu;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class LoginSettingsActivity extends Activity {
+	
+	private final static String SERVER_PREFERENCES = 
+			"se.umu.cs.pvt151.SERVER_PREFERENCES";
+	
+	private final static String INDEX_OF_SELECTED_SERVER = 
+			"indexOfSelectedServer";
+	
+	private final static String ALL_SERVERS = "allServers";
+	
+	private final static String DELIMITER = "#";
 	
 	private Spinner mServerSpinner;
 	private List<String> savedServerURLs;
@@ -39,28 +56,28 @@ public class LoginSettingsActivity extends Activity {
 	private EditText mAddURLInput;
 	private AlertDialog mAddURLDialog;
 	
+	private SharedPreferences sharedPreferences;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login_layout_settings);
+		
+		sharedPreferences = getSharedPreferences(SERVER_PREFERENCES, 
+				Context.MODE_PRIVATE);
 
+		
 		buildServerSpinner();
 		buildEditURLDialog();
 		buildRemoveURLDialog();
 		buildAddURLDialog();
 	}
 	
-	/**
-	 * Testcomment
-	 */
-	private void buildServerSpinner() {
+	private void buildServerSpinner() {		
 		mServerSpinner = (Spinner) 
 				 findViewById(R.id.login_settings_spinner_servers);
 		
-		Resources res = getResources();
-		
-		savedServerURLs = new ArrayList<String>(Arrays.asList(
-				res.getStringArray(R.array.login_settings_serverList)));
+		savedServerURLs = getSavedURLArrayList();
 		
 		mSpinnerAdapter = new ArrayAdapter<String>(
 				this, android.R.layout.simple_spinner_item, savedServerURLs);
@@ -70,6 +87,23 @@ public class LoginSettingsActivity extends Activity {
 		
 		mServerSpinner.setAdapter(mSpinnerAdapter);
 		
+		mServerSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				saveToSharedPreferences();
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// Do nothing
+				
+			}
+			
+		});
+		
+		mServerSpinner.setSelection(getSavedSelectedIndex());
 	}
 	
 	private void buildEditURLDialog() {
@@ -178,8 +212,11 @@ public class LoginSettingsActivity extends Activity {
 	
 	private void setEditedURL(String editedURL) {
 		String serverURL = (String) mServerSpinner.getSelectedItem();
-		savedServerURLs.set(savedServerURLs.indexOf(serverURL), editedURL);
+		
+		savedServerURLs.set(savedServerURLs.indexOf(serverURL), formatURLString(editedURL));
  		mSpinnerAdapter.notifyDataSetChanged();
+ 		
+ 		saveToSharedPreferences();
 	}
 	
 	public void onClickRemoveURL() {
@@ -196,6 +233,8 @@ public class LoginSettingsActivity extends Activity {
 		String serverURL = (String) mServerSpinner.getSelectedItem();
 		savedServerURLs.remove(serverURL);
 		mSpinnerAdapter.notifyDataSetChanged();
+		
+		saveToSharedPreferences();
 	}
 	
 	private void onClickAddURL() {
@@ -203,9 +242,71 @@ public class LoginSettingsActivity extends Activity {
 	}
 	
 	private void addServerURL(String serverURL) {
-		savedServerURLs.add(serverURL);
+		String formattedURL = formatURLString(serverURL);
+		savedServerURLs.add(formattedURL);
 		mSpinnerAdapter.notifyDataSetChanged();
 		mServerSpinner.setSelection(mSpinnerAdapter.getCount() - 1);
+		
+		saveToSharedPreferences();
+	}
+	
+	public static String formatURLString(String url) {
+		String formattedURL = url;
+		
+		if (!formattedURL.startsWith("http://") && !formattedURL.startsWith("https://")) {
+			formattedURL = "http://" + formattedURL;
+		}
+		
+		if (!formattedURL.endsWith("/")) {
+			formattedURL = formattedURL + "/";
+		}
+		
+		return formattedURL;
+	}
+	
+	private void saveToSharedPreferences() {
+		int selectedPosition = mServerSpinner.getSelectedItemPosition();
+		String allServers = concatServersWithDelimiter();
+		Editor editor = sharedPreferences.edit();
+		
+		editor.putInt(INDEX_OF_SELECTED_SERVER, selectedPosition);
+		editor.putString(ALL_SERVERS, allServers);
+		editor.commit();
+	}
+	
+	private String concatServersWithDelimiter() {
+		StringBuilder sb = new StringBuilder();
+		
+		for (int i = 0; i < savedServerURLs.size(); i++) {
+			sb.append(savedServerURLs.get(i));
+			sb.append(DELIMITER);
+		}
+		
+		return sb.toString();
+	}
+	
+	private ArrayList<String> getSavedURLArrayList() {
+		String allServers = sharedPreferences.getString(ALL_SERVERS, "");
+		
+		if (allServers.equals("")) {
+			return new ArrayList<String>();
+		}
+		
+		String[] splittedServers = allServers.split(Pattern.quote(DELIMITER));
+		
+		ArrayList<String> serverURLs = new ArrayList<String>();
+		
+		for (int i = 0; i < splittedServers.length; i++) {
+			serverURLs.add(splittedServers[i]);
+		}
+		
+		return serverURLs;
+		
+		
+	}
+	
+	private int getSavedSelectedIndex() {
+		return sharedPreferences.getInt(INDEX_OF_SELECTED_SERVER, 0);	
 	}
 	
 //	/**
