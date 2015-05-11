@@ -1,7 +1,6 @@
 package se.umu.cs.pvt151.search;
 
 import se.umu.cs.pvt151.R;
-import se.umu.cs.pvt151.R.layout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;

@@ -69,6 +69,10 @@ public class Communicator {
 	public static void setToken(String token) {
 		Communicator.token = token;
 	}
+	
+	public static String getServerURL() {
+		return urlString;
+	}
 
 
 	/**
