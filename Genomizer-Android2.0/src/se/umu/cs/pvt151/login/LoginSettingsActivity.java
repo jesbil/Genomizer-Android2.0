@@ -161,6 +161,12 @@ public class LoginSettingsActivity extends Activity {
 				})
 				.create();
 	}
+	
+	@Override
+	public boolean onNavigateUp() {
+		onBackPressed();
+		return true;
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -288,99 +294,5 @@ public class LoginSettingsActivity extends Activity {
 		return sharedPreferences.getInt(INDEX_OF_SELECTED_SERVER, 0);	
 	}
 	
-//	/**
-//	 * Fetch the currently selected URL from the settings file and mark this URL within
-//	 * the Spinner (drop-down) menu.
-//	 */
-//	private void markCurrentlyUsedURL() {
-//		String currentURL = getCurrentlySelectedURL();
-//
-//		for(int i = 0; i < mSavedURLsList.size(); i++) {
-//			if(currentURL.equals(mSavedURLsList.get(i))) {
-//				spinner.setSelection(i);
-//			}
-//		}
-//	}
-//	
-//	/**
-//	 * Check if an URL already exists with the 'mSavedURLsList' container.
-//	 * @param url The server URL which the user wish to add.
-//	 * @return true if the URL already exits, false otherwise.
-//	 */
-//	private boolean urlExists(String url) {		
-//		for(String oldURL : mSavedURLsList) {
-//			if(oldURL.equals(url)) {
-//				return true;
-//			}
-//		}
-//		return false;
-//	}
-//	
-//	/**
-//	 * Write the currently selected URL to a settings file to enable persistence between application restarts.
-//	 * @param url The server URL to store within the settings file.
-//	 */
-//	private void saveCurrentlySelectedURL(String url) {
-//		SharedPreferences settings = getActivity().getSharedPreferences(getResources().getString(R.string.settings_fileAnchor) ,Context.MODE_PRIVATE);	
-//		SharedPreferences.Editor prefEditor = settings.edit();		
-//		prefEditor.putString(getResources().getString(R.string.settings_serverSelectedURLAnchor), url);
-//		prefEditor.commit();			
-//		
-//	}
-//	
-//	/**
-//	 * Fetch the server URL that was previously stored within the settings file.
-//	 * @return A string representing the URL of the selected server.
-//	 */
-//	private String getCurrentlySelectedURL() {
-//		SharedPreferences settings = this.getSharedPreferences(getResources().getString(R.string.settings_fileAnchor) ,Context.MODE_PRIVATE);	
-//		return settings.getString(getResources().getString(R.string.settings_serverSelectedURLAnchor), ComHandler.getServerURL());
-//	}
-//	
-//	/**
-//	 * Locate all server URLs that have been saved within the settings file and store them in the 'mSavedURLsList'.
-//	 * Also fetch the saved 'currently selected server URL' from the settings file and add it to the 'mSavedURLsList' if it is not
-//	 * in the list.
-//	 */
-//	private void fetchSavedURLs() {		
-//		SharedPreferences settings = getActivity().getSharedPreferences(getResources().getString(R.string.settings_fileAnchor) ,Context.MODE_PRIVATE);
-//		String savedURLsWithDelimiters = settings.getString(getResources().getString(R.string.settings_serverALLURLAnchor), "#");
-//		String[] savedURLs = savedURLsWithDelimiters.split("#");
-//		
-//		for(String url : savedURLs) {
-//			mSavedURLsList.add(url);
-//		}
-//		
-//		String currentURL = getCurrentlySelectedURL();
-//		if(!urlExists(currentURL)) {
-//			mSavedURLsList.add(currentURL);
-//		}
-//		String comURL = ComHandler.getServerURL();
-//		if(!urlExists(comURL)) {
-//			mSavedURLsList.add(comURL);
-//		}
-//		
-//		
-//	}
-//
-//	/**
-//	 * Save all server URLs that the user have added to a settings file. The server URLs are stored as a single string with 
-//	 * the character '#' as separator.
-//	 */
-//	public void saveMultipleURLs() {
-//		SharedPreferences settings = getActivity().getSharedPreferences(getResources().getString(R.string.settings_fileAnchor), Context.MODE_PRIVATE);	
-//		SharedPreferences.Editor prefEditor = settings.edit();
-//		
-//		StringBuilder sb = new StringBuilder();
-//		for(String url : mSavedURLsList) {
-//			sb.append(url);
-//			sb.append('#');
-//		}		
-//		
-//		prefEditor.putString(getResources().getString(R.string.settings_serverALLURLAnchor), sb.toString());
-//		prefEditor.commit();				
-//	}
-//	
-	
-	
 }
+	

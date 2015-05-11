@@ -24,6 +24,12 @@ import android.widget.TextView;
 
 public class LoginActivity extends Activity {
 	
+	private final static String SAVED_INSTANCE_USERNAME = 
+			"se.umu.cs.pvt151.login.LoginActivity.SAVED_INSTANCE_USERNAME";
+	
+	private final static String SAVED_INSTANCE_PASSWORD =
+			"se.umu.cs.pvt151.login.LoginActivity.SAVED_INSTANCE_PASSWORD";
+	
 	private String serverURL;
 	private TextView mServerURLTextView;
 	private EditText mUsernameEditText;
@@ -34,10 +40,19 @@ public class LoginActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login_layout);
+	
 		
 		mServerURLTextView = (TextView) findViewById(R.id.login_tv_serverURL);
 		mUsernameEditText = (EditText) findViewById(R.id.login_et_enterUsername);
 		mPasswordEditText = (EditText) findViewById(R.id.login_et_enterPassword);
+		
+		/*if (savedInstanceState != null) {
+			String username = savedInstanceState.getString(SAVED_INSTANCE_USERNAME);
+			String password = savedInstanceState.getString(SAVED_INSTANCE_PASSWORD);
+			mUsernameEditText.setText(username);
+			mPasswordEditText.setText(password);
+		}*/
+		
 	}
 	
 	@Override
@@ -49,6 +64,25 @@ public class LoginActivity extends Activity {
 		mServerURLTextView.setText(serverURL);
 		
 		super.onResume();
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		String username = mUsernameEditText.toString();
+		String password = mPasswordEditText.toString();
+		
+		savedInstanceState.putString(SAVED_INSTANCE_USERNAME, username);
+		savedInstanceState.putString(SAVED_INSTANCE_PASSWORD, password);
+		
+		super.onSaveInstanceState(savedInstanceState);
+	}
+	
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+		String username = savedInstanceState.getString(SAVED_INSTANCE_USERNAME);
+		String password = savedInstanceState.getString(SAVED_INSTANCE_PASSWORD);
+		mUsernameEditText.setText(username);
+		mPasswordEditText.setText(password);
 	}
 
 	@Override
