@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Genomizer</string>
+    <string name="app_name">Genomizer 2.0</string>
 
     <!-- Used in login_activity -->
     <string name="login_action_settings">Settings</string>
@@ -27,7 +27,9 @@
 
     <!-- Used in search_layout_regular -->
     <string name="searchRegular_btn_search">Search</string>
-
+    <string name="searchRegular_et_expid">Experiment ID</string>
+    
+    
     <!-- Used in search_layout_pubmed -->
     <string name="searchPubmed_tv_pubmedStyle">PubMed-style</string>
     <string name="searchPubmed_btn_search">Search</string>
