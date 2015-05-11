@@ -7,17 +7,37 @@ import se.umu.cs.pvt151.R.id;
 import se.umu.cs.pvt151.R.layout;
 import se.umu.cs.pvt151.R.menu;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 public class LoginActivity extends Activity {
+	
+	private String serverURL;
+	private TextView mServerURLTextView;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login_layout);
+		
+		mServerURLTextView = (TextView) findViewById(R.id.login_tv_serverURL);
+	}
+	
+	@Override
+	public void onResume() {
+		SharedPreferences sharedPreferences = getSharedPreferences(
+				LoginSettingsActivity.SERVER_PREFERENCES, Context.MODE_PRIVATE);
+		
+		serverURL = sharedPreferences.getString(LoginSettingsActivity.NAME_OF_SELECTED_SERVER, "No server selected.");
+		mServerURLTextView.setText(serverURL);
+		
+		super.onResume();
 	}
 
 	@Override

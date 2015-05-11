@@ -42,7 +42,7 @@
             android:ems="10"
             android:hint="@string/login_enterUsername"
             android:maxLength="20"
-            android:textColor="@color/white"            
+            android:textColor="@color/black"            
             android:inputType="textNoSuggestions"
             android:textColorHint="@color/gray_login"
             android:singleLine="true" >
@@ -63,7 +63,7 @@
             android:ems="10"
             android:hint="@string/login_enterPassword"
             android:inputType="textPassword"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textColorHint="@color/gray_login"            
             android:maxLength="20"
             android:singleLine="true" />
@@ -88,5 +88,15 @@
             android:text="@string/app_name"
             android:textColor="@color/genomizer_blue"
             android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/login_tv_serverURL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+			android:textColor="@color/gray_login"
+			android:textSize="12sp"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout>

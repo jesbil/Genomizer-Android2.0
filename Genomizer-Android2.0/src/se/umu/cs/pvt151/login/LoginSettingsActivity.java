@@ -33,11 +33,14 @@ import android.widget.Toast;
 
 public class LoginSettingsActivity extends Activity {
 	
-	private final static String SERVER_PREFERENCES = 
+	protected final static String SERVER_PREFERENCES = 
 			"se.umu.cs.pvt151.SERVER_PREFERENCES";
 	
 	private final static String INDEX_OF_SELECTED_SERVER = 
 			"indexOfSelectedServer";
+	
+	protected final static String NAME_OF_SELECTED_SERVER = 
+			"nameOfSelectedServer";
 	
 	private final static String ALL_SERVERS = "allServers";
 	
@@ -73,6 +76,12 @@ public class LoginSettingsActivity extends Activity {
 		buildAddURLDialog();
 	}
 	
+	@Override
+	public void onPause() {
+		saveToSharedPreferences();
+		super.onPause();
+	}
+	
 	private void buildServerSpinner() {		
 		mServerSpinner = (Spinner) 
 				 findViewById(R.id.login_settings_spinner_servers);
@@ -86,22 +95,6 @@ public class LoginSettingsActivity extends Activity {
 				android.R.layout.simple_list_item_single_choice);
 		
 		mServerSpinner.setAdapter(mSpinnerAdapter);
-		
-		mServerSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view,
-					int position, long id) {
-				saveToSharedPreferences();
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-				// Do nothing
-				
-			}
-			
-		});
 		
 		mServerSpinner.setSelection(getSavedSelectedIndex());
 	}
@@ -215,8 +208,6 @@ public class LoginSettingsActivity extends Activity {
 		
 		savedServerURLs.set(savedServerURLs.indexOf(serverURL), formatURLString(editedURL));
  		mSpinnerAdapter.notifyDataSetChanged();
- 		
- 		saveToSharedPreferences();
 	}
 	
 	public void onClickRemoveURL() {
@@ -233,8 +224,6 @@ public class LoginSettingsActivity extends Activity {
 		String serverURL = (String) mServerSpinner.getSelectedItem();
 		savedServerURLs.remove(serverURL);
 		mSpinnerAdapter.notifyDataSetChanged();
-		
-		saveToSharedPreferences();
 	}
 	
 	private void onClickAddURL() {
@@ -246,8 +235,6 @@ public class LoginSettingsActivity extends Activity {
 		savedServerURLs.add(formattedURL);
 		mSpinnerAdapter.notifyDataSetChanged();
 		mServerSpinner.setSelection(mSpinnerAdapter.getCount() - 1);
-		
-		saveToSharedPreferences();
 	}
 	
 	public static String formatURLString(String url) {
@@ -267,10 +254,12 @@ public class LoginSettingsActivity extends Activity {
 	private void saveToSharedPreferences() {
 		int selectedPosition = mServerSpinner.getSelectedItemPosition();
 		String allServers = concatServersWithDelimiter();
+		String selectedServer = (String) mServerSpinner.getSelectedItem();
 		Editor editor = sharedPreferences.edit();
 		
 		editor.putInt(INDEX_OF_SELECTED_SERVER, selectedPosition);
 		editor.putString(ALL_SERVERS, allServers);
+		editor.putString(NAME_OF_SELECTED_SERVER, selectedServer);
 		editor.commit();
 	}
 	
