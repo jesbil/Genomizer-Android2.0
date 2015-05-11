@@ -10,5 +10,9 @@
     <item name="light_gray_experimentFiles" type="color">#D3D3D3</item>
     <item name="gray_divider" type="color">#9ca7b1</item>
     
+    <item name="genomizer_blue" type="color">#164c82</item>
+    
+    <item name="genomizer_white" type="color">#FAFAFA</item>
+    
     
 </resources>
