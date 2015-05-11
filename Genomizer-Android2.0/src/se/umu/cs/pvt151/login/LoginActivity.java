@@ -1,25 +1,34 @@
 package se.umu.cs.pvt151.login;
 
 
+import java.io.IOException;
+import java.util.Arrays;
+
 import se.umu.cs.pvt151.MainActivity;
 import se.umu.cs.pvt151.R;
-import se.umu.cs.pvt151.R.id;
-import se.umu.cs.pvt151.R.layout;
-import se.umu.cs.pvt151.R.menu;
+import se.umu.cs.pvt151.com.ComHandler;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class LoginActivity extends Activity {
 	
 	private String serverURL;
 	private TextView mServerURLTextView;
+	private EditText mUsernameEditText;
+	private EditText mPasswordEditText;
+	private Button mSignInButton;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +36,8 @@ public class LoginActivity extends Activity {
 		setContentView(R.layout.login_layout);
 		
 		mServerURLTextView = (TextView) findViewById(R.id.login_tv_serverURL);
+		mUsernameEditText = (EditText) findViewById(R.id.login_et_enterUsername);
+		mPasswordEditText = (EditText) findViewById(R.id.login_et_enterPassword);
 	}
 	
 	@Override
@@ -62,8 +73,91 @@ public class LoginActivity extends Activity {
 	}
 	
 	public void login(View v) {
-		Intent intent = new Intent(this, MainActivity.class);
-		startActivity(intent);
-		this.finish();
+		mSignInButton = (Button) findViewById(R.id.login_btn_signIn);
+		mSignInButton.setEnabled(false);
+		
+		new LoginTask().execute();
+	}
+	
+	/**
+	 * Fetches the text that user inputs into the user name and user password
+	 * input fields. These strings are used to verify server access through the
+	 * ComHandler. The ComHandler receives a token identifier if the user gets
+	 * access, and is needed throughout the session.
+	 */
+	private boolean sendLoginRequest() {
+		String username = mUsernameEditText.getText().toString();
+		String password = mPasswordEditText.getText().toString();
+		if (username.length() <= 0 || password.length() <= 0) {
+			return false;
+		}		
+		
+		ComHandler.setServerURL(serverURL);
+		
+		try {
+			
+			return ComHandler.login(username, password);		
+			
+		} catch (IOException e) {
+			Log.d("login", "exception: " + Arrays.toString(e.getStackTrace()));
+			Log.d("login", "exception: " + e.getMessage());			
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * A private class that handles the login request in a
+	 * background thread.
+	 * @author Petter Nilsson (ens11pnn)
+	 *
+	 */
+	private class LoginTask extends AsyncTask<Void, Void, Boolean> {
+		
+		
+		private static final String CONNECT_MESSAGE = 
+				"Connecting to server: \n";
+		
+		private static final String CONNECT = "Connecting";
+		
+		private ProgressDialog mProgress;
+		
+		/**
+		 * Creates a new LoginTask. Builds a ProgressDialog that is displayed
+		 * during the background work.
+		 */
+		public LoginTask() {
+			mProgress = new ProgressDialog(LoginActivity.this);
+			mProgress.setTitle(CONNECT);
+			mProgress.setMessage(CONNECT_MESSAGE + serverURL);
+			mProgress.show();
+		}
+		
+		/**
+		 * Sends login request and dispatches the answer onPostExecute
+		 */
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			return sendLoginRequest();
+		}
+		
+		/**
+		 * If the login-request was successful SearchFragment is started up.
+		 * Also re-enables the login button and dismiss the progress screen
+		 * that is shown during the login request.
+		 */
+		@Override
+		protected void onPostExecute(Boolean result) {
+
+			if (result.booleanValue()) {
+				Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+				startActivity(intent);
+				finish();
+			}
+			
+			mSignInButton.setEnabled(true);		
+			mProgress.dismiss();
+		}
+		
 	}
 }

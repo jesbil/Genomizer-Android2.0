@@ -25,17 +25,12 @@ import se.umu.cs.pvt151.model.ProcessStatus;
  */
 public class ComHandler {
 
-	private static String serverURL = "dumbledore.cs.umu.se:7000/";
-
-
-
 	/**
 	 * Used to change the targeted server URL.
 	 * 
 	 * @param serverURL The URL of the server.
 	 */
-	public static void setServerURL(String serverURL) {		
-		ComHandler.serverURL = serverURL;		
+	public static void setServerURL(String serverURL) {				
 		Communicator.initCommunicator(serverURL);
 	}
 
@@ -45,7 +40,7 @@ public class ComHandler {
 	 * @return serverURL The URL of the server.
 	 */
 	public static String getServerURL() {		
-		return ComHandler.serverURL;
+		return Communicator.getServerURL();
 	}
 
 
@@ -65,8 +60,7 @@ public class ComHandler {
 			Genomizer.makeToast(requestType + ": Bad Request.");
 			break;
 		case 401:
-			Genomizer.makeToast(requestType + ": Access Denied -" +
-					"Invalid username or password");
+			Genomizer.makeToast("Invalid username or password");
 			break;
 		case 403:
 			Genomizer.makeToast(requestType + ": Forbidden - "
