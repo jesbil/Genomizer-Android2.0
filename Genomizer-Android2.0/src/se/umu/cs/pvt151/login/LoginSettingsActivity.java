@@ -60,7 +60,7 @@ public class LoginSettingsActivity extends Activity {
 				Context.MODE_PRIVATE);
 
 		
-		buildServerSpinner();
+		//buildServerSpinner();
 		buildEditURLDialog();
 		buildRemoveURLDialog();
 		buildAddURLDialog();
@@ -70,6 +70,12 @@ public class LoginSettingsActivity extends Activity {
 	public void onPause() {
 		saveToSharedPreferences();
 		super.onPause();
+	}
+	
+	@Override
+	public void onResume() {
+		buildServerSpinner();
+		super.onResume();
 	}
 	
 	private void buildServerSpinner() {		
@@ -140,6 +146,7 @@ public class LoginSettingsActivity extends Activity {
 	
 	private void buildAddURLDialog() {
 		mAddURLInput = new EditText(this);
+		mAddURLInput.setText("http://");
 		
 		mAddURLDialog = new AlertDialog.Builder(this)
 				.setTitle("Add URL")
@@ -148,7 +155,8 @@ public class LoginSettingsActivity extends Activity {
 					
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						addServerURL(mAddURLInput.getText().toString());	
+						addServerURL(mAddURLInput.getText().toString());
+						mAddURLInput.setText("http://");
 					}
 				})
 				.setNegativeButton("Cancel", new DialogInterface
@@ -286,8 +294,6 @@ public class LoginSettingsActivity extends Activity {
 		}
 		
 		return serverURLs;
-		
-		
 	}
 	
 	private int getSavedSelectedIndex() {
