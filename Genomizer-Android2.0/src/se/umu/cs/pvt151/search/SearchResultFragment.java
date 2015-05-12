@@ -40,7 +40,7 @@ public class SearchResultFragment extends Fragment {
 		int id = item.getItemId();
 		if(id==R.id.search_result_settings){
 			Fragment fragment = new SearchResultSettingsFragment();
-			getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, fragment).addToBackStack(null).commit();
+			getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).add(R.id.frame_container, fragment).commit();
 			return true;
 		}
 		

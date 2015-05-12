@@ -2,6 +2,7 @@ package se.umu.cs.pvt151.search;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
 
 import se.umu.cs.pvt151.R;
 import se.umu.cs.pvt151.com.ComHandler;
@@ -9,9 +10,11 @@ import se.umu.cs.pvt151.model.Annotation;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,17 +25,25 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.Toast;
 
 public class SearchRegularFragment extends Fragment {
+	
+	private static final String DOWNLOAD_ANNOTATIONS = "Downloading server annotations";
+	private static final String LOADING = "Loading";
+	
 	
 	private ArrayList<String> mAnnotationNamesList;
 	private ArrayList<Annotation> mAnnotations;
 	private ProgressDialog mLoadScreen;
 	private ArrayList<SearchViewHolder> mViewHolderList = new ArrayList<SearchViewHolder>();
+	private ListView mAnnotationsList;
+	private AnnotationsTask annotationTask;
 	
 	
 	/**
@@ -54,26 +65,34 @@ public class SearchRegularFragment extends Fragment {
 		protected boolean isChecked;
 		protected View convertView;
 	}
+	
+	@Override
+	public void onResume() {
+		showLoadScreen(DOWNLOAD_ANNOTATIONS);
+		new AnnotationsTask().execute();
+		
+		super.onResume();
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
 			Bundle savedInstanceState) {
 
 		View rootView = inflater.inflate(R.layout.search_layout_regular,container, false);
-		
-		new AnnotationsTask().execute();
+		mAnnotationsList = (ListView) rootView.findViewById(R.id.search_regular_lv_annotationList);
 		
 		Button mSearchButton = (Button) rootView.findViewById(R.id.search_regular_btn_search);
 		mSearchButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Fragment fragment = new SearchResultFragment();
-				getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, fragment).addToBackStack(null).commit();
+				getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).add(R.id.frame_container, fragment).commit();	
 			}
 		});
 		
 		return rootView;
 	}
+	
 	
 	/**
 	 * Initializes a new SearchListAdapter for the listView in the fragment 
@@ -81,13 +100,21 @@ public class SearchRegularFragment extends Fragment {
 	 * setup a footer for the search button to generate a search string.
 	 */
 	private void setupListView() {
-		ArrayAdapter<String> adapter;
-//		View footer = generateFooter();
-//		generateSearchButton(footer);
-//		generateHeader();
-		adapter = new SearchListAdapter(mAnnotationNamesList);
+		ArrayAdapter<String> adapter = new SearchListAdapter(mAnnotationNamesList);
 		adapter.setNotifyOnChange(true);
-//		setListAdapter(adapter);
+		mAnnotationsList.setAdapter(adapter);
+	}
+	
+	/**
+	 * Presents the user with a loading screen while data transfer is 
+	 * occuring in the application. 
+	 * 
+	 */
+	private void showLoadScreen(String msg) {
+		mLoadScreen = new ProgressDialog(getActivity());
+		mLoadScreen.setTitle(LOADING);
+		mLoadScreen.setMessage(msg);
+		mLoadScreen.show();
 	}
 	
 	
@@ -112,13 +139,17 @@ public class SearchRegularFragment extends Fragment {
 			try {
 				mAnnotations = ComHandler.getServerAnnotations();
 				mAnnotationNamesList = new ArrayList<String>();
-
+				if(mAnnotations.isEmpty()){
+					Log.d("Annotations","No annotations");
+				}
+				
 				for(Annotation annotation : mAnnotations) {
 					mAnnotationNamesList.add(annotation.getName());	
 				}
 				
 			} catch (IOException e) {
 				//TODO server communication failed
+				except = e;	
 			}
 			return null;
 			
@@ -130,7 +161,6 @@ public class SearchRegularFragment extends Fragment {
 		 */
 		@Override
 		protected void onPostExecute(Void result) {
-			super.onPostExecute(result);
 			mLoadScreen.dismiss();
 			if (except == null) {
 				setupListView();
@@ -181,17 +211,17 @@ public class SearchRegularFragment extends Fragment {
 				
 				if(mSpinnerList.size() == 1 && mSpinnerList.get(0).compareTo("freetext") == 0) {
 					convertView = getActivity().getLayoutInflater().inflate(
-							R.layout.searchlist_field, null);
+							R.layout.search_layout_regular_field, null);
 					viewHolder = new SearchViewHolder();
 					
 					makeFreeTextHolder(position, convertView, viewHolder);
 				} else {
 					convertView = getActivity().getLayoutInflater().inflate(
-							R.layout.searchlist_dropdown_field, null);
+							R.layout.search_layout_regular_dropdown_field, null);
 					
 					spinAdapter = new ArrayAdapter<String>(convertView.getContext(), android.R.layout.simple_spinner_item, mSpinnerList);
 					spinAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-					spinner = (Spinner) convertView.findViewById(R.id.spinner_search);
+					spinner = (Spinner) convertView.findViewById(R.id.searchRegular_spinner_search);
 					
 					spinner.setAdapter(spinAdapter);
 					
@@ -235,9 +265,9 @@ public class SearchRegularFragment extends Fragment {
 		 */
 		private void makeSpinnerHolder(int position, View convertView,
 				SearchViewHolder viewHolder, Spinner spinner) {
-			viewHolder.textView = (TextView) convertView.findViewById(R.id.lbl_spinner_search);
+			viewHolder.textView = (TextView) convertView.findViewById(R.id.searchRegular_tv_search);
 			viewHolder.textView.setText(mAnnotations.get(position).getName());
-			viewHolder.checkBox = (CheckBox) convertView.findViewById(R.id.check_dropdown_search);
+			viewHolder.checkBox = (CheckBox) convertView.findViewById(R.id.searchRegular_cb_checkbox);
 			viewHolder.checkBox.setTag(viewHolder);
 			viewHolder.checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 				
@@ -252,7 +282,7 @@ public class SearchRegularFragment extends Fragment {
 					
 				}
 			});
-			viewHolder.spinner = (Spinner) convertView.findViewById(R.id.spinner_search);
+			viewHolder.spinner = (Spinner) convertView.findViewById(R.id.searchRegular_spinner_search);
 			viewHolder.isDropDown = true;
 			viewHolder.position = position;
 			
@@ -284,7 +314,7 @@ public class SearchRegularFragment extends Fragment {
 		private void makeFreeTextHolder(int position, View convertView,
 				SearchViewHolder viewHolder) {
 			viewHolder.isDropDown = false;
-			viewHolder.textView = (TextView) convertView.findViewById(R.id.searchResult_tv_fieldSearch);
+			viewHolder.textView = (TextView) convertView.findViewById(R.id.searchRegular_tv_fieldSearch);
 			viewHolder.textView.setText(mAnnotations.get(position).getName());
 			viewHolder.position = position;
 			

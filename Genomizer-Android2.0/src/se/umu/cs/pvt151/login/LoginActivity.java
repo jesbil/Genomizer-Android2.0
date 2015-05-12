@@ -120,8 +120,10 @@ public class LoginActivity extends Activity {
 	 * access, and is needed throughout the session.
 	 */
 	private boolean sendLoginRequest() {
-		String username = mUsernameEditText.getText().toString();
-		String password = mPasswordEditText.getText().toString();
+//		String username = mUsernameEditText.getText().toString();
+//		String password = mPasswordEditText.getText().toString();
+		String username = "testuser";
+		String password = "baguette";
 		if (username.length() <= 0 || password.length() <= 0) {
 			return false;
 		}		
