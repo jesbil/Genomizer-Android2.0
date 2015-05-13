@@ -29,6 +29,12 @@ public class ComHandler {
 	
 	private final static String LOGIN = "login";
 	private final static String TOKEN = "token";
+	private final static String ANNOTATION = "annotation";
+	private final static String PROCESS = "process";
+	private final static String GENOME_RELEASE = "genomeRelease";
+	
+	private final static String SEARCH_ANNOTATIONS = "search/?annotations=";
+	private final static String RAW_TO_PROFILE = "process/rawtoprofile";
 	
 	public final static int OK = 200;
 	public final static int NO_CONTENT = 204;
@@ -120,14 +126,16 @@ public class ComHandler {
 	 * @throws IOException When no connection to the server can be
 	 * 		   established
 	 */
-	public static int login(String username, String password) throws IOException {
+	public static int login(String username, String password) 
+			throws IOException {
 		int result;
 		
 		if (Genomizer.isOnline()) {
 			
 			try {
 				JSONObject msg = MsgFactory.createLogin(username, password);
-				GenomizerHttpPackage loginResponse = Communicator.sendHTTPRequest(msg, RESTMethod.POST, LOGIN);
+				GenomizerHttpPackage loginResponse = Communicator
+						.sendHTTPRequest(msg, RESTMethod.POST, LOGIN);
 				
 				result = loginResponse.getCode();
 				
@@ -152,8 +160,10 @@ public class ComHandler {
 	 * Sends a search request to the server. The search is based on annotations,
 	 * added as a parameter.
 	 * 
-	 * @param annotations HashMap with the name of the field as key and the value of the field as value.
-	 * @return JSONArray Contains an arbitrary amount of JSONObjects. Each object is information about a file.
+	 * @param annotations HashMap with the name of the field as key and the 
+	 * 		  value of the field as value.
+	 * @return JSONArray Contains an arbitrary amount of JSONObjects. 
+	 *         Each object is information about a file.
 	 * @throws IOException
 	 */
 	public static ArrayList<Experiment> search(HashMap<String, String> annotations) throws IOException {
@@ -161,14 +171,18 @@ public class ComHandler {
 			try {					
 				JSONObject msg = new JSONObject();
 				GenomizerHttpPackage searchResponse = Communicator.sendHTTPRequest
-						(msg, RESTMethod.GET, "search/?annotations=" + generatePubmedQuery(annotations));
+						(msg, RESTMethod.GET, SEARCH_ANNOTATIONS + generatePubmedQuery(annotations));
 
-				if (searchResponse.getCode() == 200) { // OK - the request was successful
+				if (searchResponse.getCode() == OK) {
 					JSONArray jsonPackage = new JSONArray(searchResponse.getBody());
 					return MsgDeconstructor.deconSearch(jsonPackage);
 
 				} else { 
-					//If the search yields no result.
+					
+					/*
+					 * TODO Remove the responseDecode from all
+					 * methods.
+					 */
 					responseDecode("Search response", searchResponse.getCode());
 					return new ArrayList<Experiment>();
 				} 
@@ -193,7 +207,7 @@ public class ComHandler {
 			try {						
 				JSONObject msg = new JSONObject();
 				GenomizerHttpPackage searchResponse = Communicator.sendHTTPRequest
-						(msg, RESTMethod.GET, "search/?annotations=" + pubmedQuery);
+						(msg, RESTMethod.GET, SEARCH_ANNOTATIONS + pubmedQuery);
 
 				if (searchResponse.getCode() >= 200 && searchResponse.getCode() < 300) {
 					JSONArray jsonPackage = new JSONArray(searchResponse.getBody());
@@ -223,9 +237,9 @@ public class ComHandler {
 		if(Genomizer.isOnline()) {
 			try {
 				JSONObject msg = new JSONObject();
-				GenomizerHttpPackage annotationResponse = Communicator.sendHTTPRequest(msg, RESTMethod.GET, "annotation");
+				GenomizerHttpPackage annotationResponse = Communicator.sendHTTPRequest(msg, RESTMethod.GET, ANNOTATION);
 
-				if (annotationResponse.getCode() == 200) {
+				if (annotationResponse.getCode() == OK) {
 					String jsonString = annotationResponse.getBody();
 					JSONArray jsonPackage = new JSONArray(jsonString);
 
@@ -258,9 +272,9 @@ public class ComHandler {
 		if(Genomizer.isOnline()) {
 			try {			
 				JSONObject msg = MsgFactory.createConversionRequest(parameters, file, meta, release);
-				GenomizerHttpPackage response = Communicator.sendHTTPRequest(msg, RESTMethod.PUT, "process/rawtoprofile");
+				GenomizerHttpPackage response = Communicator.sendHTTPRequest(msg, RESTMethod.PUT, RAW_TO_PROFILE);
 
-				if(response.getCode() == 200) {
+				if(response.getCode() == OK) {
 					return true;
 				} else {
 					responseDecode("Raw to profile", response.getCode());
@@ -288,9 +302,9 @@ public class ComHandler {
 		if(Genomizer.isOnline()) {
 			try {
 				JSONObject msg = new JSONObject();
-				GenomizerHttpPackage genomeResponse = Communicator.sendHTTPRequest(msg, RESTMethod.GET, "genomeRelease");
+				GenomizerHttpPackage genomeResponse = Communicator.sendHTTPRequest(msg, RESTMethod.GET, GENOME_RELEASE);
 
-				if (genomeResponse.getCode() == 200) {
+				if (genomeResponse.getCode() == OK) {
 					String jsonString = genomeResponse.getBody();
 					JSONArray jsonPackage = new JSONArray(jsonString);
 
@@ -320,9 +334,9 @@ public class ComHandler {
 		if(Genomizer.isOnline()) {
 			try {
 				JSONObject msg = new JSONObject();
-				GenomizerHttpPackage genomeResponse = Communicator.sendHTTPRequest(msg, RESTMethod.GET, "process");
+				GenomizerHttpPackage genomeResponse = Communicator.sendHTTPRequest(msg, RESTMethod.GET, PROCESS);
 
-				if (genomeResponse.getCode() == 200) {
+				if (genomeResponse.getCode() == OK) {
 					String jsonString = genomeResponse.getBody();
 					JSONArray jsonPackage = new JSONArray(jsonString);
 
