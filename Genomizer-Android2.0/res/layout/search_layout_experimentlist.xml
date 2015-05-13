@@ -28,7 +28,7 @@
       android:layout_width="fill_parent" 
       android:layout_height="7dp" 
       android:layout_below="@+id/search_tv_searchResult"
-      android:background="@color/light_gray" />
+      android:background="@color/genomizer_gray" />
      
     <ListView
         android:id="@+id/search_lv_searchResultList"
@@ -38,7 +38,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_below="@id/search_tv_divider"
-        android:background="@color/smoke_white"
+        android:background="@color/genomizer_white"
         android:dividerHeight="1dp"        
         android:choiceMode="singleChoice" >
 

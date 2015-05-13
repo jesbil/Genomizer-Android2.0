@@ -64,7 +64,8 @@ public class GeneFile implements Parcelable {
 	 * @param file that extra information will
 	 * be received from. 
 	 */
-	public String getFileInfo() {
+	@Override
+	public String toString() {
 		return "Exp id: " + expId +"\n" +
 			   "Type: " + type + "\n" + 
 			   "GR Version: "+ grVersion + "\n" +

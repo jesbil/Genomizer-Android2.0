@@ -2,7 +2,7 @@ package se.umu.cs.pvt151.search;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.Executor;
+import java.util.HashMap;
 
 import se.umu.cs.pvt151.R;
 import se.umu.cs.pvt151.com.ComHandler;
@@ -10,7 +10,6 @@ import se.umu.cs.pvt151.model.Annotation;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -28,22 +27,22 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.Toast;
 
 public class SearchRegularFragment extends Fragment {
 	
 	private static final String DOWNLOAD_ANNOTATIONS = "Downloading server annotations";
 	private static final String LOADING = "Loading";
+	private static final String NO_SEARCH_VALUES = "No annotations choosen for search";
 	
 	
-	private ArrayList<String> mAnnotationNamesList;
+	private ArrayList<String> annotationNamesList;
 	private ArrayList<Annotation> mAnnotations;
 	private ProgressDialog mLoadScreen;
 	private ArrayList<SearchViewHolder> mViewHolderList = new ArrayList<SearchViewHolder>();
 	private ListView mAnnotationsList;
-	private AnnotationsTask annotationTask;
 	
 	
 	/**
@@ -85,8 +84,17 @@ public class SearchRegularFragment extends Fragment {
 		mSearchButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Fragment fragment = new SearchResultFragment();
-				getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).add(R.id.frame_container, fragment).commit();	
+				
+			
+				HashMap<String, String> searchValues = generateSearchMap();
+				
+				if(searchValues.isEmpty()){
+					Toast.makeText(getActivity(), NO_SEARCH_VALUES, Toast.LENGTH_LONG).show();
+				}else{
+					Fragment fragment = new SearchResultFragment(searchValues,annotationNamesList);
+					getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).add(R.id.frame_container, fragment).commit();	
+		
+				}
 			}
 		});
 		
@@ -94,13 +102,33 @@ public class SearchRegularFragment extends Fragment {
 	}
 	
 	
+	protected HashMap<String, String> generateSearchMap() {
+		HashMap<String, String> search = new HashMap<String, String>();
+		String key;
+		String value;
+		
+		for(SearchViewHolder vh : mViewHolderList) {
+			if(vh.isChecked) {
+				key = vh.textView.getText().toString();
+				if(vh.isDropDown) {
+					value = vh.spinner.getSelectedItem().toString();
+				}else{
+					value = vh.freetext;
+				}
+				search.put(key, value);
+			}
+		}
+		
+		return search;
+	}
+
 	/**
 	 * Initializes a new SearchListAdapter for the listView in the fragment 
 	 * containing the generated annotations from the database and
 	 * setup a footer for the search button to generate a search string.
 	 */
 	private void setupListView() {
-		ArrayAdapter<String> adapter = new SearchListAdapter(mAnnotationNamesList);
+		ArrayAdapter<String> adapter = new SearchListAdapter(annotationNamesList);
 		adapter.setNotifyOnChange(true);
 		mAnnotationsList.setAdapter(adapter);
 	}
@@ -138,13 +166,13 @@ public class SearchRegularFragment extends Fragment {
 		protected Void doInBackground(Void... params) {
 			try {
 				mAnnotations = ComHandler.getServerAnnotations();
-				mAnnotationNamesList = new ArrayList<String>();
+				annotationNamesList = new ArrayList<String>();
 				if(mAnnotations.isEmpty()){
 					Log.d("Annotations","No annotations");
 				}
 				
 				for(Annotation annotation : mAnnotations) {
-					mAnnotationNamesList.add(annotation.getName());	
+					annotationNamesList.add(annotation.getName());	
 				}
 				
 			} catch (IOException e) {
@@ -202,7 +230,7 @@ public class SearchRegularFragment extends Fragment {
 		 */
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			SearchViewHolder viewHolder = null;
+			SearchViewHolder viewHolder;
 			ArrayAdapter<String> spinAdapter;
 			Spinner spinner;
 
@@ -224,8 +252,6 @@ public class SearchRegularFragment extends Fragment {
 					spinner = (Spinner) convertView.findViewById(R.id.searchRegular_spinner_search);
 					
 					spinner.setAdapter(spinAdapter);
-					
-					
 					viewHolder = new SearchViewHolder();
 					makeSpinnerHolder(position, convertView, viewHolder,
 							spinner);
@@ -240,13 +266,13 @@ public class SearchRegularFragment extends Fragment {
 				convertView = viewHolder.convertView;
 				
 				if(viewHolder.isDropDown) {				
-					viewHolder.textView.setText(mAnnotationNamesList.get(viewHolder.position));
+					viewHolder.textView.setText(annotationNamesList.get(viewHolder.position));
 					viewHolder.spinner.setSelection(viewHolder.selectedPosition);
 					viewHolder.checkBox.setChecked(viewHolder.isChecked);
 				} else {
 					viewHolder.editText.setText(viewHolder.freetext);
 					viewHolder.editText.clearFocus();
-					viewHolder.textView.setText(mAnnotationNamesList.get(viewHolder.position));
+					viewHolder.textView.setText(annotationNamesList.get(viewHolder.position));
 					viewHolder.checkBox.setChecked(viewHolder.isChecked);
 				}
 			}
