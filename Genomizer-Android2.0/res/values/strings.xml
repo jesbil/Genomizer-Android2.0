@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+	
+	<!-- Toast messages -->
+    <string name="msg_no_internet_availiable">Internet seems to be disconnected</string>
+    <string name="msg_http_response_204">No content</string>
+    <string name="msg_http_response_400">Bad request</string>
+    <string name="msg_http_response_401">Invalid username or password</string>
+    <string name="msg_http_response_403">Access denied</string>
+    <string name="msg_http_response_404">Resource not found</string>
+    <string name="msg_http_response_405">Method not allowed</string>
+    <string name="msg_http_response_429">Too many requests.\nPlease try again later.</string>
+    <string name="msg_http_response_503">Service unavailiable</string>
+    <string name="msg_an_error_occurred">An error occurred</string>
+    <string name="msg_no_connection_with_server">Could not connect to server</string>
+           
+    
     <string name="app_name">Genomizer 2.0</string>
 
     <!-- Used in login_activity -->
@@ -10,6 +24,7 @@
     <string name="login_enterUsername">Enter username</string>
     <string name="login_password">Password</string>
     <string name="login_enterPassword">••••••</string>
+    
 
     <!-- Used in login_layout_settings -->
     <string name="login_settings_label">Server settings</string>

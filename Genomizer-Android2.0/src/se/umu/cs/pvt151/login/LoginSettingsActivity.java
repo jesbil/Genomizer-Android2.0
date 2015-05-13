@@ -37,7 +37,7 @@ public class LoginSettingsActivity extends Activity {
 	private final static String DELIMITER = "#";
 	
 	private Spinner mServerSpinner;
-	private List<String> savedServerURLs;
+	private ArrayList<String> savedServerURLs;
 	private ArrayAdapter<String> mSpinnerAdapter;
 	
 	private EditText mEditURLInput;

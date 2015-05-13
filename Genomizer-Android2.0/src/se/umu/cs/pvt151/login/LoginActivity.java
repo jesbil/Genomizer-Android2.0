@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class LoginActivity extends Activity {
 	
@@ -119,27 +120,23 @@ public class LoginActivity extends Activity {
 	 * ComHandler. The ComHandler receives a token identifier if the user gets
 	 * access, and is needed throughout the session.
 	 */
-	private boolean sendLoginRequest() {
+	private int sendLoginRequest() {
 //		String username = mUsernameEditText.getText().toString();
 //		String password = mPasswordEditText.getText().toString();
 		String username = "testuser";
 		String password = "baguette";
 		if (username.length() <= 0 || password.length() <= 0) {
-			return false;
+			return ComHandler.UNAUTHORIZED;
 		}		
 		
 		ComHandler.setServerURL(serverURL);
 		
 		try {
-			
-			return ComHandler.login(username, password);		
-			
-		} catch (IOException e) {
-			Log.d("login", "exception: " + Arrays.toString(e.getStackTrace()));
-			Log.d("login", "exception: " + e.getMessage());			
+			return ComHandler.login(username, password);
+		} catch (IOException ioe) {
+			return ComHandler.NO_CONNECTION_WITH_SERVER;
 		}
 		
-		return false;
 	}
 	
 	/**
@@ -148,7 +145,7 @@ public class LoginActivity extends Activity {
 	 * @author Petter Nilsson (ens11pnn)
 	 *
 	 */
-	private class LoginTask extends AsyncTask<Void, Void, Boolean> {
+	private class LoginTask extends AsyncTask<Void, Void, Integer> {
 		
 		
 		private static final String CONNECT_MESSAGE = 
@@ -173,26 +170,79 @@ public class LoginActivity extends Activity {
 		 * Sends login request and dispatches the answer onPostExecute
 		 */
 		@Override
-		protected Boolean doInBackground(Void... params) {
+		protected Integer doInBackground(Void... params) {
 			return sendLoginRequest();
 		}
 		
 		/**
-		 * If the login-request was successful SearchFragment is started up.
+		 * If the login-request was successful the MainActivity is started up.
 		 * Also re-enables the login button and dismiss the progress screen
 		 * that is shown during the login request.
+		 * 
+		 * If the login should fail a proper toast is displayed.
 		 */
 		@Override
-		protected void onPostExecute(Boolean result) {
-
-			if (result.booleanValue()) {
+		protected void onPostExecute(Integer result) {
+			mSignInButton.setEnabled(true);		
+			mProgress.dismiss();
+			
+			if (result.equals(ComHandler.OK)) {
 				Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 				startActivity(intent);
 				finish();
+			} else {
+				toastLoginError(result);
+			}
+		}
+		
+		/**
+		 * A method that makes a toast depending on the error code
+		 * provided as input. The error code is matched with a R.string
+		 * and then displayed to the user.
+		 * <br><br/>
+		 * Make sure to call this method when you are on the main GUI
+		 * thread.
+		 * @param code The error code found in ComHandler
+		 * @author Petter Nilsson (ens11pnn)
+		 */
+		private void toastLoginError(int code) {
+			int stringId;
+			switch (code) {
+			case ComHandler.BAD_REQUEST:
+				stringId = R.string.msg_http_response_400;
+				break;
+			case ComHandler.FORBIDDEN:
+				stringId = R.string.msg_http_response_403;
+				break;
+			case ComHandler.NO_CONNECTION_WITH_SERVER:
+				stringId = R.string.msg_no_connection_with_server;
+				break;
+			case ComHandler.NO_CONTENT:
+				stringId = R.string.msg_http_response_204;
+				break;
+			case ComHandler.NO_INTERNET_CONNECTION:
+				stringId = R.string.msg_no_internet_availiable;
+				break;
+			case ComHandler.NOT_ALLOWED:
+				stringId = R.string.msg_http_response_405;
+				break;
+			case ComHandler.SERVICE_UNAVAILIABLE:
+				stringId = R.string.msg_http_response_503;
+				break;
+			case ComHandler.TOO_MANY_REQUESTS:
+				stringId = R.string.msg_http_response_429;
+				break;
+			case ComHandler.UNAUTHORIZED:
+				stringId = R.string.msg_http_response_401;
+				break;
+			default:
+				stringId = R.string.msg_an_error_occurred;
+				break;
 			}
 			
-			mSignInButton.setEnabled(true);		
-			mProgress.dismiss();
+			Toast.makeText(LoginActivity.this, 
+						   stringId, 
+						   Toast.LENGTH_LONG).show();
 		}
 		
 	}

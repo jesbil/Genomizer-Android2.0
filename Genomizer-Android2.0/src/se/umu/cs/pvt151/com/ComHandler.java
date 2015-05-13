@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import se.umu.cs.pvt151.R;
 import se.umu.cs.pvt151.model.Annotation;
 import se.umu.cs.pvt151.model.Experiment;
 import se.umu.cs.pvt151.model.GeneFile;
@@ -20,11 +21,28 @@ import se.umu.cs.pvt151.model.ProcessStatus;
 /**
  * This class takes care of the communication with the server.
  * 
+ * @TODO Throw all exceptions back to the calling fragments for toasts
  * @author Rickard dv12rhm
  *
  */
 public class ComHandler {
-
+	
+	private final static String LOGIN = "login";
+	private final static String TOKEN = "token";
+	
+	public final static int OK = 200;
+	public final static int NO_CONTENT = 204;
+	public final static int BAD_REQUEST = 400;
+	public final static int UNAUTHORIZED = 401;
+	public final static int FORBIDDEN = 403;
+	public final static int NOT_ALLOWED = 405;
+	public final static int TOO_MANY_REQUESTS = 429;
+	public final static int SERVICE_UNAVAILIABLE = 503;
+	
+	public final static int NO_CONNECTION_WITH_SERVER = -1;
+	public final static int NO_INTERNET_CONNECTION = -2;
+	public final static int PARSING_ERROR = -3;
+	
 	/**
 	 * Used to change the targeted server URL.
 	 * 
@@ -85,43 +103,50 @@ public class ComHandler {
 		}
 
 	}
-
-
+	
 	/**
-	 * Sends a login request to the server.
+	 * A method that sends a login request to the specified server.
+	 * If the login succeeds (200 OK / ComHandler.OK), the 
+	 * authorization token is saved in the Communicator.
+	 * <br><br/>
+	 * The method returns the code that the request returns. If no
+	 * connection can be established or something else goes wrong, the correct
+	 * error code is returned instead.
 	 * 
-	 * @param username The username in the login request.
-	 * @param password The password in the login request.
-	 * @return True on accepted login, otherwise false.
-	 * @throws IOException Is thrown when the application can't communicate 
-	 * with the server.
-	 * @throws ConnectionException 
+	 * @param username The username
+	 * @param password The password
+	 * @return Either a HTTP response code, or an error code. Both are found
+	 * 		   as fields in ComHandler.
+	 * @throws IOException When no connection to the server can be
+	 * 		   established
 	 */
-	public static boolean login(String username, String password) throws IOException {
-		if(Genomizer.isOnline()) {
+	public static int login(String username, String password) throws IOException {
+		int result;
+		
+		if (Genomizer.isOnline()) {
+			
 			try {
-				JSONObject msg = MsgFactory.createLogin(username, password);			
-
-				GenomizerHttpPackage loginResponse = Communicator.sendHTTPRequest(msg, RESTMethod.POST, "login");	
-				if (loginResponse.getCode() == 200) { // OK - the request was successful
-					String jsonString = loginResponse.getBody();				
-					JSONObject jsonPackage = new JSONObject(jsonString);				
-					Communicator.setToken(jsonPackage.get("token").toString());
-					return true;
-
-				} else {
-					responseDecode("Login response", loginResponse.getCode());
-					return false;
+				JSONObject msg = MsgFactory.createLogin(username, password);
+				GenomizerHttpPackage loginResponse = Communicator.sendHTTPRequest(msg, RESTMethod.POST, LOGIN);
+				
+				result = loginResponse.getCode();
+				
+				if (result == OK) {
+					String jsonString = loginResponse.getBody();
+					JSONObject jsonObject = new JSONObject(jsonString);
+					Communicator.setToken(jsonObject.get(TOKEN).toString());
 				}
-			} catch (JSONException e) {
-				//This is only an issue if the server is changed.
-				throw new IOException("JSONException on response body. Has the server API changed?");
+				
+			} catch (JSONException je) {
+				result = PARSING_ERROR;
 			}
+			
+		} else {
+			result = NO_INTERNET_CONNECTION;
 		}
-		Genomizer.makeToast("Internet access unavailable.");
-		return false;
+		
+		return result;
 	}
-
 
 	/**
 	 * Sends a search request to the server. The search is based on annotations,
