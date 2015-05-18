@@ -42,18 +42,10 @@ public class LoginActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login_layout);
 	
-		
 		mServerURLTextView = (TextView) findViewById(R.id.login_tv_serverURL);
 		mUsernameEditText = (EditText) findViewById(R.id.login_et_enterUsername);
 		mPasswordEditText = (EditText) findViewById(R.id.login_et_enterPassword);
-		
-		/*if (savedInstanceState != null) {
-			String username = savedInstanceState.getString(SAVED_INSTANCE_USERNAME);
-			String password = savedInstanceState.getString(SAVED_INSTANCE_PASSWORD);
-			mUsernameEditText.setText(username);
-			mPasswordEditText.setText(password);
-		}*/
-		
+		mSignInButton = (Button) findViewById(R.id.login_btn_signIn);
 	}
 	
 	@Override
@@ -108,35 +100,9 @@ public class LoginActivity extends Activity {
 	}
 	
 	public void login(View v) {
-		mSignInButton = (Button) findViewById(R.id.login_btn_signIn);
 		mSignInButton.setEnabled(false);
 		
 		new LoginTask().execute();
-	}
-	
-	/**
-	 * Fetches the text that user inputs into the user name and user password
-	 * input fields. These strings are used to verify server access through the
-	 * ComHandler. The ComHandler receives a token identifier if the user gets
-	 * access, and is needed throughout the session.
-	 */
-	private int sendLoginRequest() {
-//		String username = mUsernameEditText.getText().toString();
-//		String password = mPasswordEditText.getText().toString();
-		String username = "testuser";
-		String password = "baguette";
-		if (username.length() <= 0 || password.length() <= 0) {
-			return ComHandler.UNAUTHORIZED;
-		}		
-		
-		ComHandler.setServerURL(serverURL);
-		
-		try {
-			return ComHandler.login(username, password);
-		} catch (IOException ioe) {
-			return ComHandler.NO_CONNECTION_WITH_SERVER;
-		}
-		
 	}
 	
 	/**
@@ -149,7 +115,7 @@ public class LoginActivity extends Activity {
 		
 		
 		private static final String CONNECT_MESSAGE = 
-				"Connecting to server: \n";
+				"Connecting to server:\n";
 		
 		private static final String CONNECT = "Connecting";
 		
@@ -196,6 +162,28 @@ public class LoginActivity extends Activity {
 		}
 		
 		/**
+		 * Fetches the text that user inputs into the user name and user password
+		 * input fields. These strings are used to verify server access through the
+		 * ComHandler. The ComHandler receives a token identifier if the user gets
+		 * access, and is needed throughout the session.
+		 */
+		private int sendLoginRequest() {
+			String username = mUsernameEditText.getText().toString();
+			String password = mPasswordEditText.getText().toString();
+//			String username = "testuser";
+//			String password = "baguette";
+			
+			ComHandler.setServerURL(serverURL);
+			
+			try {
+				return ComHandler.login(username, password);
+			} catch (IOException ioe) {
+				return ComHandler.NO_CONNECTION_WITH_SERVER;
+			}
+			
+		}
+		
+		/**
 		 * A method that makes a toast depending on the error code
 		 * provided as input. The error code is matched with a R.string
 		 * and then displayed to the user.
@@ -208,36 +196,36 @@ public class LoginActivity extends Activity {
 		private void toastLoginError(int code) {
 			int stringId;
 			switch (code) {
-			case ComHandler.BAD_REQUEST:
-				stringId = R.string.msg_http_response_400;
-				break;
-			case ComHandler.FORBIDDEN:
-				stringId = R.string.msg_http_response_403;
-				break;
-			case ComHandler.NO_CONNECTION_WITH_SERVER:
-				stringId = R.string.msg_no_connection_with_server;
-				break;
-			case ComHandler.NO_CONTENT:
-				stringId = R.string.msg_http_response_204;
-				break;
-			case ComHandler.NO_INTERNET_CONNECTION:
-				stringId = R.string.msg_no_internet_availiable;
-				break;
-			case ComHandler.NOT_ALLOWED:
-				stringId = R.string.msg_http_response_405;
-				break;
-			case ComHandler.SERVICE_UNAVAILIABLE:
-				stringId = R.string.msg_http_response_503;
-				break;
-			case ComHandler.TOO_MANY_REQUESTS:
-				stringId = R.string.msg_http_response_429;
-				break;
-			case ComHandler.UNAUTHORIZED:
-				stringId = R.string.msg_http_response_401;
-				break;
-			default:
-				stringId = R.string.msg_an_error_occurred;
-				break;
+				case ComHandler.BAD_REQUEST:
+					stringId = R.string.msg_http_response_400;
+					break;
+				case ComHandler.FORBIDDEN:
+					stringId = R.string.msg_http_response_403;
+					break;
+				case ComHandler.NO_CONNECTION_WITH_SERVER:
+					stringId = R.string.msg_no_connection_with_server;
+					break;
+				case ComHandler.NO_CONTENT:
+					stringId = R.string.msg_http_response_204;
+					break;
+				case ComHandler.NO_INTERNET_CONNECTION:
+					stringId = R.string.msg_no_internet_availiable;
+					break;
+				case ComHandler.NOT_ALLOWED:
+					stringId = R.string.msg_http_response_405;
+					break;
+				case ComHandler.SERVICE_UNAVAILIABLE:
+					stringId = R.string.msg_http_response_503;
+					break;
+				case ComHandler.TOO_MANY_REQUESTS:
+					stringId = R.string.msg_http_response_429;
+					break;
+				case ComHandler.UNAUTHORIZED:
+					stringId = R.string.msg_http_response_401;
+					break;
+				default:
+					stringId = R.string.msg_an_error_occurred;
+					break;
 			}
 			
 			Toast.makeText(LoginActivity.this, 
