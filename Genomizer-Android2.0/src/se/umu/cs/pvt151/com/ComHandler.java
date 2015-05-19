@@ -175,7 +175,7 @@ public class ComHandler {
 
 				if (searchResponse.getCode() == OK) {
 					JSONArray jsonPackage = new JSONArray(searchResponse.getBody());
-					return MsgDeconstructor.deconSearch(jsonPackage);
+					return MsgDeconstructor.deconExperiments(jsonPackage);
 
 				} else { 
 					
@@ -211,7 +211,7 @@ public class ComHandler {
 
 				if (searchResponse.getCode() >= 200 && searchResponse.getCode() < 300) {
 					JSONArray jsonPackage = new JSONArray(searchResponse.getBody());
-					return MsgDeconstructor.deconSearch(jsonPackage);
+					return MsgDeconstructor.deconExperiments(jsonPackage);
 
 				} else {
 					responseDecode("Search response", searchResponse.getCode());

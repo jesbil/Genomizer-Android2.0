@@ -55,6 +55,7 @@ public class MsgDeconstructor {
 					annotation.appendValue(valueArray.getString(k));
 				}
 			}
+			annotation.setForced(obj.getBoolean("forced"));
 			annotations.add(annotation);
 		}
 		return annotations;
@@ -80,7 +81,7 @@ public class MsgDeconstructor {
 			//Sets the files values
 			file.setFileId(getStringFromJObj(obj, "id"));
 			file.setExpId(getStringFromJObj(obj, "expId"));
-			file.setFileSize(getStringFromJObj(obj, "size"));
+			file.setFileSize(getStringFromJObj(obj, "fileSize"));
 			file.setType(getStringFromJObj(obj, "type"));
 			file.setName(getStringFromJObj(obj, "filename"));
 			file.setAuthor(getStringFromJObj(obj, "author"));
@@ -119,7 +120,7 @@ public class MsgDeconstructor {
 	 * @return An arraylist with experiments
 	 * @throws JSONException
 	 */
-	public static ArrayList<Experiment> deconSearch(JSONArray json) throws JSONException {
+	public static ArrayList<Experiment> deconExperiments(JSONArray json) throws JSONException {
 		ArrayList<Experiment> experiments = new ArrayList<Experiment>();
 
 		//For each experiment..

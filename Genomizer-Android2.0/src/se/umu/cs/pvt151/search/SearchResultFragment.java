@@ -115,7 +115,7 @@ public class SearchResultFragment extends Fragment {
 				for(Annotation annotation : annotations){
 					if(annotationName.equals(annotation.getName())){
 						temp = temp + annotation.getName() +" "+
-					           annotation.getValue().toString()+"\n";	
+					           annotation.getValues().toString()+"\n";	
 					}
 				}
 			}

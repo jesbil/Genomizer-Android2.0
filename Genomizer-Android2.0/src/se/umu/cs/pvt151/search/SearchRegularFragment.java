@@ -235,7 +235,7 @@ public class SearchRegularFragment extends Fragment {
 			Spinner spinner;
 
 			if (convertView == null) {
-				final ArrayList<String> mSpinnerList = mAnnotations.get(position).getValue();				
+				final ArrayList<String> mSpinnerList = mAnnotations.get(position).getValues();				
 				
 				if(mSpinnerList.size() == 1 && mSpinnerList.get(0).compareTo("freetext") == 0) {
 					convertView = getActivity().getLayoutInflater().inflate(

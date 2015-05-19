@@ -11,35 +11,28 @@ import java.util.ArrayList;
  */
 public class Annotation {
 	
-	private int id;
 	private String name;
+	private ArrayList<String> values;
+	private boolean forced;
 	
-	private ArrayList<String> value;
-	
+	public boolean isForced() {
+		return forced;
+	}
+
+	public void setForced(boolean forced) {
+		this.forced = forced;
+	}
+
+
+
 	/**
 	 * Creates a new Annotation object.
 	 */
 	public Annotation() {
-		value = new ArrayList<String>();
+		values = new ArrayList<String>();
 	}
 	
-	/**
-	 * Returns the annotation-id number.
-	 * 
-	 * @return id number
-	 */
-	public int getId() {
-		return id;
-	}
 
-	/**
-	 * Sets the id for the Annotation object.
-	 * 
-	 * @param i the id number to set for the object
-	 */
-	public void setId(int id) {
-		this.id = id;
-	}
 
 	/**
 	 * Returns the name for the Annotation object.
@@ -65,8 +58,8 @@ public class Annotation {
 	 * 
 	 * @return values in an ArrayList containing strings
 	 */
-	public ArrayList<String> getValue() {
-		return value;
+	public ArrayList<String> getValues() {
+		return values;
 	}
 
 	/**
@@ -74,8 +67,8 @@ public class Annotation {
 	 * 
 	 * @param value the values to set as a ArrayList of strings
 	 */
-	public void setValue(ArrayList<String> value) {
-		this.value = value;
+	public void setValues(ArrayList<String> value) {
+		this.values = value;
 	}
 	
 	/**
@@ -84,7 +77,7 @@ public class Annotation {
 	 * @param newValue the string to append to the existing list in the object
 	 */
 	public void appendValue(String newValue) {
-		value.add(newValue);
+		values.add(newValue);
 	}
 
 	/**
@@ -94,6 +87,60 @@ public class Annotation {
 	 * @return true if the list is empty, otherwise returns false.
 	 */
 	public boolean isFreeText() {
-		return value.isEmpty();
+		return values.isEmpty();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (forced ? 1231 : 1237);
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((values == null) ? 0 : values.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Annotation other = (Annotation) obj;
+		if (forced != other.forced)
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (values == null) {
+			if (other.values != null)
+				return false;
+		} else if(values.size()!=other.values.size()){
+			return false;
+		} else{
+			for(int i=0; i<values.size();i++){
+				if(!values.get(i).equals(other.values.get(i))){
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(name+" ");
+		for(String value : values){
+			sb.append(value+" ");
+		}
+		sb.append(String.valueOf(forced));
+		return sb.toString();
+		
 	}
 }
