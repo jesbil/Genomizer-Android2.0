@@ -13,7 +13,6 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-import se.umu.cs.pvt151.R;
 import se.umu.cs.pvt151.model.Annotation;
 import se.umu.cs.pvt151.model.Experiment;
 import se.umu.cs.pvt151.model.GeneFile;
@@ -357,13 +356,12 @@ public class ComHandler {
 		if(Genomizer.isOnline()) {
 			try {
 				GenomizerHttpPackage fileResponse = Communicator.sendHTTPRequest(null, RESTMethod.GET, FILE+fileId);
-
 				if (fileResponse.getCode() == OK) {
 					String jsonString = fileResponse.getBody();
 					JSONArray jsonPackage = new JSONArray(jsonString);
 
 					return MsgDeconstructor.deconFiles(jsonPackage).get(0);
-				} else { // file not found
+				} else { 
 					Genomizer.makeToast(fileResponse.getCode()+"");
 					responseDecode("Requesting file", fileResponse.getCode());
 					return null;
