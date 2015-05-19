@@ -69,7 +69,7 @@ public class Communicator {
 	public static void setToken(String token) {
 		Communicator.token = token;
 	}
-	
+
 	public static String getServerURL() {
 		return urlString;
 	}
@@ -138,9 +138,8 @@ public class Communicator {
 	 * @throws IOException
 	 */
 	private static GenomizerHttpPackage sendRequest(JSONObject jsonPackage, String urlPostfix) throws IOException {
-		int responseCode = -1;
 		writePackage(jsonPackage);		
-		responseCode = recieveResponse(urlPostfix);
+		int responseCode = recieveResponse(urlPostfix);
 		GenomizerHttpPackage hp =  validateCode(responseCode);
 		return hp;
 
@@ -174,29 +173,19 @@ public class Communicator {
 	 * @throws IOException
 	 */
 	private static int recieveResponse(String urlPostfix) throws IOException {
-		int response = -1;
 
-		//Android throws an exception when the response is 401.
-		boolean invalidResponseCode = true;
 		for(int i = 0; i < RESPONSE_TRIES; i++) {
-			try {
-				response = connection.getResponseCode();
 
-				if(response != -1) {
-					invalidResponseCode = false;
-					break;
-				}
-			} catch(Exception e) {
-				e.printStackTrace();
+			int response = connection.getResponseCode();
+
+			if(response != -1) {
+				return response;
 			}
+
 		}
-		if(invalidResponseCode) {
-			if (urlPostfix.equals("login")) {
-				return 401;
-			}
-			throw new IOException("Server is not respondning.");
-		}
-		return response;
+
+		throw new IOException("Server is not respondning.");
+
 	}
 
 

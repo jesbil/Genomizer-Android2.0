@@ -6,6 +6,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 import se.umu.cs.pvt151.model.Annotation;
 import se.umu.cs.pvt151.model.Experiment;
 import se.umu.cs.pvt151.model.GeneFile;
@@ -80,7 +82,7 @@ public class MsgDeconstructor {
 			//Sets the files values
 			file.setFileId(getStringFromJObj(obj, "id"));
 			file.setExpId(getStringFromJObj(obj, "expId"));
-			file.setFileSize(getStringFromJObj(obj, "size"));
+			file.setFileSize(getStringFromJObj(obj, "fileSize"));
 			file.setType(getStringFromJObj(obj, "type"));
 			file.setName(getStringFromJObj(obj, "filename"));
 			file.setAuthor(getStringFromJObj(obj, "author"));
