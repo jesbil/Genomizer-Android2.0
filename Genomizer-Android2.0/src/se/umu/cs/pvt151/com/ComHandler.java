@@ -11,6 +11,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 import se.umu.cs.pvt151.R;
 import se.umu.cs.pvt151.model.Annotation;
 import se.umu.cs.pvt151.model.Experiment;
@@ -32,6 +34,7 @@ public class ComHandler {
 	private final static String ANNOTATION = "annotation";
 	private final static String PROCESS = "process";
 	private final static String GENOME_RELEASE = "genomeRelease";
+	private final static String FILE = "file/";
 	
 	private final static String SEARCH_ANNOTATIONS = "search/?annotations=";
 	private final static String RAW_TO_PROFILE = "process/rawtoprofile";
@@ -169,16 +172,15 @@ public class ComHandler {
 	public static ArrayList<Experiment> search(HashMap<String, String> annotations) throws IOException {
 		if(Genomizer.isOnline()) {
 			try {					
-				JSONObject msg = new JSONObject();
 				GenomizerHttpPackage searchResponse = Communicator.sendHTTPRequest
-						(msg, RESTMethod.GET, SEARCH_ANNOTATIONS + generatePubmedQuery(annotations));
+						(null, RESTMethod.GET, SEARCH_ANNOTATIONS + generatePubmedQuery(annotations));
 
 				if (searchResponse.getCode() == OK) {
 					JSONArray jsonPackage = new JSONArray(searchResponse.getBody());
 					return MsgDeconstructor.deconSearch(jsonPackage);
 
 				} else { 
-					
+					Log.d("EXPERIMENTFETCHERROR", searchResponse.getCode()+"");
 					/*
 					 * TODO Remove the responseDecode from all
 					 * methods.
@@ -205,9 +207,8 @@ public class ComHandler {
 	public static ArrayList<Experiment> search(String pubmedQuery) throws IOException {
 		if(Genomizer.isOnline()) {
 			try {						
-				JSONObject msg = new JSONObject();
 				GenomizerHttpPackage searchResponse = Communicator.sendHTTPRequest
-						(msg, RESTMethod.GET, SEARCH_ANNOTATIONS + pubmedQuery);
+						(null, RESTMethod.GET, SEARCH_ANNOTATIONS + pubmedQuery);
 
 				if (searchResponse.getCode() >= 200 && searchResponse.getCode() < 300) {
 					JSONArray jsonPackage = new JSONArray(searchResponse.getBody());
@@ -236,8 +237,7 @@ public class ComHandler {
 	public static ArrayList<Annotation> getServerAnnotations() throws IOException {
 		if(Genomizer.isOnline()) {
 			try {
-				JSONObject msg = new JSONObject();
-				GenomizerHttpPackage annotationResponse = Communicator.sendHTTPRequest(msg, RESTMethod.GET, ANNOTATION);
+				GenomizerHttpPackage annotationResponse = Communicator.sendHTTPRequest(null, RESTMethod.GET, ANNOTATION);
 
 				if (annotationResponse.getCode() == OK) {
 					String jsonString = annotationResponse.getBody();
@@ -301,8 +301,7 @@ public class ComHandler {
 	public static ArrayList<GenomeRelease> getGenomeReleases() throws IOException {
 		if(Genomizer.isOnline()) {
 			try {
-				JSONObject msg = new JSONObject();
-				GenomizerHttpPackage genomeResponse = Communicator.sendHTTPRequest(msg, RESTMethod.GET, GENOME_RELEASE);
+				GenomizerHttpPackage genomeResponse = Communicator.sendHTTPRequest(null, RESTMethod.GET, GENOME_RELEASE);
 
 				if (genomeResponse.getCode() == OK) {
 					String jsonString = genomeResponse.getBody();
@@ -333,8 +332,7 @@ public class ComHandler {
 	public static ArrayList<ProcessStatus> getProcesses() throws IOException {
 		if(Genomizer.isOnline()) {
 			try {
-				JSONObject msg = new JSONObject();
-				GenomizerHttpPackage genomeResponse = Communicator.sendHTTPRequest(msg, RESTMethod.GET, PROCESS);
+				GenomizerHttpPackage genomeResponse = Communicator.sendHTTPRequest(null, RESTMethod.GET, PROCESS);
 
 				if (genomeResponse.getCode() == OK) {
 					String jsonString = genomeResponse.getBody();
@@ -355,6 +353,29 @@ public class ComHandler {
 		
 	}
 
+	public static GeneFile getFile(String fileId) throws IOException {
+		if(Genomizer.isOnline()) {
+			try {
+				GenomizerHttpPackage fileResponse = Communicator.sendHTTPRequest(null, RESTMethod.GET, FILE+fileId);
+
+				if (fileResponse.getCode() == OK) {
+					String jsonString = fileResponse.getBody();
+					JSONArray jsonPackage = new JSONArray(jsonString);
+
+					return MsgDeconstructor.deconFiles(jsonPackage).get(0);
+				} else { // file not found
+					Genomizer.makeToast(fileResponse.getCode()+"");
+					responseDecode("Requesting file", fileResponse.getCode());
+					return null;
+				}
+
+			} catch (JSONException e) {
+				throw new IOException("Unable to understand server response. "
+						+ "Has response messages been modified? " + e.getMessage());
+			}
+		}
+		throw new IOException("Internet connection unavailable.");
+	}
 
 	/**
 	 * Returns a pubmed query string ready to be put in a URL. It is encoded for URLs so it cannot be used elsewhere.
@@ -367,16 +388,18 @@ public class ComHandler {
 			throws UnsupportedEncodingException {
 		String pubmedQuery = "";
 
-		Set<String> ann = annotations.keySet();
+		Set<String> keys = annotations.keySet();
 		int i = 0;
-		for (String searchWord : ann) {
-			String value = annotations.get(searchWord);
-			pubmedQuery += value + "[" + searchWord + "]";
+		for (String key : keys) {
+			String value = annotations.get(key);
+			pubmedQuery += value + "[" + key + "]";
 			i++;
-			if (i != ann.size()) {
+			if (i != keys.size()) {
 				pubmedQuery+=" AND ";
 			}			
 		}
 		return URLEncoder.encode(pubmedQuery, "UTF-8");
 	}
+
+
 }

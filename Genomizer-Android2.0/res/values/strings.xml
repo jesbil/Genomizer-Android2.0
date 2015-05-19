@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    
+    <string name="app_name">Genomizer 2.0</string>
+    
 	
-	<!-- Toast messages -->
+    <!-- Shared preferences selected files -->
+    <string name="rawFiles">rawFiles</string>
+    <string name="profileFiles">profileFiles</string>
+    <string name="regionFiles">regionFiles</string>
+    <string name="FILE_IDS">GenomizerFileIds</string>
+    
+    
+    
+    <!-- Toast messages -->
     <string name="msg_no_internet_availiable">Internet seems to be disconnected</string>
     <string name="msg_http_response_204">No content</string>
     <string name="msg_http_response_400">Bad request</string>
@@ -15,7 +26,6 @@
     <string name="msg_no_connection_with_server">Could not connect to server</string>
            
     
-    <string name="app_name">Genomizer 2.0</string>
 
     <!-- Used in login_activity -->
     <string name="login_action_settings">Settings</string>
