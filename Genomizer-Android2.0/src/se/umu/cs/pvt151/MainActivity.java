@@ -2,6 +2,7 @@ package se.umu.cs.pvt151;
 
 import java.util.ArrayList;
 
+import se.umu.cs.pvt151.login.LogoutFragment;
 import se.umu.cs.pvt151.process.ProcessFragment;
 import se.umu.cs.pvt151.search.SearchMotherFragment;
 import se.umu.cs.pvt151.selected_files.SelectedfilesMotherFragment;
@@ -59,13 +60,14 @@ public class MainActivity extends FragmentActivity {
         navDrawerItems = new ArrayList<NavigationDrawerItem>();
  
         // adding nav drawer items to array
-        // Home
+        // search
         navDrawerItems.add(new NavigationDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
-        // Find People
+        // selected files
         navDrawerItems.add(new NavigationDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1), true, "3"));
-        // Photos
+        // process status
         navDrawerItems.add(new NavigationDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
-        
+        // logut
+        navDrawerItems.add(new NavigationDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
         // Recycle the typed array
         navMenuIcons.recycle();
  
@@ -168,6 +170,8 @@ public class MainActivity extends FragmentActivity {
         case 2:
         	fragment = new ProcessFragment();
         	break;
+        case 3:
+        	fragment = new LogoutFragment();
         default:
             break;
         }
