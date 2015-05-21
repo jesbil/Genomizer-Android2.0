@@ -109,5 +109,7 @@
     <string name="search_btn_setVisibleAnnotations">Set visible annotations</string>
     <string name="search_btn_saveSettings">Save settings</string>
     <string name="search_btn_useDefault">Use default</string>
+    <string name="search_tv_sortBy">Sort by</string>
+    
     
 </resources>
