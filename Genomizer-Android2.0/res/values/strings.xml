@@ -39,10 +39,10 @@
     <!-- Used in login_layout_settings -->
     <string name="login_settings_label">Server settings</string>
     <string name="login_settings_selectAServerURL">Select a server URL</string>
-    <string name="login_settings_btn_editURL">Edit URL</string>
-    <string name="login_settings_btn_saveURL">Save URL</string>
-    <string name="login_settings_removeURL">Remove URL</string>
-    <string name="login_settings_addURL">Add URL</string>
+    <string name="login_settings_btn_editURL">Edit server URL</string>
+    <string name="login_settings_btn_saveURL">Save server URL</string>
+    <string name="login_settings_removeURL">Remove server URL</string>
+    <string name="login_settings_addURL">Add server URL</string>
 
     <string-array name="login_settings_serverList">
         <item>http://dumbledore.cs.umu.se:7000/</item>
@@ -64,7 +64,8 @@
     <string-array name="nav_drawer_items">
         <item>Search</item>
         <item>Selected files</item>
-        <item>Process</item>
+        <item>Process status</item>
+        <item>Logout</item>
     </string-array>
      
     <!-- Nav Drawer List Item Icons -->
@@ -73,6 +74,7 @@
         <item>@drawable/ic_search</item>
         <item>@drawable/ic_selected_files</item>
         <item>@drawable/ic_process</item>
+        <item>@drawable/ic_logout</item>
     </array>
     
     <!-- Content Description -->
@@ -80,9 +82,6 @@
 
     <!-- Used in search_layout_experimentList -->
     <string name="search_tv_searchResult">Search result</string>
-
-    
-    <!-- Used in selectedfiles_layout_mother -->
     
     <!-- Used in selectedfiles_layout_profile -->
     <string name="selectedfilesProfile_btn_removeMarkedFiles">Remove marked files</string>
@@ -103,7 +102,6 @@
     
     <!-- Used in process_layout_experimentlist -->
     <string name="process_btn_refresh">Refresh</string>
-    <string name="process_tv_processStatus">PROCESS STATUS</string>
     
     <!-- Used in search_layout_experimentlistsettings -->
     <string name="search_btn_setVisibleAnnotations">Set visible annotations</string>

@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Menu;
@@ -59,8 +60,6 @@ public class LoginSettingsActivity extends Activity {
 		sharedPreferences = getSharedPreferences(SERVER_PREFERENCES, 
 				Context.MODE_PRIVATE);
 
-		
-		//buildServerSpinner();
 		buildEditURLDialog();
 		buildRemoveURLDialog();
 		buildAddURLDialog();
@@ -99,13 +98,14 @@ public class LoginSettingsActivity extends Activity {
 		mEditURLInput = new EditText(this);
 		
 		mEditURLDialog = new AlertDialog.Builder(this)
-				.setTitle("Edit server")
+				.setTitle(getResources().getString(R.string.login_settings_btn_editURL))
 				.setView(mEditURLInput)
 				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 					
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						setEditedURL(mEditURLInput.getText().toString());	
+						
 					}
 				})
 				.setNegativeButton("Cancel", new DialogInterface
@@ -124,16 +124,16 @@ public class LoginSettingsActivity extends Activity {
 		mRemoveURLText.setTypeface(null, Typeface.BOLD);
 		
 		mRemoveURLDialog = new AlertDialog.Builder(this)
-				.setTitle("Remove server")
+				.setTitle(getResources().getString(R.string.login_settings_removeURL))
 				.setView(mRemoveURLText)
-				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+				.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 					
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						removeSelectedURL();	
 					}
 				})
-				.setNegativeButton("Cancel", new DialogInterface
+				.setNegativeButton("No", new DialogInterface
 						.OnClickListener() {
 					
 					@Override
@@ -147,9 +147,9 @@ public class LoginSettingsActivity extends Activity {
 	private void buildAddURLDialog() {
 		mAddURLInput = new EditText(this);
 		mAddURLInput.setText("http://");
-		
+		mAddURLInput.setSelection(mAddURLInput.getText().length());
 		mAddURLDialog = new AlertDialog.Builder(this)
-				.setTitle("Add URL")
+				.setTitle(getResources().getString(R.string.login_settings_addURL))
 				.setView(mAddURLInput)
 				.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 					
@@ -157,6 +157,7 @@ public class LoginSettingsActivity extends Activity {
 					public void onClick(DialogInterface dialog, int which) {
 						addServerURL(mAddURLInput.getText().toString());
 						mAddURLInput.setText("http://");
+						mAddURLInput.setSelection(mAddURLInput.getText().length());
 					}
 				})
 				.setNegativeButton("Cancel", new DialogInterface
@@ -203,6 +204,7 @@ public class LoginSettingsActivity extends Activity {
 	public void onClickEditURL(View v) {
 		if (!savedServerURLs.isEmpty()) {
 			mEditURLInput.setText(mServerSpinner.getSelectedItem().toString());
+			mEditURLInput.setSelection(mEditURLInput.getText().length());
 			mEditURLDialog.show();
 		}
 	}
@@ -216,9 +218,8 @@ public class LoginSettingsActivity extends Activity {
 	
 	public void onClickRemoveURL() {
 		if (!savedServerURLs.isEmpty()) {
-			mRemoveURLText.setText("Really remove URL " 
-					   + mServerSpinner.getSelectedItem()
-					   + "?");
+			mRemoveURLText.setText("Do you really want to remove URL:\n " 
+					   + mServerSpinner.getSelectedItem());
 			mRemoveURLDialog.show();	
 		}
 
