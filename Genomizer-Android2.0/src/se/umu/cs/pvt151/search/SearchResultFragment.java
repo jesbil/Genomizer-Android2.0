@@ -8,7 +8,6 @@ import java.util.List;
 import se.umu.cs.pvt151.R;
 import se.umu.cs.pvt151.com.ComHandler;
 import se.umu.cs.pvt151.model.Annotation;
-import se.umu.cs.pvt151.model.DataStorage;
 import se.umu.cs.pvt151.model.Experiment;
 import se.umu.cs.pvt151.model.GeneFile;
 import android.app.ProgressDialog;
@@ -30,6 +29,9 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class SearchResultFragment extends Fragment {
 	
+	protected final static String SEARCH_VALUES = "searchValues";
+	protected final static String ANNOTATION_NAMES = "annotationNames";
+	
 	private static final String DOWNLOADING_SEARCH_RESULTS = "Downloading search results";
 	private HashMap<String, String> searchValues;
 	private ArrayList<String> annotationNamesList;
@@ -44,35 +46,45 @@ public class SearchResultFragment extends Fragment {
 	private ArrayList<GeneFile> regionFiles;
 
 
-	public SearchResultFragment(HashMap<String, String> searchValues,
-			ArrayList<String> annotationNamesList) {
-		this.searchValues = searchValues;
-		this.annotationNamesList = annotationNamesList;
-		startSearch = new SearchHandler();
-		rawFiles = new ArrayList<GeneFile>();
-		profileFiles = new ArrayList<GeneFile>();
-		regionFiles = new ArrayList<GeneFile>();
-
-		
+	public SearchResultFragment() {
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
 			Bundle savedInstanceState) {
 		
-		showLoadScreen(DOWNLOADING_SEARCH_RESULTS);
+		Bundle bundle = getArguments();
+		this.searchValues = (HashMap<String, String>) 
+				bundle.getSerializable(SEARCH_VALUES);
 		
-		View rootView = inflater.inflate(R.layout.search_layout_experimentlist,container, false);
-		experimentListView = (ListView) rootView.findViewById(R.id.search_lv_searchResultList);
-				startSearch.execute();
+		this.annotationNamesList = bundle.getStringArrayList(ANNOTATION_NAMES);
+		
+		View rootView = inflater.inflate(R.layout.search_layout_experimentlist,
+				container, false);
+		
+		experimentListView = (ListView) 
+				rootView.findViewById(R.id.search_lv_searchResultList);
+		
+		rawFiles = new ArrayList<GeneFile>();
+		profileFiles = new ArrayList<GeneFile>();
+		regionFiles = new ArrayList<GeneFile>();
+		
 		return rootView;
+	}
+	
+	@Override
+	public void onResume() {
+		startSearch = new SearchHandler();
+		showLoadScreen(DOWNLOADING_SEARCH_RESULTS);
+		startSearch.execute();
+		super.onResume();
 	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-		
 	}
 	
 	@Override
@@ -85,7 +97,7 @@ public class SearchResultFragment extends Fragment {
 		int id = item.getItemId();
 		if(id==R.id.search_result_settings){
 			Fragment fragment = new SearchResultSettingsFragment();
-			getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).add(R.id.frame_container, fragment).commit();
+			getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.frame_container, fragment).commit();
 			return true;
 		}
 		
@@ -192,15 +204,12 @@ public class SearchResultFragment extends Fragment {
 		@Override
 		public void onItemClick(AdapterView<?> Adapter, View view, int position,
 				long arg3) {
-			DataStorage.setRawDataFiles(rawFiles);
-			DataStorage.setProfileDataFiles(profileFiles);
-			DataStorage.setRegionDataFiles(regionFiles);
 			//Getting list of files belonging to experiment
 			setExperimentFiles(position);
 			//Creating new intent for moving to FileListActivity
 			
 			Fragment fragment = new SearchResultExperimentFragment(rawFiles, profileFiles, regionFiles);
-			getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).add(R.id.frame_container, fragment).commit();
+			getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.frame_container, fragment).commit();
 		}
 		
 		/**
