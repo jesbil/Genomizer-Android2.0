@@ -7,10 +7,13 @@ import java.util.HashMap;
 import se.umu.cs.pvt151.R;
 import se.umu.cs.pvt151.com.ComHandler;
 import se.umu.cs.pvt151.model.Annotation;
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -33,17 +36,13 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class SearchRegularFragment extends Fragment {
 	
-	private static final String DOWNLOAD_ANNOTATIONS = "Downloading server annotations";
-	private static final String LOADING = "Loading";
 	private static final String NO_SEARCH_VALUES = "No annotations choosen for search";
 	
-	
+	private FragmentActivity mActivity;
 	private ArrayList<String> annotationNamesList;
 	private ArrayList<Annotation> mAnnotations;
-	private ProgressDialog mLoadScreen;
 	private ArrayList<SearchViewHolder> mViewHolderList = new ArrayList<SearchViewHolder>();
 	private ListView mAnnotationsList;
-	
 	
 	/**
 	 * Static searchViewHolder class for keeping items in the searchList in 
@@ -67,32 +66,57 @@ public class SearchRegularFragment extends Fragment {
 	
 	@Override
 	public void onResume() {
-		showLoadScreen(DOWNLOAD_ANNOTATIONS);
-		new AnnotationsTask().execute();
-		
 		super.onResume();
+		new AnnotationsTask().execute();
+	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		this.mActivity = (FragmentActivity) activity;
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
 			Bundle savedInstanceState) {
 
-		View rootView = inflater.inflate(R.layout.search_layout_regular,container, false);
-		mAnnotationsList = (ListView) rootView.findViewById(R.id.search_regular_lv_annotationList);
+		View rootView = inflater.inflate(R.layout.search_layout_regular,
+				container, false);
 		
-		Button mSearchButton = (Button) rootView.findViewById(R.id.search_regular_btn_search);
+		mAnnotationsList = (ListView) rootView.findViewById(
+				R.id.search_regular_lv_annotationList);
+		
+		Button mSearchButton = (Button) rootView.findViewById(
+				R.id.search_regular_btn_search);
+		
 		mSearchButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				
-			
 				HashMap<String, String> searchValues = generateSearchMap();
 				
 				if(searchValues.isEmpty()){
-					Toast.makeText(getActivity(), NO_SEARCH_VALUES, Toast.LENGTH_LONG).show();
+					Toast.makeText(getActivity(), NO_SEARCH_VALUES, 
+							Toast.LENGTH_LONG).show();
 				}else{
-					Fragment fragment = new SearchResultFragment(searchValues,annotationNamesList);
-					getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).add(R.id.frame_container, fragment).commit();	
+					Fragment fragment = new SearchResultFragment();
+					Bundle bundle = new Bundle(2);
+					
+					bundle.putSerializable(
+							SearchResultFragment.SEARCH_VALUES, 
+							generateSearchMap());
+					
+					bundle.putStringArrayList(
+							SearchResultFragment.ANNOTATION_NAMES, 
+							annotationNamesList);
+					
+					fragment.setArguments(bundle);
+							
+					getActivity().getSupportFragmentManager()
+								 .beginTransaction()
+								 .addToBackStack(null)
+								 .replace(R.id.frame_container, fragment)
+								 .commit();	
 		
 				}
 			}
@@ -128,21 +152,15 @@ public class SearchRegularFragment extends Fragment {
 	 * setup a footer for the search button to generate a search string.
 	 */
 	private void setupListView() {
+		annotationNamesList = new ArrayList<String>();
+		
+		for (int i = 0; i < mAnnotations.size(); i++) {
+			annotationNamesList.add(mAnnotations.get(i).getName());
+		}
+		
 		ArrayAdapter<String> adapter = new SearchListAdapter(annotationNamesList);
 		adapter.setNotifyOnChange(true);
 		mAnnotationsList.setAdapter(adapter);
-	}
-	
-	/**
-	 * Presents the user with a loading screen while data transfer is 
-	 * occuring in the application. 
-	 * 
-	 */
-	private void showLoadScreen(String msg) {
-		mLoadScreen = new ProgressDialog(getActivity());
-		mLoadScreen.setTitle(LOADING);
-		mLoadScreen.setMessage(msg);
-		mLoadScreen.show();
 	}
 	
 	
@@ -154,33 +172,32 @@ public class SearchRegularFragment extends Fragment {
 	 * @author Erik Åberg, c11ean
 	 *
 	 */
-	private class AnnotationsTask extends AsyncTask<Void, Void, Void> {
+	private class AnnotationsTask extends AsyncTask<Void, Void, ArrayList<Annotation>> {
 		
-		private IOException except;
-
+		private static final String DOWNLOAD_ANNOTATIONS = 
+				"Downloading server annotations";
+		private static final String LOADING = "Loading";
+		
+		private IOException ioe;
+		private ProgressDialog mLoadScreen;
+		
+		public AnnotationsTask() {
+			ioe = null;
+			showLoadScreen();
+		}
+		
 		/**
 		 * Connects to the server, collects annotation data from the database
 		 * and sets the retrieved values into corresponding lists.
 		 */
 		@Override
-		protected Void doInBackground(Void... params) {
+		protected ArrayList<Annotation> doInBackground(Void... params) {
 			try {
-				mAnnotations = ComHandler.getServerAnnotations();
-				annotationNamesList = new ArrayList<String>();
-				if(mAnnotations.isEmpty()){
-					Log.d("Annotations","No annotations");
-				}
-				
-				for(Annotation annotation : mAnnotations) {
-					annotationNamesList.add(annotation.getName());	
-				}
-				
+				return ComHandler.getServerAnnotations();
 			} catch (IOException e) {
-				//TODO server communication failed
-				except = e;	
+				ioe = e;
+				return new ArrayList<Annotation>();
 			}
-			return null;
-			
 		}
 		
 		/**
@@ -188,15 +205,26 @@ public class SearchRegularFragment extends Fragment {
 		 * information about annotations found in the database contacted.
 		 */
 		@Override
-		protected void onPostExecute(Void result) {
+		protected void onPostExecute(ArrayList<Annotation> result) {
 			mLoadScreen.dismiss();
-			if (except == null) {
-				setupListView();
-			} else {
-				except.printStackTrace();
-				except = null;
+			mAnnotations = result;
+			setupListView();
+			if (ioe != null) {
+				ioe.printStackTrace();
 			}
 			
+		}
+		
+		/**
+		 * Presents the user with a loading screen while data transfer is 
+		 * occuring in the application. 
+		 * 
+		 */
+		private void showLoadScreen() {
+			mLoadScreen = new ProgressDialog(getActivity());
+			mLoadScreen.setTitle(LOADING);
+			mLoadScreen.setMessage(DOWNLOAD_ANNOTATIONS);
+			mLoadScreen.show();
 		}
 		
 	}
@@ -218,7 +246,7 @@ public class SearchRegularFragment extends Fragment {
 		 * adapter.
 		 */
 		public SearchListAdapter(ArrayList<String> annotationNames) {
-			super(getActivity(), 0, annotationNames);
+			super(mActivity, 0, annotationNames);
 		}
 		
 		/**
