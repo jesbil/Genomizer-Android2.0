@@ -77,9 +77,11 @@ public class SelectedfilesProfileFragment extends Fragment {
 					if(file!=null){
 						profileFiles.add(file);
 					}else{
-						Log.d("SELECTEDPROFILE", "file " +  fileId + " not found");
+						Log.d("SELECTEDPROFILE", "unable to fetch file with id:" +  fileId );
 					}
 				} catch (IOException e) {
+					Log.e("SELECTEDPROFILE",e.getMessage());
+					e.printStackTrace();
 				}
 			}
 			return profileFiles;

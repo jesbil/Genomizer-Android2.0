@@ -70,6 +70,7 @@ public class SearchRegularFragment extends Fragment {
 		new AnnotationsTask().execute();
 	}
 	
+	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);

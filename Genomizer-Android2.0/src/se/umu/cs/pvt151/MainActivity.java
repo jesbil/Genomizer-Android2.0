@@ -2,7 +2,7 @@ package se.umu.cs.pvt151;
 
 import java.util.ArrayList;
 
-import se.umu.cs.pvt151.login.LogoutFragment;
+import se.umu.cs.pvt151.login.LoginActivity;
 import se.umu.cs.pvt151.process.ProcessFragment;
 import se.umu.cs.pvt151.search.SearchMotherFragment;
 import se.umu.cs.pvt151.selected_files.SelectedfilesMotherFragment;
@@ -10,6 +10,7 @@ import se.umu.cs.pvt151.selected_files.SelectedfilesMotherFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -171,7 +172,11 @@ public class MainActivity extends FragmentActivity {
         	fragment = new ProcessFragment();
         	break;
         case 3:
-        	fragment = new LogoutFragment();
+// TODO   	ComHandler.logout();
+    		Intent intent = new Intent(this,LoginActivity.class);
+    		startActivity(intent);
+    		this.finish();
+    		return;
         default:
             break;
         }
