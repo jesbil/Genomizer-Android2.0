@@ -10,16 +10,6 @@
         android:layout_below="@+id/search_tv_setVisibleAnnotations"
         android:background="@color/light_gray" />
 
-    <ListView
-        android:id="@+id/search_lv_resultAnnotationsSettings"
-        android:layout_width="match_parent"
-        android:layout_height="275dp"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/search_tv_divider"
-        android:background="@color/white"
-        android:dividerHeight="1dp" >
-    </ListView>
-
     <TextView
         android:id="@+id/search_tv_setVisibleAnnotations"
         android:layout_width="wrap_content"
@@ -32,6 +22,17 @@
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold" />
+    
+    <ListView
+        android:id="@+id/search_lv_resultAnnotationsSettings"
+        android:layout_width="match_parent"
+        android:layout_height="275dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/search_tv_divider"
+        android:background="@color/white"
+        android:dividerHeight="1dp" >
+    </ListView>
+
 
     <RelativeLayout
         android:id="@+id/rv_settings_sort"
@@ -60,8 +61,8 @@
             android:background="@color/light_gray" />
 
         <Spinner
-            android:id="@+id/spinner1"
-            android:layout_width="wrap_content"
+            android:id="@+id/searchresult_settings_spnr_sortBySpinner"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginTop="30dp" />
@@ -76,18 +77,18 @@
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/search_btn_saveSettings"
+            android:id="@+id/searchresult_settings_btn_checkAllAnnotations"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:text="@string/search_btn_saveSettings" />
+            android:text="@string/searchresult_settings_btn_checkAllAnnotations" />
 
         <Button
-            android:id="@+id/search_btn_defaultSettings"
+            android:id="@+id/searchresult_settings_btn_uncheckAllAnnotations"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:text="@string/search_btn_useDefault" />
+            android:text="@string/searchresult_settings_btn_uncheckAllAnnotations" />
     </LinearLayout>
 
 </RelativeLayout>

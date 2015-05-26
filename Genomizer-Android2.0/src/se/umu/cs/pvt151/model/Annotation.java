@@ -96,4 +96,5 @@ public class Annotation {
 	public boolean isFreeText() {
 		return value.isEmpty();
 	}
+	
 }
