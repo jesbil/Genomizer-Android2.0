@@ -34,6 +34,8 @@
        android:id="@+id/search_pubmed_button_search"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
+       android:background="?android:attr/selectableItemBackground"
+        android:textColor="@color/genomizer_blue" 
        android:text="@string/searchPubmed_btn_search"
        android:layout_alignParentBottom="true" />
 		
