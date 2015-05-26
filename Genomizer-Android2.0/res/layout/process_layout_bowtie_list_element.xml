@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/process_llayout_rawLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:paddingBottom="5dp"
+    android:paddingTop="5dp">
+   
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+	        android:id="@+id/process_tv_input_file"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginLeft="4dp"
+	        android:text="@string/process_tv_input_file"
+	        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <ImageButton
+            android:id="@+id/process_ib_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            style="?android:attr/borderlessButtonStyle"
+            android:src="@drawable/cross" />
+
+    </RelativeLayout>
+
+    
+	<Spinner
+	    android:id="@+id/process_spinner_input_file"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_margin="4dp"/>
+	
+	<TextView
+        android:id="@+id/process_tv_genomeRelease"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:text="@string/process_tv_genomeRelease"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content" >
+
+	    <Spinner
+	        android:id="@+id/process_spinner_genomeRelease"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1" />
+	    
+		<Button
+	        android:id="@+id/process_btn_parameters"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1"
+	        android:text="@string/process_btn_parameters" />
+
+	</LinearLayout>
+
+	
+	<TextView
+        android:id="@+id/process_tv_output_file"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:text="@string/process_tv_output_file"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+	
+	<EditText 
+	    android:id="@+id/process_et_output_file"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content" 
+	    android:inputType="textNoSuggestions"/>
+</LinearLayout>

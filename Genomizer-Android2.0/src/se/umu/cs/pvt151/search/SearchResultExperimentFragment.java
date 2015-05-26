@@ -7,8 +7,10 @@ import java.util.Set;
 
 import se.umu.cs.pvt151.R;
 import se.umu.cs.pvt151.model.GeneFile;
+import se.umu.cs.pvt151.process.ProcessFragment;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -124,6 +126,13 @@ public class SearchResultExperimentFragment extends Fragment {
 				sharedPrefsEditor.putStringSet(rawFileKey, new HashSet<String>(rawFileIds)).commit();
 				sharedPrefsEditor.putStringSet(profileFileKey, new HashSet<String>(profileFileIds)).commit();
 				sharedPrefsEditor.putStringSet(regionFileKey, new HashSet<String>(regionFileIds)).commit();
+				
+				Bundle b = new Bundle();
+				b.putParcelableArrayList(ProcessFragment.FILES_KEY, rawDataFiles);
+				
+				Fragment fragment = new ProcessFragment();
+				fragment.setArguments(b);
+				getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.frame_container, fragment).commit();
 			}
 		});
 		return rootView;
@@ -153,6 +162,7 @@ public class SearchResultExperimentFragment extends Fragment {
 	 */
 	private class FileListAdapter extends ArrayAdapter<GeneFile> {
 		private ArrayList<GeneFile> files;
+		private ProgressDialog mProgressDialog;
 
 		/**
 		 * Constructor for the FileListAdapter

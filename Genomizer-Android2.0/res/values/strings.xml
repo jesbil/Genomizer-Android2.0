@@ -62,9 +62,9 @@
 
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
-        <item>Search</item>
+        <item>Search and process</item>
         <item>Selected files</item>
-        <item>Process status</item>
+        <item>Active processes</item>
         <item>Logout</item>
     </string-array>
      
@@ -108,6 +108,20 @@
     <string name="search_btn_saveSettings">Save settings</string>
     <string name="search_btn_useDefault">Use default</string>
     <string name="search_tv_sortBy">Sort by</string>
+    
+    <!-- Used in process_layout_all_parameters -->
+    <string name="process_btn_process">Process</string>
+    
+    <!-- Used in process_layout_bowtie_list_element -->
+    <string name="process_tv_input_file">Input file</string>
+    <string name="process_tv_output_file">Output file</string>
+    <string name="process_tv_genomeRelease">Genome release</string>
+    <string name="process_btn_parameters">Parameters</string>
+    
+    <!-- Used in process_menu -->
+    <string name="process_action_add">Add</string>
+    
+    <string name="bowtie_parameters">-a -m 1 --best -p 10 -v 2 -q -S</string>
     
     
 </resources>
