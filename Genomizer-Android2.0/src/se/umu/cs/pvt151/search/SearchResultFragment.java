@@ -2,6 +2,7 @@ package se.umu.cs.pvt151.search;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import se.umu.cs.pvt151.model.Annotation;
 import se.umu.cs.pvt151.model.Experiment;
 import se.umu.cs.pvt151.model.GeneFile;
 import android.app.ProgressDialog;
-import android.content.Intent;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,51 +29,65 @@ import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class SearchResultFragment extends Fragment {
-	
+
 	protected final static String SEARCH_VALUES = "searchValues";
 	protected final static String ANNOTATION_NAMES = "annotationNames";
-	
+
 	private static final String DOWNLOADING_SEARCH_RESULTS = "Downloading search results";
 	private HashMap<String, String> searchValues;
 	private ArrayList<String> annotationNamesList;
 	private ProgressDialog loadScreen;
 	private SearchHandler startSearch;
-	private ArrayList<Experiment> forExperiments;
+	private ArrayList<Experiment> experiments;
 	private ArrayList<String> displaySearchResult;
 	private ListView experimentListView;
-	
+	ArrayAdapter<String> experimentListAdapter;
+
 	private ArrayList<GeneFile> rawFiles;
 	private ArrayList<GeneFile> profileFiles;
 	private ArrayList<GeneFile> regionFiles;
+
+	private static HashMap<String,Boolean> visibleAnnotations;
+	private static String sortBy;
 
 
 	public SearchResultFragment() {
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") // serialized to hashMap<String, String)
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
-			Bundle savedInstanceState) {
-		
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
 		Bundle bundle = getArguments();
 		this.searchValues = (HashMap<String, String>) 
 				bundle.getSerializable(SEARCH_VALUES);
-		
+
 		this.annotationNamesList = bundle.getStringArrayList(ANNOTATION_NAMES);
-		
+		visibleAnnotations = new HashMap<String,Boolean>();
+		for(String annotationName : annotationNamesList){
+			visibleAnnotations.put(annotationName, true);
+		}
+	}
+
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
+			Bundle savedInstanceState) {
+
 		View rootView = inflater.inflate(R.layout.search_layout_experimentlist,
 				container, false);
-		
+
 		experimentListView = (ListView) 
 				rootView.findViewById(R.id.search_lv_searchResultList);
-		
+
 		rawFiles = new ArrayList<GeneFile>();
 		profileFiles = new ArrayList<GeneFile>();
 		regionFiles = new ArrayList<GeneFile>();
-		
+
 		return rootView;
 	}
-	
+
 	@Override
 	public void onResume() {
 		startSearch = new SearchHandler();
@@ -80,31 +95,84 @@ public class SearchResultFragment extends Fragment {
 		startSearch.execute();
 		super.onResume();
 	}
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setHasOptionsMenu(true);
-	}
-	
+
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.search_result_menu, menu);
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		if(id==R.id.search_result_settings){
+			Bundle bundle = new Bundle();
+			Resources res = getActivity().getResources();
+			String annotationsKey = res.getString(R.string.annotationsKey);
+			String visibleAnnotationsKey = res.getString(R.string.visibleAnnotationsKey);
+			String annotationSortByKey = res.getString(R.string.annotationSortByKey);
+			bundle.putStringArrayList(annotationsKey, annotationNamesList);
+			bundle.putSerializable(visibleAnnotationsKey, visibleAnnotations);
+			bundle.putString(annotationSortByKey, sortBy);
 			Fragment fragment = new SearchResultSettingsFragment();
+			fragment.setArguments(bundle);
 			getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.frame_container, fragment).commit();
 			return true;
 		}
-		
 		return super.onOptionsItemSelected(item);
 	}
-	
-	
+
+	private ArrayList<Experiment> sortExperimentList(ArrayList<Experiment> experimentsToSort,String sortBy){
+		if(sortBy==null){
+			return experimentsToSort;
+		}
+
+		ArrayList<Experiment> result = new ArrayList<Experiment>();
+		
+		for(Experiment experimentToSort : experimentsToSort){
+			for(Annotation annotationToSort : experimentToSort.getAnnotations()){
+				if(annotationToSort.getName().equals(sortBy)){
+					boolean added = false;
+					resultloop:
+						for(Experiment experiment : result ){
+							for(Annotation annotation : experiment.getAnnotations()){
+								if(annotation.getName().equals(sortBy)){
+									if(annotationToSort.getValue().get(0).compareToIgnoreCase(annotation.getValue().get(0))>=0){
+										result.add(result.indexOf(experiment), experimentToSort);
+										Log.d("ADDED 1",experimentToSort.getName());
+										added = true;
+										break resultloop;
+									}
+								}
+							}
+						}if(!added){
+							result.add(experimentToSort);
+							Log.d("ADDED 2",experimentToSort.getName());
+						}
+				}
+			}
+		}
+		for(Experiment experimentToSort : experimentsToSort){
+			if(!result.contains(experimentToSort)){
+				result.add(experimentToSort);
+				Log.d("ADDED 3",experimentToSort.getName());
+			}
+		}
+		return reverseExperiments(result);
+	}
+
+	private ArrayList<Experiment> reverseExperiments(ArrayList<Experiment> experiments){
+		ArrayList<Experiment> reversed = new ArrayList<Experiment>();
+		for(int i=experiments.size()-1; i>=0; i--){
+			reversed.add(experiments.get(i));
+		}
+		return reversed;
+
+	}
+
+	protected static void setSortBy(String by){
+		sortBy=by;
+	}
+
 	/**
 	 * Displays a loading screen for the user, while downloading data from the
 	 * server. Must be manually dismissed when data transfer is done.
@@ -117,26 +185,49 @@ public class SearchResultFragment extends Fragment {
 		loadScreen.setMessage(msg);
 		loadScreen.show();
 	}
-	
-	public ArrayList<String> getDisplayValues(ArrayList<Experiment> forExperiments) {
+
+	private ArrayList<String> getDisplayValues(ArrayList<Experiment> forExperiments) {
 		ArrayList<String> searchResult = new ArrayList<String>();
 		for(Experiment experiment : forExperiments){
 			List<Annotation> annotations = experiment.getAnnotations();
 			String temp = "";
 			for(String annotationName : annotationNamesList){
-				for(Annotation annotation : annotations){
-					if(annotationName.equals(annotation.getName())){
-						temp = temp + annotation.getName() +" "+
-					           annotation.getValue().toString()+"\n";	
+				boolean found=false;
+				if(visibleAnnotations.get(annotationName)){
+					for(Annotation annotation  : annotations){
+						if(annotation.getName().equals(annotationName)){
+							temp = temp + annotationName+" ["+annotation.getValue().get(0)	+"]\n";
+							found=true;
+						}
+
 					}
+					if(!found){
+						temp = temp + annotationName+" [ - ]\n";
+
+					}
+
 				}
 			}
+			//			for(Annotation annotation : annotations){
+			//				if(visibleAnnotations.get(annotation.getName())){
+			//					if(annotationNamesList.contains(annotation.getName())){
+			//						temp = temp + annotation.getName() +" "+
+			//								annotation.getValue().toString()+"\n";	
+			//					}else{
+			//						temp = temp + annotation.getName() +" "+"[-]\n";
+			//					}
+			//					
+			//				}
+			//			}
+
 			searchResult.add("Experiment "+ experiment.getName() +"\n"+temp);
-			
+
 		}
 		return searchResult;
 	}
-	
+
+
+
 	/**
 	 * SearchHandler
 	 * ASyncTask to receive information
@@ -145,53 +236,46 @@ public class SearchResultFragment extends Fragment {
 	 *
 	 */
 	private class SearchHandler extends AsyncTask<Void, Void, 
-		ArrayList<Experiment>> {
+	ArrayList<Experiment>> {
 
-		//@Override
+		@Override
 		protected ArrayList<Experiment> doInBackground(Void...arg0) {
-		
-		try {
-			/*If search string is null the HashMap with annotation is
-			 * used to get search results from the server. Else if
-			 * the search string is valid that string is used for 
-			 * receiving search results instead.*/
-//				if(searchString == null) {
-					forExperiments = ComHandler.search(searchValues);
-//				} else {
-//					forExperiments = ComHandler.search(searchString);
-//				}
+
+			try {
+				experiments = ComHandler.search(searchValues);
+
 			} catch (IOException e) {
 				//TODO server communication failed
 			} 
-			return forExperiments;
+			return experiments;
 		}
-		
-		protected void onPostExecute(ArrayList<Experiment> forExperiments) {
+
+		protected void onPostExecute(ArrayList<Experiment> experiments) {
 			/*Creating list with right looking information
 			 * used to be displayed in search.*/
-			loadScreen.dismiss();
-			// TODO kolla inställningarna vilka annotationer som ska visas
-			
-			displaySearchResult = getDisplayValues(forExperiments);
+
+			ArrayList<Experiment> sortedExperiments = sortExperimentList(experiments, sortBy);
+			displaySearchResult = getDisplayValues(sortedExperiments);
 
 			//Creating adapter for displaying search results
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+			experimentListAdapter = new ArrayAdapter<String>(
 					getActivity().getApplicationContext(), 
 					R.layout.search_layout_experimentlist_text_view,
 					R.id.search_tv_experiment, 
 					displaySearchResult);	
 			//Setting adapter to view
-			experimentListView.setAdapter(adapter);
-			adapter.notifyDataSetChanged();
+			experimentListView.setAdapter(experimentListAdapter);
+			experimentListAdapter.notifyDataSetChanged();
+			loadScreen.dismiss();
 			//Set onItemclicklistener to list, used to detect clicks
 			experimentListView.setOnItemClickListener(new ListHandler());
-			
+
 		}
 	}
 
 
 
-	
+
 	/**
 	 * Listener used to detect what happens
 	 * when user clicks on an experiment in
@@ -207,11 +291,11 @@ public class SearchResultFragment extends Fragment {
 			//Getting list of files belonging to experiment
 			setExperimentFiles(position);
 			//Creating new intent for moving to FileListActivity
-			
+
 			Fragment fragment = new SearchResultExperimentFragment(rawFiles, profileFiles, regionFiles);
 			getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.frame_container, fragment).commit();
 		}
-		
+
 		/**
 		 * Method used to get all different data files 
 		 * for a specific experiment in separate lists.
@@ -219,7 +303,7 @@ public class SearchResultFragment extends Fragment {
 		 */
 		private void setExperimentFiles(int selectedExperiment) {
 			//Getting all files for a selected experiment
-			List<GeneFile> files = forExperiments.get(
+			List<GeneFile> files = experiments.get(
 					selectedExperiment).getFiles();
 			/*Sorting the files in right lists, all raw in one,
 			 * all profile in one, all region in one.*/
@@ -233,7 +317,7 @@ public class SearchResultFragment extends Fragment {
 				}
 			}
 		}
-		
+
 	}
-	
+
 }

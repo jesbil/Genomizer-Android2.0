@@ -16,9 +16,11 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class RawToProfileAdapter extends ArrayAdapter<RawToProfileParameters> {
 	private final static String BOWTIE_TITLE = "Bowtie parameters";
@@ -86,6 +88,8 @@ public class RawToProfileAdapter extends ArrayAdapter<RawToProfileParameters> {
 			
 		});
 		
+
+		
 		Button mParametersButton = (Button) view.findViewById(R.id.process_btn_parameters);
 		
 		mParametersButton.setOnClickListener(new OnClickListener() {
@@ -97,6 +101,7 @@ public class RawToProfileAdapter extends ArrayAdapter<RawToProfileParameters> {
 			
 		});
 		
+
 		ImageButton mDeleteButton = (ImageButton) view.findViewById(R.id.process_ib_delete);
 		
 		mDeleteButton.setOnClickListener(new OnClickListener() {
@@ -110,7 +115,7 @@ public class RawToProfileAdapter extends ArrayAdapter<RawToProfileParameters> {
 		
 		EditText mOutputEditText = (EditText) view.findViewById(R.id.process_et_output_file);
 		mOutputEditText.setText(object.getOutputFileName());
-		
+		//CheckBox keepSam = (CheckBox) view.findViewById(R.id.process_cb_keepsam);
 		return view;
 	}
 	

@@ -6,10 +6,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Set;
 
 import org.json.JSONObject;
 
 import android.os.Build;
+import android.util.Log;
 
 /**
  * This class handles the core communication with a server.
@@ -101,7 +104,7 @@ public class Communicator {
 	 * @throws IOException
 	 */
 	private static void setupConnection(RESTMethod requestType, String urlPostfix) throws IOException  {
-
+		Log.d("setupConnection",urlPostfix);
 		if (Build.VERSION.SDK_INT <= 8) {
 			System.setProperty("http.keepAlive", "false");
 		}
@@ -138,7 +141,7 @@ public class Communicator {
 	 * @throws IOException
 	 */
 	private static GenomizerHttpPackage sendRequest(JSONObject jsonPackage, String urlPostfix) throws IOException {
-		writePackage(jsonPackage);		
+		writePackage(jsonPackage);	
 		int responseCode = recieveResponse(urlPostfix);
 		GenomizerHttpPackage hp =  validateCode(responseCode);
 		return hp;
@@ -177,7 +180,7 @@ public class Communicator {
 		for(int i = 0; i < RESPONSE_TRIES; i++) {
 
 			int response = connection.getResponseCode();
-
+			
 			if(response != -1) {
 				return response;
 			}

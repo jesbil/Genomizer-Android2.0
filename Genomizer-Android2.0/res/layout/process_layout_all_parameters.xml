@@ -2,18 +2,38 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="@color/genomizer_white"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@color/genomizer_white" >
+    android:paddingTop="@dimen/activity_vertical_margin" >
 
-	<ListView
-        android:id="@+id/process_lv_bowtie"
+    <LinearLayout
+        android:id="@+id/process_lv_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/genomizer_white"
-        android:dividerHeight="2dp" >
-    </ListView>
-        
+        android:layout_height="match_parent"
+        android:layout_above="@+id/process_btn_layout" >
+
+        <ListView
+            android:id="@+id/process_lv_bowtie"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/genomizer_white"
+            android:dividerHeight="2dp" >
+        </ListView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/process_btn_layout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignLeft="@+id/process_lv_layout"
+        android:layout_alignParentBottom="true" >
+
+        <Button
+            android:id="@+id/process_btn_process"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/process_btn_process" />
+    </LinearLayout>
+
 </RelativeLayout>

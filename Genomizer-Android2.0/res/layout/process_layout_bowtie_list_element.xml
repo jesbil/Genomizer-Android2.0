@@ -3,79 +3,108 @@
     android:id="@+id/process_llayout_rawLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
+    android:orientation="vertical"
     android:paddingBottom="5dp"
-    android:paddingTop="5dp">
-   
+    android:paddingTop="5dp" >
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
         <TextView
-	        android:id="@+id/process_tv_input_file"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_marginLeft="4dp"
-	        android:text="@string/process_tv_input_file"
-	        android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:id="@+id/process_tv_input_file"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:text="@string/process_tv_input_file"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <ImageButton
             android:id="@+id/process_ib_delete"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            style="?android:attr/borderlessButtonStyle"
             android:src="@drawable/cross" />
-
     </RelativeLayout>
 
-    
-	<Spinner
-	    android:id="@+id/process_spinner_input_file"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_margin="4dp"/>
-	
-	<TextView
-        android:id="@+id/process_tv_genomeRelease"
-        android:layout_width="wrap_content"
+    <Spinner
+        android:id="@+id/process_spinner_input_file"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:text="@string/process_tv_genomeRelease"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:layout_margin="4dp" />
 
-	<LinearLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:orientation="horizontal" >
 
-	    <Spinner
-	        android:id="@+id/process_spinner_genomeRelease"
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent"
-	        android:layout_weight="1" />
-	    
-		<Button
-	        android:id="@+id/process_btn_parameters"
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent"
-	        android:layout_weight="1"
-	        android:text="@string/process_btn_parameters" />
+        <TextView
+            android:id="@+id/process_tv_genomeRelease"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:text="@string/process_tv_genomeRelease"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+    </LinearLayout>
 
-	</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
-	
-	<TextView
-        android:id="@+id/process_tv_output_file"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:text="@string/process_tv_output_file"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-	
-	<EditText 
-	    android:id="@+id/process_et_output_file"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content" 
-	    android:inputType="textNoSuggestions"/>
+        <Spinner
+            android:id="@+id/process_spinner_genomeRelease"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/process_btn_parameters"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/process_btn_parameters" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/process_tv_output_file"
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:text="@string/process_tv_output_file"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/process_tv_keepsam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:text="@string/process_tv_keepsam"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <EditText
+            android:id="@+id/process_et_output_file"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="textNoSuggestions" />
+
+        <CheckBox
+            android:id="@+id/process_cb_keepsam"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2.5" />
+    </LinearLayout>
+
 </LinearLayout>

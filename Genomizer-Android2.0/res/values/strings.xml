@@ -10,7 +10,10 @@
     <string name="regionFiles">regionFiles</string>
     <string name="FILE_IDS">GenomizerFileIds</string>
     
-    
+    <!--  Bundle keys for annotations between search result and its settings -->
+    <string name="annotationsKey">annotationsKey</string>
+    <string name="visibleAnnotationsKey">visibleAnnotationstestKey</string>
+    <string name="annotationSortByKey">annotationSortByKey</string>
     
     <!-- Toast messages -->
     <string name="msg_no_internet_availiable">Internet seems to be disconnected</string>
@@ -105,8 +108,8 @@
     
     <!-- Used in search_layout_experimentlistsettings -->
     <string name="search_btn_setVisibleAnnotations">Set visible annotations</string>
-    <string name="search_btn_saveSettings">Save settings</string>
-    <string name="search_btn_useDefault">Use default</string>
+    <string name="searchresult_settings_btn_checkAllAnnotations">Check All</string>
+    <string name="searchresult_settings_btn_uncheckAllAnnotations">Uncheck All</string>
     <string name="search_tv_sortBy">Sort by</string>
     
     <!-- Used in process_layout_all_parameters -->
@@ -115,8 +118,9 @@
     <!-- Used in process_layout_bowtie_list_element -->
     <string name="process_tv_input_file">Input file</string>
     <string name="process_tv_output_file">Output file</string>
-    <string name="process_tv_genomeRelease">Genome release</string>
+    <string name="process_tv_genomeRelease">Genome release       </string>
     <string name="process_btn_parameters">Parameters</string>
+    <string name="process_tv_keepsam">Keep sam</string>
     
     <!-- Used in process_menu -->
     <string name="process_action_add">Add</string>

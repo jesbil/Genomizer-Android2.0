@@ -3,23 +3,24 @@
     android:id="@+id/search_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
-    android:background="@color/genomizer_white">
+    android:background="@color/genomizer_white"
+    android:orientation="vertical" >
 
-    
     <Button
-       android:id="@+id/search_regular_btn_search"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:text="@string/searchRegular_btn_search"
-       android:layout_alignParentBottom="true" />
+        android:id="@+id/search_regular_btn_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="?android:attr/selectableItemBackground"
+        android:textColor="@color/genomizer_blue" 
+        android:text="@string/searchRegular_btn_search" />
 
     <ListView
         android:id="@+id/search_regular_lv_annotationList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-       	android:layout_alignParentTop="true"
-       	android:layout_above="@id/search_regular_btn_search">
+        android:layout_above="@id/search_regular_btn_search"
+        android:layout_alignParentTop="true" >
     </ListView>
 
 </RelativeLayout>
