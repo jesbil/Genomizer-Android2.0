@@ -16,7 +16,6 @@
         android:layout_marginLeft="4dp"
         android:layout_alignParentTop="true"
         android:text="@string/login_settings_selectAServerURL"
-        
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <Spinner
@@ -36,7 +35,6 @@
         android:layout_below="@id/login_settings_tv_selectAServerURL"
         android:inputType="textNoSuggestions"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        
         />
 
        <Button

@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="32dp"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:background="@color/genomizer_white" >
 
     <TextView
         android:id="@+id/search_experimentfiles_tv_fileName"

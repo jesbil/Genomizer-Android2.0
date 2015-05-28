@@ -5,33 +5,34 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
+    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="se.umu.cs.pvt151.FileListActivity$PlaceholderFragment" >
-    
-     <TextView
+
+    <TextView
         android:id="@+id/search_tv_experimentFiles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-		android:layout_gravity="center_horizontal"
-        android:layout_marginTop="8dp"
+        android:layout_gravity="center_horizontal"
         android:layout_marginBottom="6dp"
+        android:layout_marginTop="8dp"
         android:background="@color/white"
-        android:text="@string/search_tv_experimentFiles"        
-        android:textSize="16sp"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:text="@string/search_tv_experimentFiles"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/black"        
+        android:textColor="@color/black"
+        android:textSize="16sp"
         android:textStyle="bold" />
-     
 
-     
-     <TextView
+    <TextView
         android:id="@+id/search_tv_raw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/search_tv_experimentFiles"
         android:background="@color/light_gray_experimentFiles"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
         android:text="@string/search_tv_rawData"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/black" />
@@ -41,13 +42,12 @@
         android:layout_width="match_parent"
         android:layout_height="114dp"
         android:layout_above="@+id/search_tv_profile"
-        android:layout_below="@id/search_tv_raw"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:background="@color/smoke_white"
+        android:layout_below="@id/search_tv_raw"
         android:choiceMode="multipleChoice"
-        android:dividerHeight="1dp" >
-
+        android:dividerHeight="1dp"
+        android:background="@color/genomizer_white" >
     </ListView>
 
     <TextView
@@ -57,9 +57,10 @@
         android:layout_above="@+id/search_lv_regionList"
         android:layout_alignParentLeft="true"
         android:background="@color/light_gray_experimentFiles"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
         android:text="@string/search_tv_regionData"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#000000"  />
+        android:textColor="#000000" />
 
     <ListView
         android:id="@+id/search_lv_regionList"
@@ -67,18 +68,20 @@
         android:layout_height="114dp"
         android:layout_above="@+id/search_btn_addToSelection"
         android:layout_alignParentLeft="true"
-        android:background="@color/smoke_white"
+        android:choiceMode="multipleChoice"
         android:dividerHeight="1dp"
-        android:choiceMode="multipleChoice" >
+        android:background="@color/genomizer_white" >
     </ListView>
 
     <Button
         android:id="@+id/search_btn_addToSelection"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"                
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:text="@string/search_btn_addToSelection" />
+        android:text="@string/search_btn_addToSelection"
+        android:background="?android:attr/selectableItemBackground"
+         />
 
     <ListView
         android:id="@+id/search_lv_profileList"
@@ -86,10 +89,9 @@
         android:layout_height="114dp"
         android:layout_above="@+id/search_tv_region"
         android:layout_alignParentLeft="true"
-        android:background="@color/smoke_white"
         android:choiceMode="multipleChoice"
-        android:dividerHeight="1dp" >
-
+        android:dividerHeight="1dp"
+        android:background="@color/genomizer_white" >
     </ListView>
 
     <TextView
@@ -97,8 +99,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/search_lv_profileList"
-        android:layout_alignParentLeft="true"        
+        android:layout_alignParentLeft="true"
         android:background="@color/light_gray_experimentFiles"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
         android:text="@string/search_tv_profileData"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/black" />
