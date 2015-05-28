@@ -6,8 +6,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
-
 import se.umu.cs.pvt151.model.Annotation;
 import se.umu.cs.pvt151.model.Experiment;
 import se.umu.cs.pvt151.model.GeneFile;
@@ -183,15 +181,16 @@ public class MsgDeconstructor {
 		for (int i = 0; i < json.length(); i++) {
 			JSONObject obj = (JSONObject) json.get(i);
 			
-			ProcessStatus process = new ProcessStatus();
+			ProcessStatus processStatus = new ProcessStatus();
 			
-			process.setExperimentName(obj.getString("experimentName"));
-			process.setStatus(obj.getString("status"));
-			process.setAuthor(obj.getString("author"));
+			processStatus.setExperimentName(obj.getString("experimentName"));
+			processStatus.setStatus(obj.getString("status"));
+			processStatus.setAuthor(obj.getString("author"));
+			processStatus.setID(obj.getString("PID"));
 			
-			process.setTimeAdded(obj.getLong("timeAdded"));
-			process.setTimeStarted(obj.getLong("timeStarted"));
-			process.setTimeFinnished(obj.getLong("timeFinished"));
+			processStatus.setTimeAdded(obj.getLong("timeAdded"));
+			processStatus.setTimeStarted(obj.getLong("timeStarted"));
+			processStatus.setTimeFinnished(obj.getLong("timeFinished"));
 			
 			JSONArray outputFiles = obj.getJSONArray("outputFiles");
 			String[] files = new String[outputFiles.length()];
@@ -199,9 +198,9 @@ public class MsgDeconstructor {
 			for (int j = 0; j < files.length; j++) {
 				files[j] = outputFiles.getString(j);
 			}
-			process.setOutputFiles(files);
+			processStatus.setOutputFiles(files);
 			
-			processes.add(process);
+			processes.add(processStatus);
 		}
 		return processes;
 	}

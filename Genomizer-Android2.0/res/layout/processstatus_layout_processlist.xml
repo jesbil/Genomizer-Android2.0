@@ -6,7 +6,7 @@
     android:orientation="vertical" >
    
     <ListView
-        android:id="@+id/process_listv_processList"
+        android:id="@+id/process_status_listv_processList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -24,7 +24,7 @@
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/process_btn_refresh"
+            android:id="@+id/process_status_btn_refresh"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

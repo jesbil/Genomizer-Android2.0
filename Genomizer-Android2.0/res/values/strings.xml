@@ -61,6 +61,7 @@
     <!-- Used in search_layout_pubmed -->
     <string name="searchPubmed_tv_pubmedStyle">PubMed-style</string>
     <string name="searchPubmed_btn_search">Search</string>
+    <string name="searchPubmed_input_field_example">value1[annotation1] AND value2[annotation2]</string>
     
 
     <!-- Nav Drawer Menu Items -->
@@ -103,14 +104,22 @@
     <string name="search_tv_regionData">REGION DATA</string>
     <string name="search_btn_addToSelection">Add to selection</string>
     
-    <!-- Used in process_layout_experimentlist -->
+    <!-- Used in processstatus_layout_processlist -->
     <string name="process_btn_refresh">Refresh</string>
+    <string name="process_status_tv_experiment">Experiment:</string>
+    <string name="process_status_tv_author">Author:</string>
+    <string name="process_status_tv_timeadded">Process added:</string>
+    <string name="process_status_tv_timestarted">Process started:</string>
+    <string name="process_status_tv_timefinished">Process finished:</string>
+    <string name="process_status_tv_status">Status:</string>
     
     <!-- Used in search_layout_experimentlistsettings -->
     <string name="search_btn_setVisibleAnnotations">Set visible annotations</string>
     <string name="searchresult_settings_btn_checkAllAnnotations">Check All</string>
     <string name="searchresult_settings_btn_uncheckAllAnnotations">Uncheck All</string>
     <string name="search_tv_sortBy">Sort by</string>
+    
+    
     
     
 </resources>

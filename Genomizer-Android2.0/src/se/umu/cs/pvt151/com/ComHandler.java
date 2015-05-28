@@ -374,6 +374,23 @@ public class ComHandler {
 		}
 		throw new IOException("Internet connection unavailable.");
 	}
+	
+	
+	public static boolean HaltProcessing(String PID) throws IOException{
+		if(Genomizer.isOnline()) {
+			JSONObject haltObject = new JSONObject();
+			try {
+				haltObject.put("PID", PID);
+				GenomizerHttpPackage haltResponse = Communicator.sendHTTPRequest(haltObject, RESTMethod.DELETE, PROCESS);
+				if(haltResponse.getCode() == OK){
+					return true;
+				}
+			} catch (JSONException e) {
+				return false;
+			}
+		}
+		throw new IOException("Internet connection unavailable.");
+	}
 
 	/**
 	 * Returns a pubmed query string ready to be put in a URL. It is encoded for URLs so it cannot be used elsewhere.
@@ -398,6 +415,7 @@ public class ComHandler {
 		}
 		return URLEncoder.encode(pubmedQuery, "UTF-8");
 	}
+
 
 
 }

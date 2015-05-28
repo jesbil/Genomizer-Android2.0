@@ -3,7 +3,7 @@ package se.umu.cs.pvt151;
 import java.util.ArrayList;
 
 import se.umu.cs.pvt151.login.LoginActivity;
-import se.umu.cs.pvt151.process.ProcessFragment;
+import se.umu.cs.pvt151.processStatus.ProcessStatusFragment;
 import se.umu.cs.pvt151.search.SearchMotherFragment;
 import se.umu.cs.pvt151.selected_files.SelectedfilesMotherFragment;
 
@@ -169,7 +169,7 @@ public class MainActivity extends FragmentActivity {
             fragment = new SelectedfilesMotherFragment();
             break;
         case 2:
-        	fragment = new ProcessFragment();
+        	fragment = new ProcessStatusFragment();
         	break;
         case 3:
 // TODO   	ComHandler.logout();

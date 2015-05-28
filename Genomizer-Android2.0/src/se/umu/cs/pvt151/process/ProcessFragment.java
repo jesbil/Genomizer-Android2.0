@@ -8,12 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class ProcessFragment extends Fragment {
-
+	
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
 			Bundle savedInstanceState) {
 		
-		View rootView = inflater.inflate(R.layout.process_layout_experimentlist,container, false);
+		View rootView = inflater.inflate(R.layout.processstatus_layout_processlist,container, false);
 		
 		return rootView;
 	}
