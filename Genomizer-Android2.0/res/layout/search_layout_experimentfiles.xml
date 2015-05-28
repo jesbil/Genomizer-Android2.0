@@ -3,7 +3,7 @@
     android:id="@+id/RelativeLayout1"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/genomizer_white"
     android:orientation="vertical"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="se.umu.cs.pvt151.FileListActivity$PlaceholderFragment" >

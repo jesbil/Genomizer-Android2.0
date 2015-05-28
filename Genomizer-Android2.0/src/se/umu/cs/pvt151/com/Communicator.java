@@ -6,9 +6,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-
+import java.util.ArrayList;
+import java.util.Set;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -16,11 +15,13 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import javax.security.cert.CertificateException;
+import javax.security.cert.X509Certificate;
 
 import org.json.JSONObject;
 
 import android.os.Build;
-
+import android.util.Log;
 
 /**
  * This class handles the core communication with a server.
@@ -125,14 +126,16 @@ public class Communicator {
 				return new java.security.cert.X509Certificate[] {};
 			}
 			@Override
-			public void checkClientTrusted(X509Certificate[] arg0, String arg1)
-					throws CertificateException {
+			public void checkClientTrusted(
+					java.security.cert.X509Certificate[] chain, String authType)
+					throws java.security.cert.CertificateException {
 				// TODO Auto-generated method stub
 				
 			}
 			@Override
-			public void checkServerTrusted(X509Certificate[] arg0, String arg1)
-					throws CertificateException {
+			public void checkServerTrusted(
+					java.security.cert.X509Certificate[] chain, String authType)
+					throws java.security.cert.CertificateException {
 				// TODO Auto-generated method stub
 				
 			}
@@ -156,12 +159,6 @@ public class Communicator {
 	 * @throws IOException
 	 */
 	private static void setupConnection(RESTMethod requestType, String urlPostfix) throws IOException  {
-		if (Build.VERSION.SDK_INT <= 8) {
-			System.setProperty("http.keepAlive", "false");
-		}
-		if(!urlString.startsWith("http://") && !urlString.startsWith("https://")){
-			urlString = "http://"+urlString;
-		}
 		URL url = new URL(urlString + urlPostfix);
 		if (url.getProtocol().equals("https")) {
 		    trustAllHosts();
@@ -217,10 +214,10 @@ public class Communicator {
 	 */
 	private static void writePackage(JSONObject jsonPackage) throws IOException {
 		if (connection.getDoOutput()) {
-			DataOutputStream out = new DataOutputStream(connection.getOutputStream());	
-			byte[] pack = jsonPackage.toString().getBytes("UTF-8");		
+			DataOutputStream out = new DataOutputStream(connection.getOutputStream());						
+			byte[] pack = jsonPackage.toString().getBytes("UTF-8");							
 			out.write(pack);
-			out.flush();		
+			out.flush();				
 		}
 	}
 
@@ -235,13 +232,19 @@ public class Communicator {
 	 * @throws IOException
 	 */
 	private static int recieveResponse(String urlPostfix) throws IOException {
+
 		for(int i = 0; i < RESPONSE_TRIES; i++) {
+
 			int response = connection.getResponseCode();
+			
 			if(response != -1) {
 				return response;
 			}
+
 		}
+
 		throw new IOException("Server is not respondning.");
+
 	}
 
 
@@ -260,6 +263,7 @@ public class Communicator {
 		if (responseCode >= 200 && responseCode < 300) {
 			BufferedReader inStream = new BufferedReader(
 					new InputStreamReader(connection.getInputStream()));
+
 			StringBuffer response = new StringBuffer();
 			String inputLine;
 

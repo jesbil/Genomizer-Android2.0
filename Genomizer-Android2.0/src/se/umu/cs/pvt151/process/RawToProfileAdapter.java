@@ -113,10 +113,55 @@ public class RawToProfileAdapter extends ArrayAdapter<RawToProfileParameters> {
 			
 		});
 		
-		EditText mOutputEditText = (EditText) view.findViewById(R.id.process_et_output_file);
-		mOutputEditText.setText(object.getOutputFileName());
-		//CheckBox keepSam = (CheckBox) view.findViewById(R.id.process_cb_keepsam);
+		EditText mOutputFileEditText = (EditText) view.findViewById(R.id.process_et_output_file);
+		mOutputFileEditText.setText(object.getOutputFileName());
+		
+		mOutputFileEditText.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				object.setOutputFileName(s.toString());
+			}
+			
+		});
+		
+		final CheckBox keepSam = (CheckBox) view.findViewById(R.id.process_cb_keepsam);
+		keepSam.setChecked(object.willKeepSam());
+		
+		keepSam.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				object.setKeepSam(keepSam.isChecked());
+			}
+			
+		});
+		
 		return view;
+	}
+	
+	@Override
+	public int getCount() {
+		return objects.size();
+	}
+	
+	@Override
+	public RawToProfileParameters getItem(int position) {
+		return objects.get(position);
 	}
 	
 	private AlertDialog buildBowtieParamsDialog(final int position) {

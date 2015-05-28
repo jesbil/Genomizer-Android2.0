@@ -7,16 +7,19 @@ import se.umu.cs.pvt151.R;
 import se.umu.cs.pvt151.com.ComHandler;
 import se.umu.cs.pvt151.model.GeneFile;
 import se.umu.cs.pvt151.model.GenomeRelease;
+import se.umu.cs.pvt151.processStatus.ProcessStatusFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -37,6 +40,8 @@ public class ProcessFragment extends Fragment {
 	
 	private ArrayList<GenomeRelease> genomeReleases;
 	private ArrayList<String> genomeReleaseNames;
+	
+	private Button mProcessButton;
 	
 	public ProcessFragment() {
 		
@@ -62,6 +67,27 @@ public class ProcessFragment extends Fragment {
 		Bundle b = getArguments();
 		geneFiles = b.getParcelableArrayList(FILES_KEY);
 		
+		mProcessButton = (Button) rootView.findViewById(R.id.process_btn_process);
+		
+		mProcessButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (!mAdapter.isEmpty()) {
+					int size = mAdapter.getCount();
+					ArrayList<RawToProfileParameters> allProcesses = 
+							new ArrayList<RawToProfileParameters>();
+					for (int i = 0; i < size; i++) {
+						allProcesses.add(mAdapter.getItem(i));
+					}
+					
+					new RawToProfileTask(getActivity(), allProcesses).execute();
+				}
+			
+			}
+			
+		});
+				
 		new GenomeReleaseTask(getActivity()).execute();
 		
 		return rootView;
@@ -101,7 +127,7 @@ public class ProcessFragment extends Fragment {
 	}
 	
 	private void addNewBowtieListItem() {
-		mAdapter.add(new RawToProfileParameters(geneFileNames, genomeReleaseNames));
+		mAdapter.add(new RawToProfileParameters(geneFileNames, genomeReleaseNames, geneFiles.get(0).getExpId()));
 		mAdapter.notifyDataSetChanged();
 	}
 	
@@ -144,6 +170,82 @@ public class ProcessFragment extends Fragment {
 			genomeReleases = result;
 			buildBowtieListViewAdapter();
 		}
+	}
+	
+	private class RawToProfileTask extends AsyncTask<Void, Void, Boolean> {
+		
+		private Context context;
+		private ArrayList<RawToProfileParameters> allProcesses;
+		private ProgressDialog progressDialog;
+		
+		public RawToProfileTask(Context context, ArrayList<RawToProfileParameters> allProcesses) {
+			this.context = context;
+			this.allProcesses = allProcesses;
+			progressDialog = new ProgressDialog(context);
+			progressDialog.setTitle(getProgressDialogTitle(allProcesses.size()));
+			progressDialog.setMessage(getProgressDialogMessage(allProcesses.size()));
+		}
+		
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			try {
+				return ComHandler.rawToProfile(allProcesses);
+			} catch (IOException ioe) {
+				return false;
+			}
+		}
+		
+		@Override
+		protected void onPostExecute(Boolean result) {
+			progressDialog.dismiss();
+			String message = "";
+			
+			if (result.booleanValue()) {
+				message = getProcessSuccessMessage(allProcesses.size());
+			} else {
+				message = getProcessFailedMessage(allProcesses.size());
+			}
+			Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+			
+			Fragment fragment = new ProcessStatusFragment();
+			getActivity().getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+			getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, fragment).commit();
+		}
+		
+		private String getProgressDialogTitle(int size) {
+			if (size == 1) {
+				return "Starting process";
+			} else {
+				return "Starting processes";
+			}
+		}
+		
+		private String getProgressDialogMessage(int size) {
+			if (size == 1) {
+				return "Starting process. Please wait.";
+			}
+			
+			return "Starting processes. Please wait.";
+		}
+		
+		private String getProcessSuccessMessage(int size) {
+			if (size == 1 ) {
+				return size + " process started successfully";
+			}
+			
+			return size + " processes started successfully";
+		}
+		
+		private String getProcessFailedMessage(int size) {
+			if (size == 1) {
+				return size + " process failed to start";
+			}
+			
+			return size + " processes failed to start";
+		}
+
+
+		
 	}
 
 }
