@@ -8,8 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.Set;
+
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -21,7 +20,7 @@ import javax.net.ssl.X509TrustManager;
 import org.json.JSONObject;
 
 import android.os.Build;
-import android.util.Log;
+
 
 /**
  * This class handles the core communication with a server.
@@ -236,17 +235,13 @@ public class Communicator {
 	 * @throws IOException
 	 */
 	private static int recieveResponse(String urlPostfix) throws IOException {
-
 		for(int i = 0; i < RESPONSE_TRIES; i++) {
 			int response = connection.getResponseCode();
 			if(response != -1) {
 				return response;
 			}
-
 		}
-
 		throw new IOException("Server is not respondning.");
-
 	}
 
 

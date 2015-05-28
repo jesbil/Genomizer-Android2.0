@@ -22,16 +22,20 @@
 	        android:textAppearance="?android:attr/textAppearanceSmall"/>
 	    
 	    <EditText 
-	         android:id="@+id/search_pubmed_input_field"
+	        android:id="@+id/search_pubmed_input_field"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_marginLeft="4dp"        
-	        android:inputType="textNoSuggestions"
-	        android:layout_below="@id/search_tv_pubmedStyle"/>
+	        android:inputType="textMultiLine"
+	        android:hint="@string/searchPubmed_input_field_example"
+            android:textColorHint="@color/gray_login"
+	        android:layout_below="@id/search_tv_pubmedStyle" />
 	   
+
+	    
 	</RelativeLayout>
 	  <Button
-       android:id="@+id/search_pubmed_button_search"
+       android:id="@+id/search_pubmed_btn_search"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:background="?android:attr/selectableItemBackground"

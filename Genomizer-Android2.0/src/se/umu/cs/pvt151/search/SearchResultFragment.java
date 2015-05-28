@@ -2,7 +2,6 @@ package se.umu.cs.pvt151.search;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,16 +31,21 @@ public class SearchResultFragment extends Fragment {
 
 	protected final static String SEARCH_VALUES = "searchValues";
 	protected final static String ANNOTATION_NAMES = "annotationNames";
+	protected final static String PUBMED_QUERY = "pubmedquery";
 
 	private static final String DOWNLOADING_SEARCH_RESULTS = "Downloading search results";
+	
 	private HashMap<String, String> searchValues;
 	private ArrayList<String> annotationNamesList;
+	private String pubmedQuery;
+	
 	private ProgressDialog loadScreen;
 	private SearchHandler startSearch;
 	private ArrayList<Experiment> experiments;
 	private ArrayList<String> displaySearchResult;
 	private ListView experimentListView;
-	ArrayAdapter<String> experimentListAdapter;
+	private ArrayAdapter<String> experimentListAdapter;
+	
 
 	private ArrayList<GeneFile> rawFiles;
 	private ArrayList<GeneFile> profileFiles;
@@ -59,15 +63,19 @@ public class SearchResultFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
+		
 		Bundle bundle = getArguments();
 		this.searchValues = (HashMap<String, String>) 
 				bundle.getSerializable(SEARCH_VALUES);
 
+		this.pubmedQuery = bundle.getString(PUBMED_QUERY);
+		
 		this.annotationNamesList = bundle.getStringArrayList(ANNOTATION_NAMES);
 		visibleAnnotations = new HashMap<String,Boolean>();
 		for(String annotationName : annotationNamesList){
 			visibleAnnotations.put(annotationName, true);
 		}
+		
 	}
 
 
@@ -208,17 +216,6 @@ public class SearchResultFragment extends Fragment {
 
 				}
 			}
-			//			for(Annotation annotation : annotations){
-			//				if(visibleAnnotations.get(annotation.getName())){
-			//					if(annotationNamesList.contains(annotation.getName())){
-			//						temp = temp + annotation.getName() +" "+
-			//								annotation.getValue().toString()+"\n";	
-			//					}else{
-			//						temp = temp + annotation.getName() +" "+"[-]\n";
-			//					}
-			//					
-			//				}
-			//			}
 
 			searchResult.add("Experiment "+ experiment.getName() +"\n"+temp);
 
@@ -242,7 +239,11 @@ public class SearchResultFragment extends Fragment {
 		protected ArrayList<Experiment> doInBackground(Void...arg0) {
 
 			try {
-				experiments = ComHandler.search(searchValues);
+				if(searchValues!=null){
+					experiments = ComHandler.search(searchValues);	
+				}else if(pubmedQuery!=null){
+					experiments = ComHandler.search(pubmedQuery);
+				}
 
 			} catch (IOException e) {
 				//TODO server communication failed
