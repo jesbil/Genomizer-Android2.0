@@ -45,9 +45,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_below="@id/search_tv_raw"
-        android:background="@color/smoke_white"
         android:choiceMode="multipleChoice"
-        android:dividerHeight="1dp" >
+        android:dividerHeight="1dp"
+        android:background="@color/genomizer_white" >
     </ListView>
 
     <TextView
@@ -68,9 +68,9 @@
         android:layout_height="114dp"
         android:layout_above="@+id/search_btn_addToSelection"
         android:layout_alignParentLeft="true"
-        android:background="@color/smoke_white"
         android:choiceMode="multipleChoice"
-        android:dividerHeight="1dp" >
+        android:dividerHeight="1dp"
+        android:background="@color/genomizer_white" >
     </ListView>
 
     <Button
@@ -89,9 +89,9 @@
         android:layout_height="114dp"
         android:layout_above="@+id/search_tv_region"
         android:layout_alignParentLeft="true"
-        android:background="@color/smoke_white"
         android:choiceMode="multipleChoice"
-        android:dividerHeight="1dp" >
+        android:dividerHeight="1dp"
+        android:background="@color/genomizer_white" >
     </ListView>
 
     <TextView
