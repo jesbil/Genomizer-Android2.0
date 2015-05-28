@@ -35,7 +35,6 @@ public class MsgDeconstructor {
 	public static ArrayList<Annotation> deconAnnotations(JSONArray json) throws JSONException {
 		ArrayList<Annotation> annotations = new ArrayList<Annotation>();
 
-		//for each annotation..
 		for (int i = 0; i < json.length(); i++) {
 			JSONObject obj = (JSONObject) json.get(i);
 			Annotation annotation = new Annotation();

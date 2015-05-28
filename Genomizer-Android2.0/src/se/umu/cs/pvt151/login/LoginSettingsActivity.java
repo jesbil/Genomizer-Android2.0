@@ -52,6 +52,9 @@ public class LoginSettingsActivity extends Activity {
 	
 	private SharedPreferences sharedPreferences;
 	
+	/**
+	 * Starts the lifcycle of login_layout_settings.
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -64,19 +67,28 @@ public class LoginSettingsActivity extends Activity {
 		buildRemoveURLDialog();
 		buildAddURLDialog();
 	}
-	
+	/**
+	 * Saves the sevrers when user goes back to loginscreen.
+	 */
 	@Override
 	public void onPause() {
 		saveToSharedPreferences();
 		super.onPause();
 	}
 	
+	/**
+	 * Builds the serverSpinner when the user returns to the login_layout_settings.
+	 */
 	@Override
 	public void onResume() {
 		buildServerSpinner();
 		super.onResume();
 	}
 	
+	/**
+	 * Creates the Spinner that handles the serverURLs.
+	 * Gets the saved urls that has been added before by the user.
+	 */
 	private void buildServerSpinner() {		
 		mServerSpinner = (Spinner) 
 				 findViewById(R.id.login_settings_spinner_servers);
@@ -94,6 +106,10 @@ public class LoginSettingsActivity extends Activity {
 		mServerSpinner.setSelection(getSavedSelectedIndex());
 	}
 	
+	/**
+	 * Dialog window so the selected server can be edited.
+	 * 
+	 */
 	private void buildEditURLDialog() {
 		mEditURLInput = new EditText(this);
 		
@@ -119,6 +135,11 @@ public class LoginSettingsActivity extends Activity {
 				.create();
 	}
 	
+	/**
+	 * Comes up when the user has selected a serverurk in the spinner and
+	 * presses "Red cross" in the actionbar. This secures that the user really want to 
+	 * delete that serverURL.
+	 */
 	private void buildRemoveURLDialog() {
 		mRemoveURLText = new TextView(this);
 		mRemoveURLText.setTypeface(null, Typeface.BOLD);
@@ -144,6 +165,11 @@ public class LoginSettingsActivity extends Activity {
 				.create();
 	}
 	
+	/**
+	 * Dialog window that comes up when the user presses the green
+	 * add button in the actionbar. There the user can write in 
+	 * the serverURL and press ok to save it to the Spinner.
+	 */
 	private void buildAddURLDialog() {
 		mAddURLInput = new EditText(this);
 		mAddURLInput.setText("http://");
@@ -170,25 +196,26 @@ public class LoginSettingsActivity extends Activity {
 				})
 				.create();
 	}
-	
+	 	
 	@Override
 	public boolean onNavigateUp() {
 		onBackPressed();
 		return true;
 	}
-
+	/**
+	 * Inflates the login_settings_menu and it's items shows.
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.login_settings_menu, menu);
 		return true;
 	}
-
+	/**
+	 * Handles the actionbar clicks on items login_settings_addURL
+	 * and login_settings_removeURL.
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		switch(id){
 		case R.id.login_settings_addURL:
@@ -201,6 +228,11 @@ public class LoginSettingsActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
+	/**
+	 * When the Edit URL button is pressed creates the 
+	 * 
+	 * @param v
+	 */
 	public void onClickEditURL(View v) {
 		if (!savedServerURLs.isEmpty()) {
 			mEditURLInput.setText(mServerSpinner.getSelectedItem().toString());
@@ -208,7 +240,10 @@ public class LoginSettingsActivity extends Activity {
 			mEditURLDialog.show();
 		}
 	}
-	
+	/**
+	 * Updates the spinner with the edited url.
+	 * @param editedURL - severURL form edit dialog.
+	 */
 	private void setEditedURL(String editedURL) {
 		String serverURL = (String) mServerSpinner.getSelectedItem();
 		
@@ -216,6 +251,10 @@ public class LoginSettingsActivity extends Activity {
  		mSpinnerAdapter.notifyDataSetChanged();
 	}
 	
+	/**
+	 * If the spinner is not empty the dialog is shown with the seected url when
+	 * the user presses "red cross". 
+	 */
 	public void onClickRemoveURL() {
 		if (!savedServerURLs.isEmpty()) {
 			mRemoveURLText.setText("Do you really want to remove URL:\n " 
@@ -224,17 +263,26 @@ public class LoginSettingsActivity extends Activity {
 		}
 
 	}
-	
+	/**
+	 * Removes the selected URL when user presses ok in the remove dialog.
+	 */
 	private void removeSelectedURL() {
 		String serverURL = (String) mServerSpinner.getSelectedItem();
 		savedServerURLs.remove(serverURL);
 		mSpinnerAdapter.notifyDataSetChanged();
 	}
 	
+	/**
+	 * Shows the add dialog.
+	 */
 	private void onClickAddURL() {
 		mAddURLDialog.show();
 	}
 	
+	/**
+	 * Adds the URL the user has written in the add dialog.
+	 * @param serverURL - dialog from the addDialog.
+	 */
 	private void addServerURL(String serverURL) {
 		String formattedURL = formatURLString(serverURL);
 		savedServerURLs.add(formattedURL);
@@ -242,6 +290,12 @@ public class LoginSettingsActivity extends Activity {
 		mServerSpinner.setSelection(mSpinnerAdapter.getCount() - 1);
 	}
 	
+	/**
+	 * Format the url so it has "http://" in fornt of it if 
+	 * it's not exist. Also adds a "/" in the ennd if it not ends with it.
+	 * @param url - serverURL.
+	 * @return - formated String
+	 */
 	public static String formatURLString(String url) {
 		String formattedURL = url;
 		
@@ -256,6 +310,10 @@ public class LoginSettingsActivity extends Activity {
 		return formattedURL;
 	}
 	
+	/**
+	 *  Saves the spinner server infromation that is 
+	 *  essential for recreating server spinner. 
+	 */
 	private void saveToSharedPreferences() {
 		int selectedPosition = mServerSpinner.getSelectedItemPosition();
 		String allServers = concatServersWithDelimiter();
@@ -268,6 +326,10 @@ public class LoginSettingsActivity extends Activity {
 		editor.commit();
 	}
 	
+	/**
+	 * Adds a delimeter so the serer String can be diveded after each URL.
+	 * @return
+	 */
 	private String concatServersWithDelimiter() {
 		StringBuilder sb = new StringBuilder();
 		

@@ -22,7 +22,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
+/**
+ * Login screens activity that creates the login_layout.
+ * Handles logic so the loginrequest is sent and loginerrors.
+ * 
+ */
 public class LoginActivity extends Activity {
 	
 	private final static String SAVED_INSTANCE_USERNAME = 
@@ -37,6 +41,10 @@ public class LoginActivity extends Activity {
 	private EditText mPasswordEditText;
 	private Button mSignInButton;
 	
+	/**
+	 * Starts the lifecycle of the activity. 
+	 * Creates the layout with its items.
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -47,7 +55,10 @@ public class LoginActivity extends Activity {
 		mPasswordEditText = (EditText) findViewById(R.id.login_et_enterPassword);
 		mSignInButton = (Button) findViewById(R.id.login_btn_signIn);
 	}
-	
+	/**
+	 * When the login screen has been called more then once this is called so 
+	 * last server user used is saved in SharedPreferences.
+	 */
 	@Override
 	public void onResume() {
 		SharedPreferences sharedPreferences = getSharedPreferences(
@@ -59,6 +70,10 @@ public class LoginActivity extends Activity {
 		super.onResume();
 	}
 	
+	/**
+	 * Saves username and password so they can be sent in a login-
+	 * package.
+	 */
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
 		String username = mUsernameEditText.toString();
@@ -69,7 +84,9 @@ public class LoginActivity extends Activity {
 		
 		super.onSaveInstanceState(savedInstanceState);
 	}
-	
+	/**
+	 * Restores the username and password back after it has been saved.
+	 */
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 		String username = savedInstanceState.getString(SAVED_INSTANCE_USERNAME);
@@ -77,19 +94,20 @@ public class LoginActivity extends Activity {
 		mUsernameEditText.setText(username);
 		mPasswordEditText.setText(password);
 	}
-
+	/**
+	 * Inflates the login_menu so items shows in the actionbar.
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.login_menu, menu);
 		return true;
 	}
-
+	/**
+	 * Action bar items i handled here. Will handle the click on 
+	 * login_action_settings that takes the user to LoginSettingsActivity.
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.login_action_settings) {
 			Intent intent = new Intent(this, LoginSettingsActivity.class);
@@ -98,10 +116,12 @@ public class LoginActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+	/**
+	 * Executes the LoginTask.
+	 * @param v
+	 */
 	public void login(View v) {
 		mSignInButton.setEnabled(false);
-		
 		new LoginTask().execute();
 	}
 	
@@ -170,9 +190,6 @@ public class LoginActivity extends Activity {
 		private int sendLoginRequest() {
 			String username = mUsernameEditText.getText().toString();
 			String password = mPasswordEditText.getText().toString();
-//			String username = "testuser";
-//			String password = "baguette";
-			
 			ComHandler.setServerURL(serverURL);
 			
 			try {
