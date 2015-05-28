@@ -5,14 +5,18 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
-import java.net.URLConnection;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Set;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import org.json.JSONObject;
 
@@ -33,7 +37,7 @@ public class Communicator {
 	//The number of tries on getting response code
 	private static final int RESPONSE_TRIES = 3;
 
-	private static HttpsURLConnection connection;
+	private static HttpURLConnection connection;
 	private static String urlString;
 	private static String token = "";
 	private static Communicator staticSelfReference = null;
@@ -95,12 +99,56 @@ public class Communicator {
 	 * @return GenomizerHttpPackage - contains response code & body
 	 * @throws IOException
 	 */
-	public static GenomizerHttpPackage sendHTTPRequest(JSONObject jsonPackage, RESTMethod requestType, String urlPostfix) {
+	public static GenomizerHttpPackage sendHTTPRequest(JSONObject jsonPackage, RESTMethod requestType, String urlPostfix) throws IOException {
 		setupConnection(requestType, urlPostfix);
 		return sendRequest(jsonPackage, urlPostfix);
 	}
+	
+	// always verify the host - dont check for certificate
+	final static HostnameVerifier DO_NOT_VERIFY = new HostnameVerifier() {
+		@Override
+		public boolean verify(String hostname, SSLSession session) {
+			return true;
+		}
 
 
+	};
+
+	/**
+	 * Trust every server - dont check for any certificate
+	 */
+	private static void trustAllHosts() {
+		
+		// Create a trust manager that does not validate certificate chains
+		TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+			@Override
+			public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+				return new java.security.cert.X509Certificate[] {};
+			}
+			@Override
+			public void checkClientTrusted(X509Certificate[] arg0, String arg1)
+					throws CertificateException {
+				// TODO Auto-generated method stub
+				
+			}
+			@Override
+			public void checkServerTrusted(X509Certificate[] arg0, String arg1)
+					throws CertificateException {
+				// TODO Auto-generated method stub
+				
+			}
+		} };
+
+		// Install the all-trusting trust manager
+		try {
+			SSLContext sc = SSLContext.getInstance("TLS");
+			sc.init(null, trustAllCerts, new java.security.SecureRandom());
+			HttpsURLConnection
+					.setDefaultSSLSocketFactory(sc.getSocketFactory());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	/**
 	 * Sets up a connection to a server.
 	 * 
@@ -108,46 +156,36 @@ public class Communicator {
 	 * @param urlPostfix
 	 * @throws IOException
 	 */
-	private static void setupConnection(RESTMethod requestType, String urlPostfix)  {
-		Log.d("setupConnection",urlPostfix);
-		if (Build.VERSION.SDK_INT <= 16) {
+	private static void setupConnection(RESTMethod requestType, String urlPostfix) throws IOException  {
+		if (Build.VERSION.SDK_INT <= 8) {
 			System.setProperty("http.keepAlive", "false");
 		}
 		if(!urlString.startsWith("http://") && !urlString.startsWith("https://")){
 			urlString = "http://"+urlString;
 		}
-		URL url;
-		try {
-			url = new URL(urlString + urlPostfix);
-			connection = (HttpsURLConnection) url.openConnection();
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			Log.d("error", "error-1");
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			Log.d("error", "error-2");
-			e.printStackTrace();
+		URL url = new URL(urlString + urlPostfix);
+		if (url.getProtocol().equals("https")) {
+		    trustAllHosts();
+			HttpsURLConnection https = (HttpsURLConnection) url.openConnection();
+			https.setHostnameVerifier(DO_NOT_VERIFY);
+			connection = https;
+		} else {
+			connection = (HttpURLConnection) url.openConnection();
 		}
-
+		
 		if (!requestType.equals(RESTMethod.GET)) {
 			connection.setDoOutput(true);
 		}
 		connection.setDoInput(true);
 		connection.setUseCaches(false);
-		connection.addRequestProperty(requestType.toString(), requestType.toString());
-		try {
-			connection.setRequestMethod(requestType.toString());
-		} catch (ProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		connection.setRequestMethod(requestType.toString());
+		connection.setRequestProperty("Content-Type", "application/json");
 
 		if (!urlPostfix.equals("login")) {			
 			connection.setRequestProperty("Authorization", token);
 		}
 
-		//connection.setChunkedStreamingMode(100);
+		connection.setChunkedStreamingMode(100);
 		connection.setConnectTimeout(4000);
 		connection.setReadTimeout(15000);
 		connection.setRequestProperty("connection", "close");
@@ -162,7 +200,7 @@ public class Communicator {
 	 * @return GenomizerHttpPackage - The response code and body
 	 * @throws IOException
 	 */
-	private static GenomizerHttpPackage sendRequest(JSONObject jsonPackage, String urlPostfix) {
+	private static GenomizerHttpPackage sendRequest(JSONObject jsonPackage, String urlPostfix) throws IOException {
 		writePackage(jsonPackage);	
 		int responseCode = recieveResponse(urlPostfix);
 		GenomizerHttpPackage hp =  validateCode(responseCode);
@@ -178,25 +216,13 @@ public class Communicator {
 	 * @param jsonPackage
 	 * @throws IOException
 	 */
-	private static void writePackage(JSONObject jsonPackage)  {
-
-		try {
-			if (connection.getDoOutput()) {
-				DataOutputStream out;
-				Log.d("out", connection.getOutputStream().toString() );
-				out = new DataOutputStream(connection.getOutputStream());
-				Log.d("out", out.toString());
-				byte[] pack = jsonPackage.toString().getBytes("UTF-8");							
-				out.write(pack);
-				out.flush();
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			Log.d("error", "error1");
-			e.printStackTrace();
-		}						
-
-
+	private static void writePackage(JSONObject jsonPackage) throws IOException {
+		if (connection.getDoOutput()) {
+			DataOutputStream out = new DataOutputStream(connection.getOutputStream());	
+			byte[] pack = jsonPackage.toString().getBytes("UTF-8");		
+			out.write(pack);
+			out.flush();		
+		}
 	}
 
 
@@ -209,27 +235,17 @@ public class Communicator {
 	 * @return Response code
 	 * @throws IOException
 	 */
-	private static int recieveResponse(String urlPostfix) {
+	private static int recieveResponse(String urlPostfix) throws IOException {
 
 		for(int i = 0; i < RESPONSE_TRIES; i++) {
-
-			//int response = connection.getResponseCode();
-			int response = connection.getHeaderFieldInt(null, 0);
-
+			int response = connection.getResponseCode();
 			if(response != -1) {
 				return response;
 			}
 
 		}
 
-		try {
-			throw new IOException("Server is not respondning.");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			Log.d("error", "error2");
-			e.printStackTrace();
-		}
-		return 0;
+		throw new IOException("Server is not respondning.");
 
 	}
 
@@ -245,34 +261,20 @@ public class Communicator {
 	 * @return HttpPackage response from server
 	 * @throws IOException
 	 */
-	private static GenomizerHttpPackage validateCode(int responseCode) {
-		try {
-			if (responseCode >= 200 && responseCode < 300) {
-				BufferedReader inStream;
+	private static GenomizerHttpPackage validateCode(int responseCode) throws IOException {
+		if (responseCode >= 200 && responseCode < 300) {
+			BufferedReader inStream = new BufferedReader(
+					new InputStreamReader(connection.getInputStream()));
+			StringBuffer response = new StringBuffer();
+			String inputLine;
 
-				inStream = new BufferedReader(
-						new InputStreamReader(connection.getInputStream()));
-
-
-				StringBuffer response = new StringBuffer();
-				String inputLine;
-
-				//Read response body
-				while ((inputLine = inStream.readLine()) != null) {
-					response.append(inputLine);
-				}
-				return new GenomizerHttpPackage(responseCode, response.toString());
+			//Read response body
+			while ((inputLine = inStream.readLine()) != null) {
+				response.append(inputLine);
 			}
-
+			return new GenomizerHttpPackage(responseCode, response.toString());
+		} else {
 			return new GenomizerHttpPackage(responseCode, "");
 		}
-
-
-		catch (IOException e) {
-			// TODO Auto-generated catch block
-			Log.d("error", "error3");
-			e.printStackTrace();
-		}
-		return null;
 	}
 }
