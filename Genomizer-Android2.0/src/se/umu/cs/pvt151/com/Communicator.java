@@ -9,6 +9,15 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Set;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import javax.security.cert.CertificateException;
+import javax.security.cert.X509Certificate;
+
 import org.json.JSONObject;
 
 import android.os.Build;
@@ -94,8 +103,54 @@ public class Communicator {
 		setupConnection(requestType, urlPostfix);
 		return sendRequest(jsonPackage, urlPostfix);
 	}
+	
+	// always verify the host - dont check for certificate
+	final static HostnameVerifier DO_NOT_VERIFY = new HostnameVerifier() {
+		@Override
+		public boolean verify(String hostname, SSLSession session) {
+			return true;
+		}
 
 
+	};
+
+	/**
+	 * Trust every server - dont check for any certificate
+	 */
+	private static void trustAllHosts() {
+		
+		// Create a trust manager that does not validate certificate chains
+		TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+			@Override
+			public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+				return new java.security.cert.X509Certificate[] {};
+			}
+			@Override
+			public void checkClientTrusted(
+					java.security.cert.X509Certificate[] chain, String authType)
+					throws java.security.cert.CertificateException {
+				// TODO Auto-generated method stub
+				
+			}
+			@Override
+			public void checkServerTrusted(
+					java.security.cert.X509Certificate[] chain, String authType)
+					throws java.security.cert.CertificateException {
+				// TODO Auto-generated method stub
+				
+			}
+		} };
+
+		// Install the all-trusting trust manager
+		try {
+			SSLContext sc = SSLContext.getInstance("TLS");
+			sc.init(null, trustAllCerts, new java.security.SecureRandom());
+			HttpsURLConnection
+					.setDefaultSSLSocketFactory(sc.getSocketFactory());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	/**
 	 * Sets up a connection to a server.
 	 * 
@@ -105,7 +160,15 @@ public class Communicator {
 	 */
 	private static void setupConnection(RESTMethod requestType, String urlPostfix) throws IOException  {
 		URL url = new URL(urlString + urlPostfix);
-		connection = (HttpURLConnection) url.openConnection();
+		if (url.getProtocol().equals("https")) {
+		    trustAllHosts();
+			HttpsURLConnection https = (HttpsURLConnection) url.openConnection();
+			https.setHostnameVerifier(DO_NOT_VERIFY);
+			connection = https;
+		} else {
+			connection = (HttpURLConnection) url.openConnection();
+		}
+		
 		if (!requestType.equals(RESTMethod.GET)) {
 			connection.setDoOutput(true);
 		}

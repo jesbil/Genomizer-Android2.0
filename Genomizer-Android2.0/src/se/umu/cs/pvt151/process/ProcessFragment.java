@@ -7,6 +7,7 @@ import se.umu.cs.pvt151.R;
 import se.umu.cs.pvt151.com.ComHandler;
 import se.umu.cs.pvt151.model.GeneFile;
 import se.umu.cs.pvt151.model.GenomeRelease;
+import se.umu.cs.pvt151.processStatus.ProcessStatusFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -26,6 +27,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class ProcessFragment extends Fragment {
+	
+	
 	
 	public final static String FILES_KEY = "filesKey";
 	
