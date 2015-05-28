@@ -63,12 +63,10 @@ public class MainActivity extends FragmentActivity {
         // adding nav drawer items to array
         // search
         navDrawerItems.add(new NavigationDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
-        // selected files
-        navDrawerItems.add(new NavigationDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1), true, "3"));
         // process status
-        navDrawerItems.add(new NavigationDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
+        navDrawerItems.add(new NavigationDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
         // logut
-        navDrawerItems.add(new NavigationDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));
+        navDrawerItems.add(new NavigationDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
         // Recycle the typed array
         navMenuIcons.recycle();
  
@@ -166,12 +164,9 @@ public class MainActivity extends FragmentActivity {
             fragment = new SearchMotherFragment();
             break;
         case 1:
-            fragment = new SelectedfilesMotherFragment();
-            break;
-        case 2:
         	fragment = new ProcessStatusFragment();
         	break;
-        case 3:
+        case 2:
 // TODO   	ComHandler.logout();
     		Intent intent = new Intent(this,LoginActivity.class);
     		startActivity(intent);

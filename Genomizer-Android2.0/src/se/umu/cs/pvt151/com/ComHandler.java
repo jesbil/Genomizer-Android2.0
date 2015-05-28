@@ -384,6 +384,8 @@ public class ComHandler {
 				GenomizerHttpPackage haltResponse = Communicator.sendHTTPRequest(haltObject, RESTMethod.DELETE, PROCESS);
 				if(haltResponse.getCode() == OK){
 					return true;
+				}else{
+					return false;
 				}
 			} catch (JSONException e) {
 				return false;

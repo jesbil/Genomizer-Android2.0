@@ -1,7 +1,10 @@
 package se.umu.cs.pvt151.processStatus;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import se.umu.cs.pvt151.R;
 import se.umu.cs.pvt151.com.ComHandler;
@@ -152,13 +155,13 @@ public class ProcessStatusFragment extends Fragment {
 			mAuthor.setText(processes.get(position).getAuthor());
 			
 			TextView mTimeAdded = (TextView) view.findViewById(R.id.process_status_tv_timeAdded);
-			mTimeAdded.setText(String.valueOf(processes.get(position).getTimeAdded()));
+			mTimeAdded.setText(timeInterpreter(processes.get(position).getTimeAdded()));
 			
 			TextView mTimeStarted = (TextView) view.findViewById(R.id.process_status_tv_timeStarted);
-			mTimeStarted.setText(String.valueOf(processes.get(position).getTimeStarted()));
+			mTimeStarted.setText(timeInterpreter(processes.get(position).getTimeStarted()));
 			
 			TextView mTimeFinished = (TextView) view.findViewById(R.id.process_status_tv_timeFinished);
-			mTimeFinished.setText(String.valueOf(processes.get(position).getTimeFinnished()));
+			mTimeFinished.setText(timeInterpreter(processes.get(position).getTimeFinnished()));
 			
 			TextView mStatus = (TextView) view.findViewById(R.id.process_status_tv_status);
 			mStatus.setText(processes.get(position).getStatus());
@@ -169,8 +172,27 @@ public class ProcessStatusFragment extends Fragment {
 
 	}
 	
+	/**
+	 * Converts a long variable from seconds 
+	 * counted from 1 january 1970 to a date and returns it
+	 * as a String.
+	 * 
+	 * @param seconds
+	 * @return - Date as a String
+	 */
+	private String timeInterpreter(long seconds) {
+		if(seconds == 0) {
+			return "Pending...";
+		}
+
+		Date date = new Date(seconds);		
+		return SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.SHORT, 
+				SimpleDateFormat.SHORT, Locale.ENGLISH).format(date);
+	}
+	
 	private class ProcessHaltTask extends AsyncTask<Void, Void, ProcessStatus>{
 		private ProcessStatus process;
+		private IOException ioe;
 		
 		public ProcessHaltTask(ProcessStatus process){
 			this.process = process;
@@ -184,7 +206,7 @@ public class ProcessStatusFragment extends Fragment {
 					return process;
 				}
 			} catch (IOException e) {
-				Toast.makeText(getActivity(), "Cant stop process: "+e.getMessage(), Toast.LENGTH_LONG).show();
+				ioe = e;
 			}
 			return null;
 		}
@@ -193,7 +215,10 @@ public class ProcessStatusFragment extends Fragment {
 			if(result!=null){
 				processes.remove(process);
 				processListAdapter.notifyDataSetChanged();
-			
+			}else if(ioe!=null){
+				Toast.makeText(getActivity(), "Process couldn't be stopped: "+ioe.getMessage(), Toast.LENGTH_LONG).show();
+			}else{
+				Toast.makeText(getActivity(), "Process couldn't be stopped", Toast.LENGTH_SHORT).show();
 			}
 		}
 		
