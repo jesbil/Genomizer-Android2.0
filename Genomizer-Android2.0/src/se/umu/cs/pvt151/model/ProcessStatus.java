@@ -18,6 +18,7 @@ public class ProcessStatus {
 	private long timeFinnished;
 
 	private String[] outputFiles;
+	private String ID;
 	
 	/**
 	 * Creates a new ProcessStatus object.
@@ -157,4 +158,14 @@ public class ProcessStatus {
 	public void setOutputFiles(String[] outputFiles) {
 		this.outputFiles = outputFiles;
 	}
+
+	public String getID(){
+		return ID;
+	}
+	
+	public void setID(String ID) {
+		this.ID = ID;
+	}
+	
+	
 }

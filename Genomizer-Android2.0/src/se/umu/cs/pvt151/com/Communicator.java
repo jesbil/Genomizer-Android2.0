@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Set;
 
 import org.json.JSONObject;
 
@@ -176,19 +174,13 @@ public class Communicator {
 	 * @throws IOException
 	 */
 	private static int recieveResponse(String urlPostfix) throws IOException {
-
 		for(int i = 0; i < RESPONSE_TRIES; i++) {
-
 			int response = connection.getResponseCode();
-			
 			if(response != -1) {
 				return response;
 			}
-
 		}
-
 		throw new IOException("Server is not respondning.");
-
 	}
 
 
