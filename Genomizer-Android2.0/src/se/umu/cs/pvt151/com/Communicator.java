@@ -104,13 +104,6 @@ public class Communicator {
 	 * @throws IOException
 	 */
 	private static void setupConnection(RESTMethod requestType, String urlPostfix) throws IOException  {
-		Log.d("setupConnection",urlPostfix);
-		if (Build.VERSION.SDK_INT <= 8) {
-			System.setProperty("http.keepAlive", "false");
-		}
-		if(!urlString.startsWith("http://") && !urlString.startsWith("https://")){
-			urlString = "http://"+urlString;
-		}
 		URL url = new URL(urlString + urlPostfix);
 		connection = (HttpURLConnection) url.openConnection();
 		if (!requestType.equals(RESTMethod.GET)) {

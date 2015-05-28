@@ -4,24 +4,32 @@ import java.util.ArrayList;
 
 public class RawToProfileParameters {
 	private final static String WIG = ".wig";
-	public final static String BOWTIE_PARAMS = "-a -m 1 --best -p 10 -v 2 -q -S";
+	public final static String BOWTIE_PARAMS = " -a -m 1 --best -p 10 -v 2 -q -S--phred33";
 	
 	private final ArrayList<String> geneFileNames;
 	private final ArrayList<String> grVersions;
+	private final String expId;
 	
 	private String outputFileName;
 	private String bowtieParameters;
 	private String inputFileName;
 	private String grVersion;
+	private boolean keepSam;
 	
 	public RawToProfileParameters(ArrayList<String> geneFileNames, 
-			ArrayList<String> grVersions) {
+			ArrayList<String> grVersions, String expId) {
 		this.geneFileNames = geneFileNames;
 		this.grVersions = grVersions;
+		this.expId = expId;
 		inputFileName = geneFileNames.get(0);
 		grVersion = grVersions.get(0);
 		outputFileName = removeExtension(inputFileName) + WIG;
 		bowtieParameters = BOWTIE_PARAMS;
+		setKeepSam(false);
+	}
+	
+	public String getExpId() {
+		return expId;
 	}
 
 	public ArrayList<String> getGeneFileNames() {
@@ -83,6 +91,14 @@ public class RawToProfileParameters {
 	        return filename;
 
 	    return filename.substring(0, extensionIndex);
+	}
+
+	public boolean willKeepSam() {
+		return keepSam;
+	}
+
+	public void setKeepSam(boolean keepSam) {
+		this.keepSam = keepSam;
 	}
 
 }

@@ -18,6 +18,7 @@ import se.umu.cs.pvt151.model.Experiment;
 import se.umu.cs.pvt151.model.GeneFile;
 import se.umu.cs.pvt151.model.GenomeRelease;
 import se.umu.cs.pvt151.model.ProcessStatus;
+import se.umu.cs.pvt151.process.RawToProfileParameters;
 
 /**
  * This class takes care of the communication with the server.
@@ -36,7 +37,7 @@ public class ComHandler {
 	private final static String FILE = "file/";
 	
 	private final static String SEARCH_ANNOTATIONS = "search/?annotations=";
-	private final static String RAW_TO_PROFILE = "process/rawtoprofile";
+	private final static String RAW_TO_PROFILE = "process/processCommands";
 	
 	public final static int OK = 200;
 	public final static int NO_CONTENT = 204;
@@ -288,6 +289,28 @@ public class ComHandler {
 		}
 		throw new IOException("Internet connection unavailable.");
 		
+	}
+	
+	public static boolean rawToProfile(ArrayList<RawToProfileParameters> parameters) throws IOException {
+		
+		if (Genomizer.isOnline()) {
+			try {
+				JSONObject msg = MsgFactory.createRawToProfileRequest(parameters);
+				GenomizerHttpPackage response = Communicator.sendHTTPRequest(msg, RESTMethod.PUT, RAW_TO_PROFILE);
+				
+				if (response.getCode() == OK) {
+					return true;
+				} else {
+					responseDecode("RawToProfile", response.getCode());
+					Log.d("RawToProfile", String.valueOf(response.getCode()));
+					return false;
+				}
+			} catch (JSONException e) {
+				throw new RuntimeException();
+			}
+		}
+		
+		throw new IOException("Genomizer is offline");
 	}
 
 

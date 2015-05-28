@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import android.util.Log;
 
 import se.umu.cs.pvt151.model.GeneFile;
+import se.umu.cs.pvt151.process.RawToProfileParameters;
 
 /**
  * MsgFactory can be used to create a number of JSONObjects.
@@ -59,6 +60,36 @@ public class MsgFactory {
 		obj.put("author", file.getAuthor());
 		
 		return obj;
+	}
+	
+	public static JSONObject createRawToProfileRequest(ArrayList<RawToProfileParameters> parameters) throws JSONException {
+		JSONObject object = new JSONObject();
+		if (!parameters.isEmpty()) {
+
+			object.put("expId", parameters.get(0).getExpId());
+			
+			JSONArray processCommands = new JSONArray();
+			JSONObject processCommand = new JSONObject();
+			processCommand.put("type","rawToProfile");
+			
+			JSONArray files = new JSONArray();
+			for (int i = 0; i < parameters.size(); i++) {
+				RawToProfileParameters parameter = parameters.get(i);
+				JSONObject file = new JSONObject();
+				file.put("infile", parameter.getInputFileName());
+				file.put("outfile", parameter.getOutputFileName());
+				file.put("params", parameter.getBowtieParameters());
+				file.put("genomeVersion", parameter.getGrVersion());
+				file.put("keepSam", parameter.willKeepSam());
+				files.put(file);
+			}
+			
+			processCommand.put("files", files);
+			processCommands.put(processCommand);
+			object.put("processCommands", processCommands);
+		}
+		
+		return object;
 	}
 	
 	
