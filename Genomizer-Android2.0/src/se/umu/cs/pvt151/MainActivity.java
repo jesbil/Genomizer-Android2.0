@@ -1,8 +1,12 @@
 package se.umu.cs.pvt151;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
+import se.umu.cs.pvt151.com.ComHandler;
+import se.umu.cs.pvt151.com.Genomizer;
 import se.umu.cs.pvt151.login.LoginActivity;
+import se.umu.cs.pvt151.model.ProcessStatus;
 import se.umu.cs.pvt151.processStatus.ProcessStatusFragment;
 import se.umu.cs.pvt151.search.SearchMotherFragment;
 import se.umu.cs.pvt151.selected_files.SelectedfilesMotherFragment;
@@ -10,9 +14,12 @@ import se.umu.cs.pvt151.selected_files.SelectedfilesMotherFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -22,6 +29,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
  
 public class MainActivity extends FragmentActivity {
     private DrawerLayout mDrawerLayout;
@@ -167,10 +175,8 @@ public class MainActivity extends FragmentActivity {
         	fragment = new ProcessStatusFragment();
         	break;
         case 2:
-// TODO   	ComHandler.logout();
-    		Intent intent = new Intent(this,LoginActivity.class);
-    		startActivity(intent);
-    		this.finish();
+        	new LogoutTask(this).execute();
+    		
     		return;
         default:
             break;
@@ -214,6 +220,31 @@ public class MainActivity extends FragmentActivity {
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggls
         mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+    
+    
+    private class LogoutTask extends AsyncTask<Void, Void, Context> {
+    	Context context;
+    	public LogoutTask(Context context){
+    		this.context = context;
+    	}
+
+		@Override
+		protected Context doInBackground(Void... params) {
+			try {
+				ComHandler.logout();
+			} catch (IOException e) {
+				Log.e("ERROR","coudlnt logout");
+			}
+			return context;
+		}
+		
+		protected void onPostExecute(Context context) {
+			Intent intent = new Intent(context,LoginActivity.class);
+    		startActivity(intent);
+    		((Activity) context).finish();
+		}
+    	
     }
 
  

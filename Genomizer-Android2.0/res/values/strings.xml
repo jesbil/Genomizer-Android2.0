@@ -100,7 +100,7 @@
     <string name="search_tv_rawData">RAW DATA</string>
     <string name="search_tv_profileData">PROFILE DATA</string>
     <string name="search_tv_regionData">REGION DATA</string>
-    <string name="search_btn_addToSelection">Add to selection</string>
+    <string name="search_btn_GoToProcesssing">Go to processing</string>
     
     <!-- Used in processstatus_layout_processlist -->
     <string name="process_btn_refresh">Refresh</string>
@@ -123,7 +123,7 @@
     <!-- Used in process_layout_bowtie_list_element -->
     <string name="process_tv_input_file">Input file</string>
     <string name="process_tv_output_file">Output file</string>
-    <string name="process_tv_genomeRelease">Genome release       </string>
+    <string name="process_tv_genomeRelease">Genome release</string>
     <string name="process_btn_parameters">Parameters</string>
     <string name="process_tv_keepsam">Keep sam</string>
     

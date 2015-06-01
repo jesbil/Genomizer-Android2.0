@@ -180,6 +180,11 @@ public class Communicator {
 		if (!urlPostfix.equals("login")) {			
 			connection.setRequestProperty("Authorization", token);
 		}
+		
+		if(urlPostfix.equals("login") && requestType.equals(RESTMethod.DELETE)){
+			connection.setRequestProperty("Authorization", token);
+			connection.setDoOutput(false);
+		}
 
 		connection.setChunkedStreamingMode(100);
 		connection.setConnectTimeout(4000);

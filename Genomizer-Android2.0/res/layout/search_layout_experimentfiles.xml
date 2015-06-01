@@ -79,7 +79,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:text="@string/search_btn_addToSelection"
+        android:text="@string/search_btn_GoToProcesssing"
+        android:textColor="@color/genomizer_blue"
         android:background="?android:attr/selectableItemBackground"
          />
 

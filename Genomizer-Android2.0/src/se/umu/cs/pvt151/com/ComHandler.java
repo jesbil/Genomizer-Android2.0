@@ -28,17 +28,17 @@ import se.umu.cs.pvt151.process.RawToProfileParameters;
  *
  */
 public class ComHandler {
-	
+
 	private final static String LOGIN = "login";
 	private final static String TOKEN = "token";
 	private final static String ANNOTATION = "annotation";
 	private final static String PROCESS = "process";
 	private final static String GENOME_RELEASE = "genomeRelease";
 	private final static String FILE = "file/";
-	
+
 	private final static String SEARCH_ANNOTATIONS = "search/?annotations=";
 	private final static String RAW_TO_PROFILE = "process/processCommands";
-	
+
 	public final static int OK = 200;
 	public final static int NO_CONTENT = 204;
 	public final static int BAD_REQUEST = 400;
@@ -47,11 +47,11 @@ public class ComHandler {
 	public final static int NOT_ALLOWED = 405;
 	public final static int TOO_MANY_REQUESTS = 429;
 	public final static int SERVICE_UNAVAILIABLE = 503;
-	
+
 	public final static int NO_CONNECTION_WITH_SERVER = -1;
 	public final static int NO_INTERNET_CONNECTION = -2;
 	public final static int PARSING_ERROR = -3;
-	
+
 	/**
 	 * Used to change the targeted server URL.
 	 * 
@@ -112,7 +112,7 @@ public class ComHandler {
 		}
 
 	}
-	
+
 	/**
 	 * A method that sends a login request to the specified server.
 	 * If the login succeeds (200 OK / ComHandler.OK), the 
@@ -132,30 +132,30 @@ public class ComHandler {
 	public static int login(String username, String password) 
 			throws IOException {
 		int result;
-		
+
 		if (Genomizer.isOnline()) {
-			
+
 			try {
 				JSONObject msg = MsgFactory.createLogin(username, password);
 				GenomizerHttpPackage loginResponse = Communicator
 						.sendHTTPRequest(msg, RESTMethod.POST, LOGIN);
-				
+
 				result = loginResponse.getCode();
-				
+
 				if (result == OK) {
 					String jsonString = loginResponse.getBody();
 					JSONObject jsonObject = new JSONObject(jsonString);
 					Communicator.setToken(jsonObject.get(TOKEN).toString());
 				}
-				
+
 			} catch (JSONException je) {
 				result = PARSING_ERROR;
 			}
-			
+
 		} else {
 			result = NO_INTERNET_CONNECTION;
 		}
-		
+
 		return result;
 	}
 
@@ -285,19 +285,19 @@ public class ComHandler {
 				throw new IOException("Unable to understand server response. "
 						+ "Has response messages been modified? " + e.getMessage());
 			}
-			
+
 		}
 		throw new IOException("Internet connection unavailable.");
-		
+
 	}
-	
+
 	public static boolean rawToProfile(ArrayList<RawToProfileParameters> parameters) throws IOException {
-		
+
 		if (Genomizer.isOnline()) {
 			try {
 				JSONObject msg = MsgFactory.createRawToProfileRequest(parameters);
 				GenomizerHttpPackage response = Communicator.sendHTTPRequest(msg, RESTMethod.PUT, RAW_TO_PROFILE);
-				
+
 				if (response.getCode() == OK) {
 					return true;
 				} else {
@@ -309,7 +309,7 @@ public class ComHandler {
 				throw new RuntimeException();
 			}
 		}
-		
+
 		throw new IOException("Genomizer is offline");
 	}
 
@@ -372,7 +372,7 @@ public class ComHandler {
 			}
 		}
 		throw new IOException("Internet connection unavailable.");
-		
+
 	}
 
 	public static GeneFile getFile(String fileId) throws IOException {
@@ -397,8 +397,8 @@ public class ComHandler {
 		}
 		throw new IOException("Internet connection unavailable.");
 	}
-	
-	
+
+
 	public static boolean HaltProcessing(String PID) throws IOException{
 		if(Genomizer.isOnline()) {
 			JSONObject haltObject = new JSONObject();
@@ -415,6 +415,17 @@ public class ComHandler {
 			}
 		}
 		throw new IOException("Internet connection unavailable.");
+	}
+
+	public static void logout() throws IOException {
+		if(Genomizer.isOnline()) {
+			try {
+				Communicator.sendHTTPRequest(null, RESTMethod.DELETE, LOGIN);
+			} catch (IOException e) {
+				throw new IOException(e.getMessage());
+			}
+
+		}
 	}
 
 	/**
@@ -440,6 +451,8 @@ public class ComHandler {
 		}
 		return URLEncoder.encode(pubmedQuery, "UTF-8");
 	}
+
+
 
 
 
