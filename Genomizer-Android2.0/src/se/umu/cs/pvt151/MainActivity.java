@@ -4,12 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import se.umu.cs.pvt151.com.ComHandler;
-import se.umu.cs.pvt151.com.Genomizer;
 import se.umu.cs.pvt151.login.LoginActivity;
-import se.umu.cs.pvt151.model.ProcessStatus;
 import se.umu.cs.pvt151.processStatus.ProcessStatusFragment;
 import se.umu.cs.pvt151.search.SearchMotherFragment;
-import se.umu.cs.pvt151.selected_files.SelectedfilesMotherFragment;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -29,7 +26,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
  
 public class MainActivity extends FragmentActivity {
     private DrawerLayout mDrawerLayout;
@@ -155,7 +151,6 @@ public class MainActivity extends FragmentActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // if nav drawer is opened, hide the action items
-        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
         //menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }

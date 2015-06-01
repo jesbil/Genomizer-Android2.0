@@ -2,7 +2,6 @@ package se.umu.cs.pvt151.login;
 
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import se.umu.cs.pvt151.MainActivity;
 import se.umu.cs.pvt151.R;
@@ -14,7 +13,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;

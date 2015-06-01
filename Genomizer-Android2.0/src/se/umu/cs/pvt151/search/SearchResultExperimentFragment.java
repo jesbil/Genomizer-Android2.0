@@ -3,14 +3,12 @@ package se.umu.cs.pvt151.search;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
 
 import se.umu.cs.pvt151.R;
 import se.umu.cs.pvt151.model.GeneFile;
 import se.umu.cs.pvt151.process.ProcessFragment;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -91,6 +89,8 @@ public class SearchResultExperimentFragment extends Fragment {
 		mRegionListView = (ListView) rootView.findViewById(R.id.search_lv_regionList);
 		mRegionListView.setAdapter(new FileListAdapter(regionDataFiles));
 
+		getActivity().getActionBar().setTitle("Search and process");
+		
 		mAddToSelectionButton = (Button) rootView.findViewById(R.id.search_btn_addToSelection);
 		mAddToSelectionButton.setOnClickListener(new OnClickListener() {
 			// when "add to selection" is pressed
@@ -162,7 +162,6 @@ public class SearchResultExperimentFragment extends Fragment {
 	 */
 	private class FileListAdapter extends ArrayAdapter<GeneFile> {
 		private ArrayList<GeneFile> files;
-		private ProgressDialog mProgressDialog;
 
 		/**
 		 * Constructor for the FileListAdapter

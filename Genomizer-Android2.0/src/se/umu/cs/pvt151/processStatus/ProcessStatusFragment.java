@@ -9,8 +9,10 @@ import java.util.Locale;
 import se.umu.cs.pvt151.R;
 import se.umu.cs.pvt151.com.ComHandler;
 import se.umu.cs.pvt151.model.ProcessStatus;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -61,7 +63,7 @@ public class ProcessStatusFragment extends Fragment {
 
 		return rootView;
 	}
-	
+
 	@Override
 	public void onResume(){
 		super.onResume();
@@ -69,7 +71,7 @@ public class ProcessStatusFragment extends Fragment {
 		showLoadScreen(DOWNLOADING_PROCESSING_INFORMATION);
 		new ProcessFetchAsyncTask().execute();
 	}
-	
+
 	/**
 	 * Displays a loading screen for the user, while downloading data from the
 	 * server. Must be manually dismissed when data transfer is done.
@@ -137,32 +139,51 @@ public class ProcessStatusFragment extends Fragment {
 				LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 				view = inflater.inflate(R.layout.processstatus_layout_processlist_element, null);
 			}
-			
+
 			ImageView mDeleteProcess = (ImageView) view.findViewById(R.id.process_status_iv_delete);
 			mDeleteProcess.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
-					new ProcessHaltTask(processes.get(position)).execute();
-					
+					final AlertDialog alert = new AlertDialog.Builder(context).create();
+					alert.setTitle("Are you sure?");
+					alert.setMessage("Do you really want to delete this process?");
+					alert.setButton(AlertDialog.BUTTON_POSITIVE, "YES", new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							new ProcessHaltTask(processes.get(position)).execute();
+							alert.dismiss();
+						}
+					});
+					alert.setButton(AlertDialog.BUTTON_NEGATIVE, "NO", new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							alert.dismiss();
+
+						}
+					});
+					alert.show();
+
 				}
 			});
-			
+
 			TextView mExperimentName = (TextView) view.findViewById(R.id.process_status_tv_experiment);
 			mExperimentName.setText(processes.get(position).getExperimentName());
-			
+
 			TextView mAuthor = (TextView) view.findViewById(R.id.process_status_tv_author);
 			mAuthor.setText(processes.get(position).getAuthor());
-			
+
 			TextView mTimeAdded = (TextView) view.findViewById(R.id.process_status_tv_timeAdded);
 			mTimeAdded.setText(timeInterpreter(processes.get(position).getTimeAdded()));
-			
+
 			TextView mTimeStarted = (TextView) view.findViewById(R.id.process_status_tv_timeStarted);
 			mTimeStarted.setText(timeInterpreter(processes.get(position).getTimeStarted()));
-			
+
 			TextView mTimeFinished = (TextView) view.findViewById(R.id.process_status_tv_timeFinished);
 			mTimeFinished.setText(timeInterpreter(processes.get(position).getTimeFinnished()));
-			
+
 			TextView mStatus = (TextView) view.findViewById(R.id.process_status_tv_status);
 			mStatus.setText(processes.get(position).getStatus());
 
@@ -171,7 +192,7 @@ public class ProcessStatusFragment extends Fragment {
 		}
 
 	}
-	
+
 	/**
 	 * Converts a long variable from seconds 
 	 * counted from 1 january 1970 to a date and returns it
@@ -189,16 +210,16 @@ public class ProcessStatusFragment extends Fragment {
 		return SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.SHORT, 
 				SimpleDateFormat.SHORT, Locale.ENGLISH).format(date);
 	}
-	
+
 	private class ProcessHaltTask extends AsyncTask<Void, Void, ProcessStatus>{
 		private ProcessStatus process;
 		private IOException ioe;
-		
+
 		public ProcessHaltTask(ProcessStatus process){
 			this.process = process;
 		}
-		
-		
+
+
 		@Override
 		protected ProcessStatus doInBackground(Void... params) {
 			try {
@@ -210,7 +231,7 @@ public class ProcessStatusFragment extends Fragment {
 			}
 			return null;
 		}
-		
+
 		protected void onPostExecute(ProcessStatus result) {
 			if(result!=null){
 				processes.remove(process);
@@ -221,7 +242,7 @@ public class ProcessStatusFragment extends Fragment {
 				Toast.makeText(getActivity(), "Process couldn't be stopped", Toast.LENGTH_SHORT).show();
 			}
 		}
-		
+
 	}
 
 }
