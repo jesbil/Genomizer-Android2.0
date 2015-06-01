@@ -4,14 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import se.umu.cs.pvt151.R;
-import se.umu.cs.pvt151.model.GeneFile;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -118,7 +114,7 @@ public class SearchResultSettingsFragment extends Fragment {
 	}
 	
 	private class AnnotationListAdapter extends ArrayAdapter<String> {
-		private ArrayList<String> annotations;
+		
 
 		/**
 		 * Constructor for the FileListAdapter
@@ -127,7 +123,6 @@ public class SearchResultSettingsFragment extends Fragment {
 		 */
 		public AnnotationListAdapter(ArrayList<String> annotations) {			
 			super(getActivity(), 0, annotations);	
-			this.annotations=annotations;
 		}
 		
 		/**

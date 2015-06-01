@@ -61,6 +61,7 @@ public class ProcessFragment extends Fragment {
 			Bundle savedInstanceState) {
 		
 		View rootView = inflater.inflate(R.layout.process_layout_all_parameters,container, false);
+		
 	
 		mBowtieListView = (ListView) rootView.findViewById(R.id.process_lv_bowtie);
 		
@@ -87,7 +88,7 @@ public class ProcessFragment extends Fragment {
 			}
 			
 		});
-				
+		getActivity().getActionBar().setTitle("Active processes");
 		new GenomeReleaseTask(getActivity()).execute();
 		
 		return rootView;
@@ -164,7 +165,7 @@ public class ProcessFragment extends Fragment {
 			mProgressDialog.dismiss();
 			
 			if (ioe != null) {
-				Toast.makeText(mContext, "blabla exception", Toast.LENGTH_LONG).show();
+				Toast.makeText(mContext, ioe.getMessage(), Toast.LENGTH_SHORT).show();
 			}
 			
 			genomeReleases = result;

@@ -3,22 +3,23 @@
     android:id="@+id/process_llayout_rawLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
    
     <ListView
         android:id="@+id/process_status_listv_processList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@color/smoke_white"
+        android:background="@color/genomizer_white"
         android:choiceMode="multipleChoice"
         android:listSelector="@android:color/transparent"               
 		android:cacheColorHint="@android:color/transparent"
-        android:dividerHeight="1dp" >
+        android:dividerHeight="1dp"
+         >
     </ListView>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="match_parent" 
         android:layout_height="wrap_content"
         android:gravity="bottom"
         android:orientation="horizontal" >
@@ -28,7 +29,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/process_btn_refresh" />
+            android:text="@string/process_btn_refresh" 
+            android:background="?android:attr/selectableItemBackground"
+            android:textColor="@color/genomizer_blue" />
     </LinearLayout>
 
 </LinearLayout>
