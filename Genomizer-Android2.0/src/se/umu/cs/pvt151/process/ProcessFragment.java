@@ -88,7 +88,6 @@ public class ProcessFragment extends Fragment {
 			}
 			
 		});
-		getActivity().getActionBar().setTitle("Active processes");
 		new GenomeReleaseTask(getActivity()).execute();
 		
 		return rootView;

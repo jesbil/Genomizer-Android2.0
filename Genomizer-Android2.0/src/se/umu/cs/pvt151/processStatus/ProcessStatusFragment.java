@@ -44,7 +44,7 @@ public class ProcessStatusFragment extends Fragment {
 		processes = new ArrayList<ProcessStatus>();
 
 		View rootView = inflater.inflate(R.layout.processstatus_layout_processlist,container, false);
-
+		getActivity().getActionBar().setTitle("Active processes");
 		processList = (ListView) rootView.findViewById(R.id.process_status_listv_processList);
 
 

@@ -89,9 +89,9 @@ public class SearchResultExperimentFragment extends Fragment {
 		mRegionListView = (ListView) rootView.findViewById(R.id.search_lv_regionList);
 		mRegionListView.setAdapter(new FileListAdapter(regionDataFiles));
 
-		getActivity().getActionBar().setTitle("Search and process");
 		
 		mAddToSelectionButton = (Button) rootView.findViewById(R.id.search_btn_addToSelection);
+		mAddToSelectionButton.setEnabled(!rawDataFiles.isEmpty());
 		mAddToSelectionButton.setOnClickListener(new OnClickListener() {
 			// when "add to selection" is pressed
 			@Override
