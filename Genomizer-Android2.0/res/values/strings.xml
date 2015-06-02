@@ -85,16 +85,6 @@
     <!-- Used in search_layout_experimentList -->
     <string name="search_tv_searchResult">Search result</string>
     
-    <!-- Used in selectedfiles_layout_profile -->
-    <string name="selectedfilesProfile_btn_removeMarkedFiles">Remove marked files</string>
-    
-    <!-- Used in selectedfiles_layout_raw -->
-    <string name="selectedfilesRaw_btn_convertToProfile">Convert to profile</string>
-    <string name="selectedfilesRaw_btn_removeMarkedFiles">Remove marked files</string>
-    
-     <!-- Used in selectedfiles_layout_region -->
-    <string name="selectedfilesRegion_btn_removeMarkedFiles">Remove marked files</string>
-
     <!-- Used in search_layout_experimentfiles -->
     <string name="search_tv_experimentFiles">EXPERIMENT FILES</string>
     <string name="search_tv_rawData">RAW DATA</string>
